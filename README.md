@@ -10,7 +10,7 @@ Supported formats:
 
  - [OpenAPI 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (FKA _Swagger_)
  
-In the works:
+Upcoming:
 
  - [RAML 1.0](https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/)
  
