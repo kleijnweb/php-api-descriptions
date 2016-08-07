@@ -18,9 +18,11 @@ class JustinRainbowSchemaValidatorAdapterTest extends \PHPUnit_Framework_TestCas
      */
     public function willContainIndexedErrors()
     {
+        $factory = new Schema\SchemaFactory();
+
         $validator = new JustinRainbowSchemaValidatorAdapter();
         $result    = $validator->validate(
-            Schema::get((object)[
+            $factory->create((object)[
                 'type'       => 'object',
                 'required'   => ['foo', 'bar'],
                 'properties' => (object)[

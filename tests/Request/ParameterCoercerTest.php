@@ -8,7 +8,10 @@
 namespace KleijnWeb\ApiDescriptions\Tests\Request;
 
 use KleijnWeb\ApiDescriptions\Description\Parameter;
-use KleijnWeb\ApiDescriptions\Description\Schema;
+use KleijnWeb\ApiDescriptions\Description\Schema\ArraySchema;
+use KleijnWeb\ApiDescriptions\Description\Schema\ObjectSchema;
+use KleijnWeb\ApiDescriptions\Description\Schema\ScalarSchema;
+use KleijnWeb\ApiDescriptions\Description\Schema\Schema;
 use KleijnWeb\ApiDescriptions\Request\ParameterCoercer;
 
 /**
@@ -204,13 +207,22 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
      */
     private function createParameter(array $schemaStubs = [], array $stubs = []): Parameter
     {
-        $parameterMock = $this->getMockBuilder(Parameter::class)->getMock();
+        $parameterMock = $this->getMockBuilder(Parameter::class)->disableOriginalConstructor()->getMock();
 
         foreach ($stubs as $methodName => $value) {
             $parameterMock->expects($this->any())->method($methodName)->willReturn($value);
         }
 
-        $schemaMock = $this->getMockBuilder(Schema::class)->disableOriginalConstructor()->getMock();
+        switch ($schemaStubs['getType']) {
+            case Schema::TYPE_ARRAY:
+                $schemaMock = $this->getMockBuilder(ArraySchema::class)->disableOriginalConstructor()->getMock();
+                break;
+            case Schema::TYPE_OBJECT:
+                $schemaMock = $this->getMockBuilder(ObjectSchema::class)->disableOriginalConstructor()->getMock();
+                break;
+            default:
+                $schemaMock = $this->getMockBuilder(ScalarSchema::class)->disableOriginalConstructor()->getMock();
+        }
 
         $parameterMock->expects($this->any())->method('getSchema')->willReturn($schemaMock);
 

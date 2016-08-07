@@ -13,7 +13,7 @@ use KleijnWeb\ApiDescriptions\Description\Visitor\VisiteeMixin;
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-abstract class Path implements Element
+class Path implements Element
 {
     use VisiteeMixin;
 
@@ -31,6 +31,20 @@ abstract class Path implements Element
      * @var Parameter[]
      */
     protected $pathParameters = [];
+
+    /**
+     * Path constructor.
+     *
+     * @param string      $path
+     * @param Operation[] $operations
+     * @param Parameter[] $pathParameters
+     */
+    public function __construct($path, array $operations, array $pathParameters)
+    {
+        $this->path           = $path;
+        $this->operations     = $operations;
+        $this->pathParameters = $pathParameters;
+    }
 
     /**
      * @return string
@@ -59,7 +73,7 @@ abstract class Path implements Element
 
         if (!isset($this->operations[$method])) {
             throw new \InvalidArgumentException(
-                "Path '$this->path' does not support '$method'" .
+                "Path '{$this->getPath()}' does not support '$method'" .
                 " (supports " . implode(', ', array_keys($this->operations)) . ')'
             );
         }
@@ -74,12 +88,4 @@ abstract class Path implements Element
     {
         return $this->pathParameters;
     }
-
-    /**
-     * @param string    $method
-     * @param \stdClass $operationDefinition
-     *
-     * @return Operation
-     */
-    abstract protected function createOperation(string $method, \stdClass $operationDefinition): Operation;
 }

@@ -5,6 +5,11 @@ info:
 basePath: /data/v1
 paths:
   '/entity/{type}':
+    parameters:
+      - in: path
+        name: type
+        required: true
+        type: string
     get:
       operationId: 'find'
       parameters:
@@ -34,6 +39,11 @@ paths:
             type: object
 
   '/entity/{type}/findByCriteria':
+    parameters:
+      - in: path
+        name: type
+        required: true
+        type: string
     post:
       operationId: 'findByCriteria'
       parameters:
@@ -51,6 +61,11 @@ paths:
               type: object
 
   '/entity/{type}/{id}':
+    parameters:
+      - in: path
+        name: type
+        required: true
+        type: string
     put:
       parameters:
         - in: path

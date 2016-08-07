@@ -8,14 +8,16 @@
 
 namespace KleijnWeb\ApiDescriptions\Description;
 
+use KleijnWeb\ApiDescriptions\Description\Document\Document;
+use KleijnWeb\ApiDescriptions\Description\Schema\Schema;
+use KleijnWeb\ApiDescriptions\Description\Visitor\ClosureVisitorScope;
 use KleijnWeb\ApiDescriptions\Description\Visitor\Visitee;
 use KleijnWeb\ApiDescriptions\Description\Visitor\VisiteeMixin;
-use KleijnWeb\ApiDescriptions\Document\Document;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-abstract class Description implements Visitee
+class Description implements Visitee, ClosureVisitorScope
 {
     use VisiteeMixin;
 
@@ -23,6 +25,11 @@ abstract class Description implements Visitee
      * @var Path[]
      */
     protected $paths;
+
+    /**
+     * @var ComplexType[]
+     */
+    protected $complexTypes;
 
     /**
      * @var string
@@ -38,6 +45,32 @@ abstract class Description implements Visitee
      * @var Document
      */
     protected $document;
+
+    /**
+     * Description constructor.
+     *
+     * @param Path[]        $paths
+     * @param ComplexType[] $complexTypes
+     * @param string        $host
+     * @param array         $schemes
+     * @param Document      $document
+     */
+    public function __construct(array $paths, array $complexTypes, $host, array $schemes, Document $document)
+    {
+        $this->paths        = $paths;
+        $this->complexTypes = $complexTypes;
+        $this->host         = $host;
+        $this->schemes      = $schemes;
+        $this->document     = $document;
+    }
+
+    /**
+     * @return ComplexType[]
+     */
+    public function getComplexTypes(): array
+    {
+        return $this->complexTypes;
+    }
 
     /**
      * @return array

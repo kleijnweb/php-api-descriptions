@@ -20,6 +20,8 @@ The aim is to provide full support and interchangeability.
  
 # Typical Usage
 
+## Validating Requests And Responses
+
 Namespaces omitted for brevity:
 
 ```php
@@ -38,10 +40,18 @@ If you're feeling frisky and want to try RAML support:
 ```php
 $validator = new MessageValidator(
     (new Repository())
-        ->setFactory(new Factory(new RamlFactory()))
+        ->setFactory(new DescriptionFactory(DescriptionFactory::BUILDER_RAML))
         ->get('tests/definitions/raml/mobile-order-api/api.raml')
 );
 ```
+
+### Fetching Complex Types And Their Schema
+
+```php
+$description = (new Repository('some/path'))->get('some-service/v1.0.1/swagger.yml')
+/** @var ComplexType $type */
+$type = $description->getComplexType('Pet');
+
 
 ## Limitations
 

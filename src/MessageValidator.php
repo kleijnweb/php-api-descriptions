@@ -79,6 +79,7 @@ class MessageValidator
         string $path
     ): ValidationResult {
     
+
         $operation = $this->description->getPath($path)->getOperation($request->getMethod());
         $schema    = $operation->getResponse($response->getStatusCode())->getSchema();
 

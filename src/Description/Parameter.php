@@ -7,12 +7,13 @@
  */
 namespace KleijnWeb\ApiDescriptions\Description;
 
+use KleijnWeb\ApiDescriptions\Description\Schema\Schema;
 use KleijnWeb\ApiDescriptions\Description\Visitor\VisiteeMixin;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-abstract class Parameter implements Element
+class Parameter implements Element
 {
     use VisiteeMixin;
 
@@ -27,7 +28,12 @@ abstract class Parameter implements Element
     protected $name;
 
     /**
-     * @var string
+     * @var bool
+     */
+    protected $required = false;
+
+    /**
+     * @var string|null
      */
     protected $collectionFormat;
 
@@ -37,55 +43,34 @@ abstract class Parameter implements Element
     protected $schema;
 
     /**
-     * @var bool
-     */
-    protected $required = false;
-
-    /**
      * @var string
      */
     protected $in;
 
     /**
-     * @var string|null
+     * Parameter constructor.
+     *
+     * @param string $name
+     * @param bool   $required
+     * @param Schema $schema
+     * @param string $in
+     * @param string $collectionFormat
      */
-    protected $enum;
-
-    /**
-     * @var string|null
-     */
-    protected $pattern;
-
-    /**
-     * @return string|null
-     */
-    public function getEnum()
+    public function __construct(string $name, bool $required, Schema $schema, string $in, $collectionFormat = null)
     {
-        return $this->enum;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPattern()
-    {
-        return $this->pattern;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getCollectionFormat()
-    {
-        return $this->collectionFormat;
+        $this->name             = $name;
+        $this->collectionFormat = $collectionFormat;
+        $this->schema           = $schema;
+        $this->in               = $in;
+        $this->required         = $required;
     }
 
     /**
      * @return string
      */
-    public function getIn(): string
+    public function getName(): string
     {
-        return $this->in;
+        return $this->name;
     }
 
     /**
@@ -94,6 +79,14 @@ abstract class Parameter implements Element
     public function isRequired(): bool
     {
         return $this->required;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCollectionFormat()
+    {
+        return $this->collectionFormat;
     }
 
     /**
@@ -107,18 +100,8 @@ abstract class Parameter implements Element
     /**
      * @return string
      */
-    public function getName(): string
+    public function getIn(): string
     {
-        return $this->name;
-    }
-
-    /**
-     * @param string $location
-     *
-     * @return bool
-     */
-    public function isIn(string $location): bool
-    {
-        return $this->in === $location;
+        return $this->in;
     }
 }

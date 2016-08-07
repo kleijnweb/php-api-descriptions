@@ -9,7 +9,7 @@
 namespace KleijnWeb\ApiDescriptions\Description\Schema\Validator;
 
 use JsonSchema\Validator as JustinRainbowJsonSchemaValidator;
-use KleijnWeb\ApiDescriptions\Description\Schema;
+use KleijnWeb\ApiDescriptions\Description\Schema\Schema;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>

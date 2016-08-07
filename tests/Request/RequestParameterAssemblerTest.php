@@ -158,12 +158,12 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
      */
     private function createOperation(string $path, array $parameterStubs = []): Operation
     {
-        $operationMock = $this->getMockBuilder(Operation::class)->getMock();
+        $operationMock = $this->getMockBuilder(Operation::class)->disableOriginalConstructor()->getMock();
         $operationMock->expects($this->once())->method('getPath')->willReturn($path);
         $parameterMocks = [];
 
         foreach ($parameterStubs as $parameterName => $stubs) {
-            $parameterMock = $this->getMockBuilder(Parameter::class)->getMock();
+            $parameterMock = $this->getMockBuilder(Parameter::class)->disableOriginalConstructor()->getMock();
             $parameterMock->expects($this->any())->method('getName')->willReturn($parameterName);
 
             foreach ($stubs as $methodName => $value) {

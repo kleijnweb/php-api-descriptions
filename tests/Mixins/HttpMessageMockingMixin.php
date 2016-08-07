@@ -34,6 +34,7 @@ trait HttpMessageMockingMixin
         string $method = 'GET'
     ): ServerRequestInterface {
     
+
         $message = $this->getMockForAbstractClass(ServerRequestInterface::class);
         $message->expects($this->once())->method('getQueryParams')->willReturn($query);
         $message->expects($this->any())->method('getMethod')->willReturn($method);

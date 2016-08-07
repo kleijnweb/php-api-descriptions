@@ -7,9 +7,8 @@
  */
 namespace KleijnWeb\ApiDescriptions\Tests\Request;
 
-use KleijnWeb\ApiDescriptions\Description\Factory\Factory;
+use KleijnWeb\ApiDescriptions\Description\DescriptionFactory;
 use KleijnWeb\ApiDescriptions\Description\Repository;
-use KleijnWeb\ApiDescriptions\Description\Standard\Raml\RamlFactory;
 use KleijnWeb\ApiDescriptions\MessageValidator;
 use KleijnWeb\ApiDescriptions\Tests\Mixins\HttpMessageMockingMixin;
 use Psr\Http\Message\ServerRequestInterface;
@@ -60,7 +59,7 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $validator = new MessageValidator(
             (new Repository())
-                ->setFactory(new Factory(new RamlFactory()))
+                ->setFactory(new DescriptionFactory(DescriptionFactory::BUILDER_RAML))
                 ->get('tests/definitions/raml/mobile-order-api/api.raml')
         );
 
@@ -68,7 +67,6 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
         $request = $this->mockRequest($path, [
             'userId' => '1964401a-a8b3-40c1-b86e-d8b9f75b5842',
         ]);
-
 
         /** @var ServerRequestInterface $request */
         $result = $validator->validateRequest($request, $path);

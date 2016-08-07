@@ -8,12 +8,13 @@
 
 namespace KleijnWeb\ApiDescriptions\Description;
 
+use KleijnWeb\ApiDescriptions\Description\Schema\Schema;
 use KleijnWeb\ApiDescriptions\Description\Visitor\VisiteeMixin;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-abstract class Operation implements Element
+class Operation implements Element
 {
     use VisiteeMixin;
 
@@ -41,6 +42,29 @@ abstract class Operation implements Element
      * @var Response[]
      */
     protected $responses;
+
+    /**
+     * Operation constructor.
+     *
+     * @param string      $path
+     * @param string      $method
+     * @param Parameter[] $parameters
+     * @param Schema      $requestSchema
+     * @param Response[]  $responses
+     */
+    public function __construct(
+        string $path,
+        string $method,
+        array $parameters,
+        Schema $requestSchema,
+        array $responses
+    ) {
+        $this->path          = $path;
+        $this->method        = $method;
+        $this->parameters    = $parameters;
+        $this->requestSchema = $requestSchema;
+        $this->responses     = $responses;
+    }
 
     /**
      * @return string

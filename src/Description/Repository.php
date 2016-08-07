@@ -8,8 +8,7 @@
 namespace KleijnWeb\ApiDescriptions\Description;
 
 use Doctrine\Common\Cache\Cache;
-use KleijnWeb\ApiDescriptions\Description\Factory\Factory;
-use KleijnWeb\ApiDescriptions\Document\Definition\Loader\DefinitionLoader;
+use KleijnWeb\ApiDescriptions\Description\Document\Definition\Loader\DefinitionLoader;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -37,36 +36,36 @@ class Repository
     private $loader;
 
     /**
-     * @var Factory
+     * @var DescriptionFactory
      */
     private $factory;
 
     /**
      * Repository constructor.
      *
-     * @param string|null           $basePath
-     * @param Cache|null            $cache
-     * @param DefinitionLoader|null $loader
-     * @param Factory|null          $factory
+     * @param string|null             $basePath
+     * @param Cache|null              $cache
+     * @param DefinitionLoader|null   $loader
+     * @param DescriptionFactory|null $factory
      */
     public function __construct(
         string $basePath = null,
         Cache $cache = null,
         DefinitionLoader $loader = null,
-        Factory $factory = null
+        DescriptionFactory $factory = null
     ) {
         $this->basePath = $basePath;
         $this->cache    = $cache;
         $this->loader   = $loader ?: new DefinitionLoader();
-        $this->factory  = $factory ?: new Factory();
+        $this->factory  = $factory ?: new DescriptionFactory();
     }
 
     /**
-     * @param Factory $factory
+     * @param DescriptionFactory $factory
      *
      * @return Repository
      */
-    public function setFactory(Factory $factory): Repository
+    public function setFactory(DescriptionFactory $factory): Repository
     {
         $this->factory = $factory;
 
@@ -100,16 +99,16 @@ class Repository
      */
     private function load(string $uri): Description
     {
-        if ($this->cache && $specification = $this->cache->fetch($uri)) {
-            return $specification;
+        if ($this->cache && $description = $this->cache->fetch($uri)) {
+            return $description;
         }
 
-        $specification = $this->factory->create($uri, $this->loader->load($uri));
+        $description = $this->factory->create($uri, $this->loader->load($uri));
 
         if ($this->cache) {
-            $this->cache->save($uri, $specification);
+            $this->cache->save($uri, $description);
         }
 
-        return $specification;
+        return $description;
     }
 }

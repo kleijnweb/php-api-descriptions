@@ -8,7 +8,7 @@
 namespace KleijnWeb\ApiDescriptions\Request;
 
 use KleijnWeb\ApiDescriptions\Description\Parameter;
-use KleijnWeb\ApiDescriptions\Description\Schema;
+use KleijnWeb\ApiDescriptions\Description\Schema\Schema;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>

@@ -8,12 +8,13 @@
 
 namespace KleijnWeb\ApiDescriptions\Description;
 
+use KleijnWeb\ApiDescriptions\Description\Schema\Schema;
 use KleijnWeb\ApiDescriptions\Description\Visitor\VisiteeMixin;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-abstract class Response implements Element
+class Response implements Element
 {
     use VisiteeMixin;
 
@@ -26,6 +27,18 @@ abstract class Response implements Element
      * @var Schema
      */
     protected $schema;
+
+    /**
+     * Response constructor.
+     *
+     * @param int    $code
+     * @param Schema $schema
+     */
+    public function __construct(int $code, Schema $schema)
+    {
+        $this->code   = $code;
+        $this->schema = $schema;
+    }
 
     /**
      * @return int
