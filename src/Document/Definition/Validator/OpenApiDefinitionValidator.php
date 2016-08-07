@@ -27,6 +27,6 @@ class OpenApiDefinitionValidator extends MetaSchemaValidator
         if (null === $schema) {
             $schema = json_decode(file_get_contents(__DIR__ . '/../../../../assets/swagger-schema.json'));
         }
-        parent::__construct($schema, $validator ?: new DefaultValidator()) ;
+        parent::__construct($schema, $validator ?: new DefaultValidator());
     }
 }

@@ -11,14 +11,16 @@ use KleijnWeb\ApiDescriptions\Description\Operation;
 use KleijnWeb\ApiDescriptions\Description\Parameter;
 use KleijnWeb\ApiDescriptions\Request\ParameterCoercer;
 use KleijnWeb\ApiDescriptions\Request\RequestParameterAssembler;
+use KleijnWeb\ApiDescriptions\Tests\Mixins\HttpMessageMockingMixin;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
 class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
 {
+    use HttpMessageMockingMixin;
+
     /**
      * @var RequestParameterAssembler
      */
@@ -135,7 +137,7 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
     {
         $body = (object)['baz' => '1'];
 
-        $message = $this->mockRequest('/foo', [], [], $body);
+        $message   = $this->mockRequest('/foo', [], [], $body);
         $operation = $this->createOperation(
             '/foo',
             [
@@ -147,40 +149,6 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
         $actual = $params->foo;
 
         $this->assertSame($body, $actual);
-    }
-
-    /**
-     * @param string    $path
-     * @param array     $query
-     * @param array     $headers
-     * @param \stdClass $body
-     *
-     * @return ServerRequestInterface
-     */
-    private function mockRequest(
-        string $path,
-        array $query = [],
-        array $headers = [],
-        \stdClass $body = null
-    ): ServerRequestInterface
-    {
-        $message = $this->getMockForAbstractClass(ServerRequestInterface::class);
-        $message->expects($this->once())->method('getQueryParams')->willReturn($query);
-        $message->expects($this->once())->method('getUri')->willReturnCallback(function () use ($path) {
-            $uri = $this->getMockForAbstractClass(UriInterface::class);
-            $uri->expects($this->once())->method('getPath')->willReturn($path);
-
-            return $uri;
-        });
-
-        $message->expects($this->once())->method('getHeaders')->willReturn($headers);
-
-        if (null !== $body) {
-            $message->expects($this->once())->method('getParsedBody')->willReturn($body);
-        }
-
-
-        return $message;
     }
 
     /**

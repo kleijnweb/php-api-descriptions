@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Description\OpenApi;
+namespace KleijnWeb\ApiDescriptions\Description\Standard\Raml;
 
 use KleijnWeb\ApiDescriptions\Description\Response;
 use KleijnWeb\ApiDescriptions\Description\Schema;
@@ -14,7 +14,7 @@ use KleijnWeb\ApiDescriptions\Description\Schema;
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class OpenApiResponse extends Response
+class RamlResponse extends Response
 {
     /**
      * Response constructor.

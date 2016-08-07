@@ -8,7 +8,6 @@
 namespace KleijnWeb\ApiDescriptions\Description;
 
 use Doctrine\Common\Cache\Cache;
-use KleijnWeb\ApiDescriptions\Description\Description;
 use KleijnWeb\ApiDescriptions\Description\Factory\Factory;
 use KleijnWeb\ApiDescriptions\Document\Definition\Loader\DefinitionLoader;
 
@@ -60,6 +59,18 @@ class Repository
         $this->cache    = $cache;
         $this->loader   = $loader ?: new DefinitionLoader();
         $this->factory  = $factory ?: new Factory();
+    }
+
+    /**
+     * @param Factory $factory
+     *
+     * @return Repository
+     */
+    public function setFactory(Factory $factory): Repository
+    {
+        $this->factory = $factory;
+
+        return $this;
     }
 
     /**

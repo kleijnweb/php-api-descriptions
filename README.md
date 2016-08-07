@@ -10,9 +10,13 @@ Supported formats:
 
  - [OpenAPI 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (FKA _Swagger_)
  
-Upcoming:
+Limited:
 
- - [RAML 1.0](https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/)
+ - [RAML 1.0](https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/)<sup>*</sup>
+ 
+<sup>*</sup> *RAML is much more feature-rich and generally elaborate standard than OpenAPI, it will take some time to support the full set. Help is appreciated.*
+
+The aim is to provide full support and interchangeability.
  
 # Typical Usage
 
@@ -29,8 +33,19 @@ $result = $validator->validateRequest($request, $path);
 $result = $validator->validateResponse($body, $request, $response, $path);
 ```
 
+If you're feeling frisky and want to try RAML support:
+
+```php
+$validator = new MessageValidator(
+    (new Repository())
+        ->setFactory(new Factory(new RamlFactory()))
+        ->get('tests/definitions/raml/mobile-order-api/api.raml')
+);
+```
+
 ## Limitations
 
+- Very limited RAML support
 - Does not work with form data
 - Requires a router to determine the matching path
 - If the request has a body, it will have to be deserialized using objects, not as an associative array 

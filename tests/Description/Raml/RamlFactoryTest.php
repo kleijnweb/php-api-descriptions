@@ -6,15 +6,15 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description\Standard\OpenApi;
+namespace KleijnWeb\ApiDescriptions\Tests\Description\Standard\Raml;
 
-use KleijnWeb\ApiDescriptions\Description\Standard\OpenApi\OpenApiFactory;
+use KleijnWeb\ApiDescriptions\Description\Standard\Raml\RamlFactory;
 use KleijnWeb\ApiDescriptions\Document\Definition\Validator\DefinitionValidator;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class OpenApiFactoryTest extends \PHPUnit_Framework_TestCase
+class RamlFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -24,7 +24,7 @@ class OpenApiFactoryTest extends \PHPUnit_Framework_TestCase
         $validator = $this->getMockBuilder(DefinitionValidator::class)->disableOriginalConstructor()->getMock();
         $validator->expects($this->exactly(1))->method('validate')->with($this->isInstanceOf(\stdClass::class));
 
-        $factory = new OpenApiFactory($validator);
+        $factory = new RamlFactory($validator);
         $factory->build('/foo', (object)[]);
     }
 }

@@ -5,7 +5,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace KleijnWeb\ApiDescriptions\Description\OpenApi;
+namespace KleijnWeb\ApiDescriptions\Description\Standard\OpenApi;
 
 use KleijnWeb\ApiDescriptions\Description\Parameter;
 use KleijnWeb\ApiDescriptions\Description\Schema;

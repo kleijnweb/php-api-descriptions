@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Description\OpenApi;
+namespace KleijnWeb\ApiDescriptions\Description\Standard\OpenApi;
 
 use KleijnWeb\ApiDescriptions\Description\Description;
 use KleijnWeb\ApiDescriptions\Document\Document;

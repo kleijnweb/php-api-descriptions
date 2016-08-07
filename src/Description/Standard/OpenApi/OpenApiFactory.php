@@ -5,14 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace KleijnWeb\ApiDescriptions\Description\OpenApi;
+namespace KleijnWeb\ApiDescriptions\Description\Standard\OpenApi;
 
 use KleijnWeb\ApiDescriptions\Description\Description;
 use KleijnWeb\ApiDescriptions\Description\Factory\StandardFactory;
-use KleijnWeb\ApiDescriptions\Description\OpenApi\OpenApiDescription;
-use KleijnWeb\ApiDescriptions\Document\Document;
 use KleijnWeb\ApiDescriptions\Document\Definition\RefResolver\RefResolver;
 use KleijnWeb\ApiDescriptions\Document\Definition\Validator\DefinitionValidator;
+use KleijnWeb\ApiDescriptions\Document\Document;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>

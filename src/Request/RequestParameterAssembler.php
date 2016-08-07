@@ -63,13 +63,17 @@ class RequestParameterAssembler
 
             switch ($parameter->getIn()) {
                 case Parameter::IN_QUERY:
-                    $parameters->$paramName = $this->parameterCoercer->coerce($parameter, $queryParams->$paramName);
+                    if (isset($queryParams->$paramName)) {
+                        $parameters->$paramName = $this->parameterCoercer->coerce($parameter, $queryParams->$paramName);
+                    }
                     break;
                 case Parameter::IN_BODY:
                     $parameters->$paramName = $httpRequest->getParsedBody();
                     break;
                 case Parameter::IN_PATH:
-                    $parameters->$paramName = $this->parameterCoercer->coerce($parameter, $pathParams->$paramName);
+                    if (isset($pathParams->$paramName)) {
+                        $parameters->$paramName = $this->parameterCoercer->coerce($parameter, $pathParams->$paramName);
+                    }
                     break;
                 case Parameter::IN_HEADER:
                     if (isset($headers[$paramName])) {

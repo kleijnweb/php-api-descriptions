@@ -23,8 +23,8 @@ class RefResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function willThrowInvalidReferenceException()
     {
-        $object = (object)[
-            'type' => 'object',
+        $object   = (object)[
+            'type'       => 'object',
             'properties' => (object)[
                 'foo' => (object)[
                     '$ref' => '#/does/not/exist'

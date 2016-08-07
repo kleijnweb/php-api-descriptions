@@ -2,6 +2,7 @@
 title: Mobile Order API
 version: 1.0
 baseUri: http://localhost:8081/api
+protocols: [ HTTP, HTTPS ]
 
 uses:
   assets:  assets-lib.raml
@@ -9,6 +10,11 @@ uses:
 /orders:
   displayName: Orders
   description: Orders collection resource used to create new orders.
+  /nested:
+     uriParameters:
+       nestedParameter:
+         type: string
+         required: true
   get:
     is: [ assets.paging ]
     description: lists all orders of a specific user

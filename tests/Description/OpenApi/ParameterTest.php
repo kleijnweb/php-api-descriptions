@@ -6,11 +6,11 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description\OpenApi;
+namespace KleijnWeb\ApiDescriptions\Tests\Description\Standard\OpenApi;
 
-use KleijnWeb\ApiDescriptions\Description\OpenApi\OpenApiParameter;
 use KleijnWeb\ApiDescriptions\Description\Parameter;
 use KleijnWeb\ApiDescriptions\Description\Schema;
+use KleijnWeb\ApiDescriptions\Description\Standard\OpenApi\OpenApiParameter;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>

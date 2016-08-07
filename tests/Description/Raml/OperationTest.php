@@ -6,10 +6,10 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description\Standard\OpenApi;
+namespace KleijnWeb\ApiDescriptions\Tests\Description\Standard\Raml;
 
 use KleijnWeb\ApiDescriptions\Description\Parameter;
-use KleijnWeb\ApiDescriptions\Description\Standard\OpenApi\OpenApiOperation;
+use KleijnWeb\ApiDescriptions\Description\Standard\Raml\RamlOperation;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -21,10 +21,10 @@ class OperationTest extends \PHPUnit_Framework_TestCase
      */
     public function canGetParameter()
     {
-        $path = new OpenApiOperation(
+        $path = new RamlOperation(
             (object)[
-                'parameters' => [
-                    (object)['name' => 'bar', 'in' => Parameter::IN_QUERY, 'type' => 'string']
+                'queryParameters' => [
+                    'bar' => (object)['type' => 'string']
                 ]
             ],
             '/foo/bar',
@@ -39,7 +39,7 @@ class OperationTest extends \PHPUnit_Framework_TestCase
      */
     public function willThrowExceptionIfParameterDoesNotExist()
     {
-        $path = new OpenApiOperation(
+        $path = new RamlOperation(
             (object)[],
             '/foo/bar',
             'get'

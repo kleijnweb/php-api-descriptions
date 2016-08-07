@@ -9,9 +9,8 @@ namespace KleijnWeb\ApiDescriptions\Tests\Document;
 
 use Doctrine\Common\Cache\ArrayCache;
 use KleijnWeb\ApiDescriptions\Description\Description;
-use KleijnWeb\ApiDescriptions\Document\Definition\Validator\DefinitionValidator;
-use KleijnWeb\ApiDescriptions\Document\Reader\ResourceNotReadableException;
 use KleijnWeb\ApiDescriptions\Description\Repository;
+use KleijnWeb\ApiDescriptions\Document\Reader\ResourceNotReadableException;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>

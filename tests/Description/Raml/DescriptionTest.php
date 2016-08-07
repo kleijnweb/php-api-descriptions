@@ -6,16 +6,15 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description\Standard\OpenApi;
+namespace KleijnWeb\ApiDescriptions\Tests\Description\Standard\Raml;
 
 use KleijnWeb\ApiDescriptions\Description\Description;
-use KleijnWeb\ApiDescriptions\Description\Response;
 use KleijnWeb\ApiDescriptions\Description\Schema;
-use KleijnWeb\ApiDescriptions\Description\Standard\OpenApi\OpenApiDescription;
-use KleijnWeb\ApiDescriptions\Description\Standard\OpenApi\OpenApiOperation;
-use KleijnWeb\ApiDescriptions\Description\Standard\OpenApi\OpenApiParameter;
-use KleijnWeb\ApiDescriptions\Description\Standard\OpenApi\OpenApiPath;
-use KleijnWeb\ApiDescriptions\Description\Standard\OpenApi\OpenApiResponse;
+use KleijnWeb\ApiDescriptions\Description\Standard\Raml\RamlDescription;
+use KleijnWeb\ApiDescriptions\Description\Standard\Raml\RamlOperation;
+use KleijnWeb\ApiDescriptions\Description\Standard\Raml\RamlParameter;
+use KleijnWeb\ApiDescriptions\Description\Standard\Raml\RamlPath;
+use KleijnWeb\ApiDescriptions\Description\Standard\Raml\RamlResponse;
 use KleijnWeb\ApiDescriptions\Description\Visitor\ClosureVisitor;
 use KleijnWeb\ApiDescriptions\Description\Visitor\ClosureVisitorScope;
 use KleijnWeb\ApiDescriptions\Document\Definition\Loader\DefinitionLoader;
@@ -39,9 +38,9 @@ class DescriptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $uri = 'tests/definitions/openapi/petstore.yml';
+        $uri = 'tests/definitions/raml/mobile-order-api/api.raml';
 
-        $this->description = new OpenApiDescription(
+        $this->description = new RamlDescription(
             $this->document = new Document(
                 $uri,
                 $definition = (new RefResolver((new DefinitionLoader())->load($uri), $uri))->resolve()
@@ -69,13 +68,21 @@ class DescriptionTest extends \PHPUnit_Framework_TestCase
 
         $expected = [
             Schema::class,
-            OpenApiDescription::class,
-            OpenApiOperation::class,
-            OpenApiParameter::class,
-            OpenApiPath::class,
-            OpenApiResponse::class,
+            RamlDescription::class,
+            RamlOperation::class,
+            RamlParameter::class,
+            RamlPath::class,
+            RamlResponse::class,
         ];
         $this->assertSame($expected, $scope->types);
+    }
+
+    /**
+     * @test
+     */
+    public function willCreatePathObjectsUsingNestedResources()
+    {
+        $this->description->getPath('/orders/nested');
     }
 
     /**
@@ -95,7 +102,7 @@ class DescriptionTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(\InvalidArgumentException::class);
 
-        $this->description->getPath('/pets')->getOperation('get');
+        $this->description->getPath('/orders')->getOperation('post');
     }
 
     /**
@@ -105,18 +112,7 @@ class DescriptionTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(\InvalidArgumentException::class);
 
-        $this->description->getPath('/pets')->getOperation('post')->getResponse(123);
-    }
-
-    /**
-     * @test
-     */
-    public function canGetDefaultResponse()
-    {
-        $this->assertInstanceOf(
-            Response::class,
-            $this->description->getPath('/users')->getOperation('post')->getResponse(123)
-        );
+        $this->description->getPath('/orders')->getOperation('get')->getResponse(123);
     }
 
     /**
@@ -125,24 +121,7 @@ class DescriptionTest extends \PHPUnit_Framework_TestCase
     public function canGetSupportedStatusCodes()
     {
         $map = [
-            '/pets'                     => ['post' => [405, 200], 'put' => [405, 404, 400, 200]],
-            '/pets/findByStatus'        => ['get' => [200, 400]],
-            '/pets/findByTags'          => ['get' => [200, 400]],
-            '/pets/{petId}'             => ['get' => [404, 200, 400], 'post' => [405, 200], 'delete' => [400, 200]],
-            '/pets/{petId}/uploadImage' => ['post' => [200]],
-            '/stores/inventory'         => ['get' => [200]],
-            '/stores/order'             => ['post' => [200, 400]],
-            '/stores/order/{orderId}'   => ['get' => [404, 200, 400], 'delete' => [404, 400, 200]],
-            '/users'                    => ['post' => [0]],
-            '/users/createWithArray'    => ['post' => [0]],
-            '/users/createWithList'     => ['post' => [0]],
-            '/users/login'              => ['get' => [200, 400]],
-            '/users/logout'             => ['get' => [0]],
-            '/users/{username}'         => [
-                'get'    => [404, 200, 400],
-                'put'    => [404, 400, 200],
-                'delete' => [404, 400, 200]
-            ],
+            '/orders' => ['get' => [200]],
         ];
 
         foreach ($this->description->getPaths() as $path) {
@@ -199,8 +178,8 @@ class DescriptionTest extends \PHPUnit_Framework_TestCase
     {
         $map = [
             'getDocument' => $this->document,
-            'getSchemes'  => ['http'],
-            'getHost'     => 'petstore.swagger.io'
+            'getSchemes'  => ['http', 'https'],
+            'getHost'     => null
 
         ];
         foreach ($map as $methodName => $value) {

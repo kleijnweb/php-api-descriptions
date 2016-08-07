@@ -25,7 +25,7 @@ abstract class Path implements Element
     /**
      * @var Operation[]
      */
-    protected $operations;
+    protected $operations = [];
 
     /**
      * @var Parameter[]

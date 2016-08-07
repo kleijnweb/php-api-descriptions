@@ -26,7 +26,7 @@ class ValidationResult
     /**
      * ValidationResult constructor.
      *
-     * @param bool      $valid
+     * @param bool     $valid
      * @param string[] $errorMessages
      */
     public function __construct(bool $valid, array $errorMessages)

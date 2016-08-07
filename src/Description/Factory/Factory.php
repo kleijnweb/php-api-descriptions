@@ -8,15 +8,36 @@
 namespace KleijnWeb\ApiDescriptions\Description\Factory;
 
 use KleijnWeb\ApiDescriptions\Description\Description;
-use KleijnWeb\ApiDescriptions\Description\OpenApi\OpenApiFactory;
+use KleijnWeb\ApiDescriptions\Description\Standard\OpenApi\OpenApiFactory;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
 class Factory
 {
+    /**
+     * @var StandardFactory
+     */
+    private $standardFactory;
+
+    /**
+     * Factory constructor.
+     *
+     * @param StandardFactory $standardFactory
+     */
+    public function __construct(StandardFactory $standardFactory = null)
+    {
+        $this->standardFactory = $standardFactory ?: new OpenApiFactory();
+    }
+
+    /**
+     * @param string    $uri
+     * @param \stdClass $definition
+     *
+     * @return Description
+     */
     public function create(string $uri, \stdClass $definition): Description
     {
-        return (new OpenApiFactory())->build($uri, $definition);
+        return $this->standardFactory->build($uri, $definition);
     }
 }

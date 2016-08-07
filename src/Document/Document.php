@@ -10,7 +10,7 @@ namespace KleijnWeb\ApiDescriptions\Document;
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class Document implements \JsonSerializable
+class Document implements \JsonSerializable, \IteratorAggregate
 {
     /**
      * @var \stdClass
@@ -49,17 +49,17 @@ class Document implements \JsonSerializable
      */
     public function apply(callable  $f)
     {
-        $recurse = function (&$item) use ($f, &$recurse) {
+        $recurse = function (&$item, $parent = null, $parentAttribute = null) use ($f, &$recurse) {
 
             foreach ($item as $attribute => &$value) {
-                if (false === $f($value, $attribute)) {
+                if (false === $f($value, $attribute, $parent, $parentAttribute)) {
                     return false;
                 }
                 if ($value === null) {
                     return true;
                 }
                 if (!is_scalar($value)) {
-                    if (false === $recurse($value)) {
+                    if (false === $recurse($value, $item, $attribute)) {
                         return false;
                     }
                 }
@@ -104,5 +104,13 @@ class Document implements \JsonSerializable
     public function jsonSerialize()
     {
         return $this->definition;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator(): \ArrayIterator
+    {
+        return new \ArrayIterator((object)$this->definition);
     }
 }
