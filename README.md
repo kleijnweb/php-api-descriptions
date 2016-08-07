@@ -45,14 +45,6 @@ $validator = new MessageValidator(
 );
 ```
 
-### Fetching Complex Types And Their Schema
-
-```php
-$description = (new Repository('some/path'))->get('some-service/v1.0.1/swagger.yml')
-/** @var ComplexType $type */
-$type = $description->getComplexType('Pet');
-
-
 ## Limitations
 
 - Very limited RAML support
