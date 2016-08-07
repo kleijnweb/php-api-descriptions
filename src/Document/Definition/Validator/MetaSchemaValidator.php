@@ -17,7 +17,7 @@ use KleijnWeb\ApiDescriptions\Description\Schema\Validator\SchemaValidator;
 class MetaSchemaValidator
 {
     /**
-     * @var string
+     * @var \stdClass
      */
     private $schema;
 

@@ -95,6 +95,7 @@ class Repository
         }
 
         $resolver = new RefResolver($this->loader->load($uri), $uri);
+        /** @var \stdClass $definition */
         $document = new Document($uri, $definition = $resolver->resolve());
 
         $specification = new Description($document);

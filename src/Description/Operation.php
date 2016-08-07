@@ -70,10 +70,10 @@ class Operation implements Element
                     $hasOkResponse = true;
                 }
                 $code                   = (int)$code;
-                $this->responses[$code] = new Response($this, $code, $responseDefinition);
+                $this->responses[$code] = new Response($code, $responseDefinition);
             }
             if (!$hasOkResponse) {
-                $this->responses[200] = new Response($this, 200, (object)[]);
+                $this->responses[200] = new Response(200, (object)[]);
             }
         }
 
@@ -181,8 +181,8 @@ class Operation implements Element
      */
     public function getParameter(string $name): Parameter
     {
-        foreach($this->getParameters() as $parameter){
-            if($parameter->getName() === $name){
+        foreach ($this->getParameters() as $parameter) {
+            if ($parameter->getName() === $name) {
                 return $parameter;
             }
         }

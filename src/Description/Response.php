@@ -30,11 +30,10 @@ class Response implements Element
     /**
      * Response constructor.
      *
-     * @param Operation $operation
      * @param int       $code
      * @param \stdClass $definition
      */
-    public function __construct(Operation $operation, int $code, \stdClass $definition)
+    public function __construct(int $code, \stdClass $definition)
     {
         $this->code   = $code;
         $this->schema = Schema::get(isset($definition->schema) ? $definition->schema : null);

@@ -16,7 +16,7 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 class YamlParser implements Parser
 {
     /**
-     * @var Parser
+     * @var SymfonyYamlParser
      */
     private $parser;
 
