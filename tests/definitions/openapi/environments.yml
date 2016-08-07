@@ -1,0 +1,387 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+basePath: /environments/v1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+  - application/vnd.error+json
+consumes:
+  - application/json
+paths:
+  /login:
+    post:
+      x-router-controller-method: 'login'
+      summary: Authenticate and login the user
+      security:
+        - bearer: []
+      parameters:
+        - in: body
+          name: ldapUser
+          required: true
+          schema:
+            $ref: '#/definitions/LdapUser'
+      responses:
+        '200':
+          description: Authenticated object
+          schema:
+            type: object
+            $ref: '#/definitions/AuthenticationResponse'
+        401:
+          $ref: '#/responses/UnauthorizedError'
+        500:
+          $ref: '#/responses/ServerError'
+  /environment:
+    post:
+      x-router-controller-method: 'createEnvironment'
+      summary: Create a new environment
+      security:
+        - bearer: []
+      parameters:
+        - in: body
+          name: environment
+          required: true
+          schema:
+            $ref: '#/definitions/Environment'
+      responses:
+        '201':
+          description: The record is echoed back with an ID on successful creation
+          schema:
+            $ref: '#/definitions/Environment'
+        400:
+          $ref: '#/responses/InputError'
+        401:
+          $ref: '#/responses/UnauthorizedError'
+        500:
+          $ref: '#/responses/ServerError'
+    get:
+      x-router-controller-method: 'findEnvironments'
+      summary: List all available environments for API user
+      security:
+        - bearer: []
+      responses:
+        '200':
+          description: Array of known environments
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Environment'
+        401:
+          $ref: '#/responses/UnauthorizedError'
+        500:
+          $ref: '#/responses/ServerError'
+    put:
+      x-router-controller-method: 'updateEnvironment'
+      summary: Replace the definition of a specific environment
+      security:
+        - bearer: []
+      parameters:
+        - in: body
+          name: environment
+          required: true
+          schema:
+            $ref: '#/definitions/Environment'
+      responses:
+        '200':
+          description: The environment with updated timestamps
+          schema:
+            $ref: '#/definitions/Environment'
+        400:
+          $ref: '#/responses/InputError'
+        401:
+          $ref: '#/responses/UnauthorizedError'
+        404:
+          $ref: '#/responses/EntityNotFoundError'
+        500:
+          $ref: '#/responses/ServerError'
+
+  /environment/{id}:
+    get:
+      x-router-controller-method: 'fetchEnvironment'
+      summary: Fetch a specific environment by ID
+      security:
+        - bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: string
+          format: uuid
+          required: true
+      responses:
+        '200':
+          description: The found environment
+          schema:
+            $ref: '#/definitions/Environment'
+        400:
+          $ref: '#/responses/InputError'
+        401:
+          $ref: '#/responses/UnauthorizedError'
+        404:
+          $ref: '#/responses/EntityNotFoundError'
+        500:
+          $ref: '#/responses/ServerError'
+
+    delete:
+      x-router-controller-method: 'deleteEnvironment'
+      summary: Remove a environment, destroy all associated VMS, dissociate all users
+      security:
+        - bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: string
+          format: uuid
+          required: true
+      responses:
+        '200':
+          description: The environment with deleted = TRUE
+          schema:
+            $ref: '#/definitions/Environment'
+        401:
+          $ref: '#/responses/UnauthorizedError'
+        500:
+          $ref: '#/responses/ServerError'
+
+definitions:
+
+  Environment:
+    type: object
+    additionalProperties: false
+    required: [name, customerReference]
+    properties:
+      id:
+        type: string
+        format: uuid
+        readOnly: true
+      externalId:
+        type: integer
+        readOnly: true
+      name:
+        type: string
+        pattern: '^[a-z][a-z0-9_]{2,20}$'
+      jobId:
+        type: string
+        readOnly: true
+      hasStaging:
+        type: boolean
+        default: false
+      isLocked:
+        type: boolean
+        default: false
+      errored:
+        type: boolean
+        default: false
+      maxRUsers:
+        type: integer
+        default: 1
+      maxVMUsers:
+        type: integer
+        default: 2
+      users:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+      virtualMachines:
+        type: array
+        items:
+          $ref: '#/definitions/VirtualMachine'
+      archived:
+        type: boolean
+        default: false
+      archivedAt:
+        type: string
+        format: date-time
+        readOnly: true
+      deleted:
+        type: boolean
+        default: false
+      deletedAt:
+        type: string
+        format: date-time
+        readOnly: true
+      createdAt:
+        type: string
+        format: date-time
+        readOnly: true
+      updatedAt:
+        type: string
+        format: date-time
+        readOnly: true
+      customerReference:
+        type: string
+      organizationName:
+        type: string
+        readOnly: true
+
+  User:
+    type: object
+    additionalProperties: true
+    required: [email, firstName, lastName]
+    properties:
+      id:
+        type: integer
+        readOnly: true
+      email:
+        type: string
+        pattern: '\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b'
+      firstName:
+        type: string
+      lastName:
+        type: string
+      role:
+        type: string
+        default: 'Standard'
+      createdAt:
+        type: string
+        format: date-time
+        readOnly: true
+      updatedAt:
+        type: string
+        format: date-time
+        readOnly: true
+      delete:
+        type: boolean
+        default: false
+
+  LdapUser:
+    type: object
+    required: [email, password]
+    properties:
+      email:
+        type: string
+        pattern: '\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b'
+      password:
+        type: string
+
+  AuthenticationResponse:
+    type: object
+    required: [token, user]
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/User'
+
+  UserRole:
+    type: object
+    additionalProperties: false
+    required: [id, title, createdAt, updatedAt]
+    properties:
+      id:
+        type: integer
+        readOnly: true
+      title:
+        type: string
+        readOnly: true
+      createdAt:
+        type: string
+        format: date-time
+        readOnly: true
+      updatedAt:
+        type: string
+        format: date-time
+        readOnly: true
+
+  VirtualMachine:
+    type: object
+    additionalProperties: false
+    required: [name, osType, class]
+    properties:
+      id:
+        type: integer
+        readOnly: true
+      name:
+        type: string
+        pattern: '^[a-z][a-z0-9_]{2,20}$'
+      osType:
+        type: string
+        enum: ['windows', 'linux']
+      class:
+        type: string
+        enum:
+           - '1 CPU - 2 GB'
+           - '1 CPU - 4 GB'
+           - '2 CPU - 4 GB'
+           - '2 CPU - 8 GB'
+           - '4 CPU - 8 GB'
+           - '4 CPU - 16 GB'
+           - '8 CPU - 16 GB'
+           - '8 CPU - 32 GB'
+      hostname:
+        type: string
+        readOnly: true
+      createdAt:
+        type: string
+        format: date-time
+        readOnly: true
+      updatedAt:
+        type: string
+        format: date-time
+        readOnly: true
+      delete:
+        type: boolean
+        default: false
+
+  SimpleVndInputError:
+    type: object
+    required:
+      - message
+      - logref
+    properties:
+       message:
+        type: string
+       logref:
+        type: string
+  SimpleVndError:
+    type: object
+    required:
+      - message
+      - logref
+    properties:
+       message:
+        type: string
+       logref:
+        type: string
+responses:
+  InputError:
+    description: Bad Input For Request
+    schema:
+      $ref: '#/definitions/SimpleVndInputError'
+    examples:
+      application/vnd.error+json:
+          message: "contractId is required"
+          logref: '55e70b2bec80b'
+  ServerError:
+    description: Server Error
+    schema:
+      $ref: '#/definitions/SimpleVndError'
+    examples:
+      application/vnd.error+json:
+          message: An unspecified error occurred
+          logref: '55e70ae6w786d'
+  EntityNotFoundError:
+    description: Entity Not Found
+    schema:
+      $ref: '#/definitions/SimpleVndError'
+    examples:
+      application/vnd.error+json:
+          message: An unspecified error occurred
+          logref: '55e70ae612c2a'
+  EntityNotFoundError:
+    description: Entity Not Found
+    schema:
+      $ref: '#/definitions/SimpleVndError'
+    examples:
+      application/vnd.error+json:
+          message: An unspecified error occurred
+          logref: '55e70ae612c2a'
+  UnauthorizedError:
+    description: 'Unauthorized Error'
+    schema:
+      $ref: '#/definitions/SimpleVndError'
+securityDefinitions:
+  bearer:
+    type: apiKey
+    name: Authorization
+    in: header

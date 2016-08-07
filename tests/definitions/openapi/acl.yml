@@ -1,0 +1,160 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+basePath: /acl/v1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+  - application/vnd.error+json
+consumes:
+  - application/json
+paths:
+  '/authorization':
+    get:
+      security:
+        - bearer: []
+      parameters:
+        - in: query
+          name: identity
+          type: string
+          required: true
+        - in: query
+          name: resource
+          type: string
+          required: true
+        - in: query
+          name: privilege
+          type: number
+          required: true
+      responses:
+        200:
+          description: Authorization
+          schema:
+            $ref: '#/definitions/Authorization'
+        401:
+          $ref: '#/responses/UnauthorizedError'
+        404:
+          $ref: '#/responses/EntityNotFoundError'
+        500:
+          $ref: '#/responses/ServerError'
+
+  '/rule':
+    post:
+      security:
+        - bearer: []
+      parameters:
+        - in: body
+          name: permissions
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Rule'
+      responses:
+        '204':
+          schema:
+            type: 'string'
+            maxLength: 0
+        400:
+          $ref: '#/responses/InputError'
+        401:
+          $ref: '#/responses/UnauthorizedError'
+        500:
+          $ref: '#/responses/ServerError'
+
+definitions:
+  Authorization:
+    type: object
+    additionalProperties: false
+    required: [allow]
+    properties:
+      allow:
+        type: boolean
+      request:
+        $ref: '#/definitions/Rule'
+
+  Rule:
+    type: object
+    additionalProperties: false
+    required: [resource, identity, name, privilege, privilegeName, allow]
+    properties:
+      resource:
+        type: string
+        readOnly: true
+      identity:
+        type: string
+        readOnly: true
+      name:
+        type: string
+        readOnly: true
+      privilege:
+        type: integer
+        readOnly: true
+      privilegeName:
+        type: string
+        readOnly: true
+      allow:
+        type: boolean
+        readOnly: true
+
+  SimpleVndInputError:
+    type: object
+    required:
+      - message
+      - logref
+    properties:
+       message:
+        type: string
+       logref:
+        type: string
+
+  SimpleVndError:
+    type: object
+    required:
+      - message
+      - logref
+    properties:
+       message:
+        type: string
+       logref:
+        type: string
+
+responses:
+  InputError:
+    description: Bad Input For Request
+    schema:
+      $ref: '#/definitions/SimpleVndInputError'
+    examples:
+      application/vnd.error+json:
+          message: "contractId is required"
+          logref: '55e70b2bec80b'
+
+  ServerError:
+    description: Server Error
+    schema:
+      $ref: '#/definitions/SimpleVndError'
+    examples:
+      application/vnd.error+json:
+          message: An unspecified error occurred
+          logref: '55e70ae6w786d'
+
+  EntityNotFoundError:
+    description: Entity Not Found
+    schema:
+      $ref: '#/definitions/SimpleVndError'
+    examples:
+      application/vnd.error+json:
+          message: An unspecified error occurred
+          logref: '55e70ae612c2a'
+
+  UnauthorizedError:
+    description: 'Unauthorized Error'
+    schema:
+      $ref: '#/definitions/SimpleVndError'
+
+securityDefinitions:
+  bearer:
+    type: apiKey
+    name: Authorization
+    in: header
