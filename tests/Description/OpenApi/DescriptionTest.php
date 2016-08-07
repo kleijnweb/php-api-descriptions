@@ -6,9 +6,15 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description;
+namespace KleijnWeb\ApiDescriptions\Tests\Description\OpenApi;
 
 use KleijnWeb\ApiDescriptions\Description\Description;
+use KleijnWeb\ApiDescriptions\Description\Factory\OpenApiFactory;
+use KleijnWeb\ApiDescriptions\Description\OpenApi\OpenApiDescription;
+use KleijnWeb\ApiDescriptions\Description\OpenApi\OpenApiOperation;
+use KleijnWeb\ApiDescriptions\Description\OpenApi\OpenApiParameter;
+use KleijnWeb\ApiDescriptions\Description\OpenApi\OpenApiPath;
+use KleijnWeb\ApiDescriptions\Description\OpenApi\OpenApiResponse;
 use KleijnWeb\ApiDescriptions\Description\Operation;
 use KleijnWeb\ApiDescriptions\Description\Parameter;
 use KleijnWeb\ApiDescriptions\Description\Path;
@@ -39,7 +45,7 @@ class DescriptionTest extends \PHPUnit_Framework_TestCase
     {
         $uri = 'tests/definitions/openapi/petstore.yml';
 
-        $this->description = new Description(
+        $this->description = new OpenApiDescription(
             $this->document = new Document(
                 $uri,
                 $definition = (new RefResolver((new DefinitionLoader())->load($uri), $uri))->resolve()
@@ -66,11 +72,11 @@ class DescriptionTest extends \PHPUnit_Framework_TestCase
         sort($scope->types);
 
         $expected = [
-            Description::class,
-            Operation::class,
-            Parameter::class,
-            Path::class,
-            Response::class,
+            OpenApiDescription::class,
+            OpenApiOperation::class,
+            OpenApiParameter::class,
+            OpenApiPath::class,
+            OpenApiResponse::class,
             Schema::class,
         ];
         $this->assertSame($expected, $scope->types);

@@ -13,7 +13,7 @@ use KleijnWeb\ApiDescriptions\Description\Visitor\VisiteeMixin;
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class Path implements Element
+abstract class Path implements Element
 {
     use VisiteeMixin;
 
@@ -31,29 +31,6 @@ class Path implements Element
      * @var Parameter[]
      */
     protected $pathParameters = [];
-
-    /**
-     * Path constructor.
-     *
-     * @param string    $path
-     * @param \stdClass $definition
-     */
-    public function __construct(string $path, \stdClass $definition)
-    {
-        $this->path = $path;
-        $definition = clone $definition;
-        if (isset($definition->parameters)) {
-            foreach ($definition->parameters as $parameterDefinition) {
-                $this->pathParameters[] = new Parameter($parameterDefinition);
-            }
-            unset($definition->parameters);
-        }
-
-        foreach ($definition as $method => $operationDefinition) {
-            $method                    = strtolower($method);
-            $this->operations[$method] = $this->createOperation($method, $operationDefinition);
-        }
-    }
 
     /**
      * @return string
@@ -104,13 +81,5 @@ class Path implements Element
      *
      * @return Operation
      */
-    protected function createOperation(string $method, \stdClass $operationDefinition): Operation
-    {
-        return new Operation(
-            $operationDefinition,
-            $this->getPath(),
-            $method,
-            $this->pathParameters
-        );
-    }
+    abstract protected function createOperation(string $method, \stdClass $operationDefinition): Operation;
 }

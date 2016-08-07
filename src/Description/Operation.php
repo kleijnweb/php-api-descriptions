@@ -13,7 +13,7 @@ use KleijnWeb\ApiDescriptions\Description\Visitor\VisiteeMixin;
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class Operation implements Element
+abstract class Operation implements Element
 {
     use VisiteeMixin;
 
@@ -41,61 +41,6 @@ class Operation implements Element
      * @var Response[]
      */
     protected $responses;
-
-    /**
-     * Operation constructor.
-     *
-     * @param \stdClass $definition
-     * @param string    $path
-     * @param string    $method
-     * @param array     $pathParameters
-     */
-    public function __construct(\stdClass $definition, string $path, string $method, array $pathParameters = [])
-    {
-        $this->path       = $path;
-        $this->method     = $method;
-        $this->parameters = $pathParameters;
-
-        if (isset($definition->parameters)) {
-            foreach ($definition->parameters as $parameterDefinition) {
-                $this->parameters[] = new Parameter($parameterDefinition);
-            }
-        }
-
-        if (isset($definition->responses)) {
-            $hasOkResponse = false;
-            foreach ($definition->responses as $code => $responseDefinition) {
-                $code = (string)$code;
-                if ($code === 'default' || substr((string)$code, 1) === '1') {
-                    $hasOkResponse = true;
-                }
-                $code                   = (int)$code;
-                $this->responses[$code] = new Response($code, $responseDefinition);
-            }
-            if (!$hasOkResponse) {
-                $this->responses[200] = new Response(200, (object)[]);
-            }
-        }
-
-        $schemaDefinition = (object)[];
-        if (!isset($definition->parameters)) {
-            $schemaDefinition->type = 'null';
-            $this->requestSchema    = Schema::get($schemaDefinition);
-        } else {
-            $schemaDefinition->type       = 'object';
-            $schemaDefinition->required   = [];
-            $schemaDefinition->properties = (object)[];
-
-            foreach ($this->parameters as $parameter) {
-                if ($parameter->isRequired()) {
-                    $schemaDefinition->required[] = $parameter->getName();
-                }
-                $schemaDefinition->properties->{$parameter->getName()} = $parameter->getSchema()->getDefinition();
-            }
-
-            $this->requestSchema = Schema::get($schemaDefinition);
-        }
-    }
 
     /**
      * @return string

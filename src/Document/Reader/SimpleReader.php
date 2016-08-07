@@ -29,7 +29,7 @@ class SimpleReader implements Reader
         }
 
         return new Response(
-            preg_match('/\b(yml|yaml)\b/', $uri) ? self::CONTENT_TYPE_YAML : self::CONTENT_TYPE_JSON,
+            preg_match('/\b(yml|yaml|raml)\b/', $uri) ? self::CONTENT_TYPE_YAML : self::CONTENT_TYPE_JSON,
             $contents
         );
     }

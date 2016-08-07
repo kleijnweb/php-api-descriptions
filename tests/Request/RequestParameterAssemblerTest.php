@@ -39,21 +39,17 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
      */
     public function canAssembleQueryParameters()
     {
-        $params  = [
+        $params    = [
             'foo' => 'bar',
             'baz' => 1
         ];
-        $message = $this->mockRequest('/foo', $params);
-
-        $operation = new Operation(
-            (object)[
-                'parameters' => [
-                    (object)['name' => 'foo', 'in' => Parameter::IN_QUERY],
-                    (object)['name' => 'baz', 'in' => Parameter::IN_QUERY],
-                ]
-            ],
+        $message   = $this->mockRequest('/foo', $params);
+        $operation = $this->createOperation(
             '/foo',
-            'get'
+            [
+                'foo' => ['getIn' => Parameter::IN_QUERY],
+                'baz' => ['getIn' => Parameter::IN_QUERY],
+            ]
         );
         /** @var ServerRequestInterface $message */
         $actual = $this->assembler->getRequestParameters($message, $operation);
@@ -66,22 +62,19 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
      */
     public function canAssemblePathParameters()
     {
-        $params  = [
+        $params    = [
             'foo' => 'bar',
             'baz' => '1'
         ];
-        $message = $this->mockRequest('/foo/bar/baz/1');
-
-        $operation = new Operation(
-            (object)[
-                'parameters' => [
-                    (object)['name' => 'foo', 'in' => Parameter::IN_PATH],
-                    (object)['name' => 'baz', 'in' => Parameter::IN_PATH],
-                ]
-            ],
+        $message   = $this->mockRequest('/foo/bar/baz/1');
+        $operation = $this->createOperation(
             '/foo/{foo}/baz/{baz}',
-            'get'
+            [
+                'foo' => ['getIn' => Parameter::IN_PATH],
+                'baz' => ['getIn' => Parameter::IN_PATH],
+            ]
         );
+
         /** @var ServerRequestInterface $message */
         $actual = $this->assembler->getRequestParameters($message, $operation);
 
@@ -93,22 +86,19 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
      */
     public function canAssembleHeaderParameters()
     {
-        $params  = [
+        $params    = [
             'foo' => 'bar',
             'baz' => '1'
         ];
-        $message = $this->mockRequest('/foo', [], ['X-Foo' => 'bar', 'baz' => '1']);
-
-        $operation = new Operation(
-            (object)[
-                'parameters' => [
-                    (object)['name' => 'foo', 'in' => Parameter::IN_HEADER],
-                    (object)['name' => 'baz', 'in' => Parameter::IN_HEADER],
-                ]
-            ],
+        $message   = $this->mockRequest('/foo', [], ['X-Foo' => 'bar', 'baz' => '1']);
+        $operation = $this->createOperation(
             '/foo',
-            'get'
+            [
+                'foo' => ['getIn' => Parameter::IN_HEADER],
+                'baz' => ['getIn' => Parameter::IN_HEADER],
+            ]
         );
+
         /** @var ServerRequestInterface $message */
         $actual = $this->assembler->getRequestParameters($message, $operation);
 
@@ -120,21 +110,18 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
      */
     public function willSkipHeaderWithoutValue()
     {
-        $params  = [
+        $params    = [
             'baz' => '1'
         ];
-        $message = $this->mockRequest('/foo', [], [ 'baz' => '1']);
-
-        $operation = new Operation(
-            (object)[
-                'parameters' => [
-                    (object)['name' => 'foo', 'in' => Parameter::IN_HEADER],
-                    (object)['name' => 'baz', 'in' => Parameter::IN_HEADER],
-                ]
-            ],
+        $message   = $this->mockRequest('/foo', [], ['baz' => '1']);
+        $operation = $this->createOperation(
             '/foo',
-            'get'
+            [
+                'foo' => ['getIn' => Parameter::IN_HEADER],
+                'baz' => ['getIn' => Parameter::IN_HEADER],
+            ]
         );
+
         /** @var ServerRequestInterface $message */
         $actual = $this->assembler->getRequestParameters($message, $operation);
 
@@ -146,18 +133,14 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
      */
     public function willCopyBodyAsIs()
     {
-        $body    = (object)['baz' => '1'];
+        $body = (object)['baz' => '1'];
 
         $message = $this->mockRequest('/foo', [], [], $body);
-
-        $operation = new Operation(
-            (object)[
-                'parameters' => [
-                    (object)['name' => 'foo', 'in' => Parameter::IN_BODY],
-                ]
-            ],
+        $operation = $this->createOperation(
             '/foo',
-            'post'
+            [
+                'foo' => ['getIn' => Parameter::IN_BODY],
+            ]
         );
         /** @var ServerRequestInterface $message */
         $params = $this->assembler->getRequestParameters($message, $operation);
@@ -174,7 +157,12 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
      *
      * @return ServerRequestInterface
      */
-    private function mockRequest(string $path, array $query = [], array $headers = [], \stdClass $body = null): ServerRequestInterface
+    private function mockRequest(
+        string $path,
+        array $query = [],
+        array $headers = [],
+        \stdClass $body = null
+    ): ServerRequestInterface
     {
         $message = $this->getMockForAbstractClass(ServerRequestInterface::class);
         $message->expects($this->once())->method('getQueryParams')->willReturn($query);
@@ -193,5 +181,30 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
 
 
         return $message;
+    }
+
+    /**
+     * @param array $parameterStubs
+     *
+     * @return Operation
+     */
+    private function createOperation(string $path, array $parameterStubs = []): Operation
+    {
+        $operationMock = $this->getMockBuilder(Operation::class)->getMock();
+        $operationMock->expects($this->once())->method('getPath')->willReturn($path);
+        $parameterMocks = [];
+
+        foreach ($parameterStubs as $parameterName => $stubs) {
+            $parameterMock = $this->getMockBuilder(Parameter::class)->getMock();
+            $parameterMock->expects($this->any())->method('getName')->willReturn($parameterName);
+
+            foreach ($stubs as $methodName => $value) {
+                $parameterMock->expects($this->any())->method($methodName)->willReturn($value);
+            }
+            $parameterMocks[$parameterName] = $parameterMock;
+        }
+        $operationMock->expects($this->any())->method('getParameters')->willReturn($parameterMocks);
+
+        return $operationMock;
     }
 }

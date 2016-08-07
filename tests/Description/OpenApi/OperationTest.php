@@ -6,8 +6,9 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description;
+namespace KleijnWeb\ApiDescriptions\Tests\Description\OpenApi;
 
+use KleijnWeb\ApiDescriptions\Description\OpenApi\OpenApiOperation;
 use KleijnWeb\ApiDescriptions\Description\Operation;
 use KleijnWeb\ApiDescriptions\Description\Parameter;
 
@@ -21,7 +22,7 @@ class OperationTest extends \PHPUnit_Framework_TestCase
      */
     public function canGetParameter()
     {
-        $path = new Operation(
+        $path = new OpenApiOperation(
             (object)[
                 'parameters' => [
                     (object)['name' => 'bar', 'in' => Parameter::IN_QUERY, 'type' => 'string']
@@ -39,7 +40,7 @@ class OperationTest extends \PHPUnit_Framework_TestCase
      */
     public function willThrowExceptionIfParameterDoesNotExist()
     {
-        $path = new Operation(
+        $path = new OpenApiOperation(
             (object)[],
             '/foo/bar',
             'get'

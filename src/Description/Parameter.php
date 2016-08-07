@@ -12,7 +12,7 @@ use KleijnWeb\ApiDescriptions\Description\Visitor\VisiteeMixin;
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class Parameter implements Element
+abstract class Parameter implements Element
 {
     use VisiteeMixin;
 
@@ -55,31 +55,6 @@ class Parameter implements Element
      * @var string|null
      */
     protected $pattern;
-
-    /**
-     * Definition constructor.
-     *
-     * @param \stdClass $definition
-     */
-    public function __construct(\stdClass $definition)
-    {
-        $this->name             = $definition->name;
-        $this->in               = $definition->in;
-        $this->collectionFormat = isset($definition->collectionFormat) ? $definition->collectionFormat : null;
-        $this->required         = isset($definition->required) && $definition->required;
-        $this->enum             = isset($definition->enum) ? $definition->enum : null;
-        $this->pattern          = isset($definition->pattern) ? $definition->pattern : null;
-
-        if ($this->isIn(self::IN_BODY)) {
-            $definition->schema       = isset($definition->schema) ? $definition->schema : (object)[];
-            $definition->schema->type = 'object';
-        }
-        if (isset($definition->schema)) {
-            $this->schema = Schema::get($definition->schema);
-        } else {
-            $this->schema = $this->createSchema($definition);
-        }
-    }
 
     /**
      * @return string|null
@@ -145,31 +120,5 @@ class Parameter implements Element
     public function isIn(string $location): bool
     {
         return $this->in === $location;
-    }
-
-    /**
-     * @param \stdClass $definition
-     *
-     * @return Schema
-     */
-    protected function createSchema(\stdClass $definition): Schema
-    {
-        // Remove non-JSON-Schema properties
-        $schemaDefinition     = clone $definition;
-        $swaggerPropertyNames = [
-            'name',
-            'in',
-            'description',
-            'required',
-            'allowEmptyValue',
-            'collectionFormat'
-        ];
-        foreach ($swaggerPropertyNames as $propertyName) {
-            if (property_exists($schemaDefinition, $propertyName)) {
-                unset($schemaDefinition->$propertyName);
-            }
-        }
-
-        return Schema::get($schemaDefinition);
     }
 }

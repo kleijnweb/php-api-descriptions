@@ -15,7 +15,7 @@ use KleijnWeb\ApiDescriptions\Document\Document;
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class Description implements Visitee
+abstract class Description implements Visitee
 {
     use VisiteeMixin;
 
@@ -37,25 +37,7 @@ class Description implements Visitee
     /**
      * @var Document
      */
-    private $document;
-
-    /**
-     * Description constructor.
-     *
-     * @param Document $document
-     */
-    public function __construct(Document $document)
-    {
-        $this->document = $document;
-        $this->host     = isset($document->host) ? $document->host : null;
-        $this->schemes  = isset($document->schemes) ? $document->schemes : [];
-
-        if (isset($this->document->paths)) {
-            foreach ($this->document->paths as $path => $pathItem) {
-                $this->paths[$path] = new Path($path, $pathItem);
-            }
-        }
-    }
+    protected $document;
 
     /**
      * @return array

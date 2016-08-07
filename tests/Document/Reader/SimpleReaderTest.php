@@ -42,6 +42,16 @@ class SimpleReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function willReturnContentTypeYamlIfUriLooksLikeRaml()
+    {
+        $loader   = new SimpleReader();
+        $response = $loader->read('tests/definitions/raml/mobile-order-api/api.raml');
+        $this->assertSame(SimpleReader::CONTENT_TYPE_YAML, $response->getContentType());
+    }
+
+    /**
+     * @test
+     */
     public function willReturnContentTypeJsonForEverythingElse()
     {
         $loader   = new SimpleReader();

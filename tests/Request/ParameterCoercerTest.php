@@ -8,6 +8,7 @@
 namespace KleijnWeb\ApiDescriptions\Tests\Request;
 
 use KleijnWeb\ApiDescriptions\Description\Parameter;
+use KleijnWeb\ApiDescriptions\Description\Schema;
 use KleijnWeb\ApiDescriptions\Request\ParameterCoercer;
 
 /**
@@ -31,7 +32,7 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
     public function willReturnOriginalValueIfTypeDoesNotMatchKnownType()
     {
         $value  = (object)[];
-        $actual = $this->coercer->coerce(new Parameter((object)['in' => 'x', 'name' => 'foo', 'type' => 'x']), $value);
+        $actual = $this->coercer->coerce($this->createParameter(['getType' => 'x']), $value);
         $this->assertSame($value, $actual);
     }
 
@@ -46,15 +47,17 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
      */
     public function willInterpretValuesAsExpected($type, $value, $expected, $format = null)
     {
-        $definition = ['type' => $type, 'name' => $value, 'in' => Parameter::IN_PATH];
+        $stubs       = [];
+        $schemaStubs = ['getType' => $type];
+
         if ($type === 'array') {
-            $definition['collectionFormat'] = $format;
+            $stubs['getCollectionFormat'] = $format;
         }
         if ($type === 'string') {
-            $definition['format'] = $format;
+            $schemaStubs['getFormat'] = $format;
         }
 
-        $actual = $this->coercer->coerce(new Parameter((object)$definition), $value);
+        $actual = $this->coercer->coerce($this->createParameter($schemaStubs, $stubs), $value);
 
         if (is_object($expected)) {
             $this->assertEquals($expected, $actual);
@@ -73,11 +76,7 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
      */
     public function willNotChangeUninterpretableValues($type, $value)
     {
-        $actual = $this->coercer->coerce(new Parameter((object)[
-            'type' => $type,
-            'name' => $value,
-            'in'   => Parameter::IN_PATH
-        ]), $value);
+        $actual = $this->coercer->coerce($this->createParameter(['getType' => $type]), $value);
         $this->assertSame($value, $actual);
     }
 
@@ -91,11 +90,9 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
     public function willNotChangeUninterpretableDateTimeAsExpected($format, $value)
     {
         $actual = $this->coercer->coerce(
-            new Parameter((object)[
-                'type'   => 'string',
-                'format' => $format,
-                'name'   => $value,
-                'in'     => Parameter::IN_PATH
+            $this->createParameter([
+                'getType'   => 'string',
+                'getFormat' => $format,
             ]),
             $value
         );
@@ -103,17 +100,18 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider unsupportedPrimitiveConversionProvider
      * @test
-     *
-     * @param array $spec
-     * @param mixed $value
      */
-    public function willThrowUnsupportedExceptionInPredefinedCases($spec, $value)
+    public function willThrowUnsupportedExceptionInPredefinedCases()
     {
         $this->setExpectedException(\RuntimeException::class);
-        $spec = array_merge(['type' => 'string', 'name' => $value, 'in' => Parameter::IN_PATH], $spec);
-        $this->coercer->coerce(new Parameter((object)$spec), $value);
+        $this->coercer->coerce(
+            $this->createParameter(
+                ['getType' => 'array'],
+                ['getCollectionFormat' => 'multi']
+            ),
+            ''
+        );
     }
 
     /**
@@ -199,13 +197,27 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return array
+     * @param array $schemaStubs
+     * @param array $stubs
+     *
+     * @return Parameter
      */
-    public static function unsupportedPrimitiveConversionProvider()
+    private function createParameter(array $schemaStubs = [], array $stubs = []): Parameter
     {
-        return [
-            [['type' => 'array', 'collectionFormat' => 'multi'], ''],
-            [['type' => 'array', 'collectionFormat' => 'foo'], ''],
-        ];
+        $parameterMock = $this->getMockBuilder(Parameter::class)->getMock();
+
+        foreach ($stubs as $methodName => $value) {
+            $parameterMock->expects($this->any())->method($methodName)->willReturn($value);
+        }
+
+        $schemaMock = $this->getMockBuilder(Schema::class)->disableOriginalConstructor()->getMock();
+
+        $parameterMock->expects($this->any())->method('getSchema')->willReturn($schemaMock);
+
+        foreach ($schemaStubs as $methodName => $value) {
+            $schemaMock->expects($this->any())->method($methodName)->willReturn($value);
+        }
+
+        return $parameterMock;
     }
 }

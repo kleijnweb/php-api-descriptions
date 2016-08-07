@@ -11,7 +11,7 @@ use Doctrine\Common\Cache\ArrayCache;
 use KleijnWeb\ApiDescriptions\Description\Description;
 use KleijnWeb\ApiDescriptions\Document\Definition\Validator\DefinitionValidator;
 use KleijnWeb\ApiDescriptions\Document\Reader\ResourceNotReadableException;
-use KleijnWeb\ApiDescriptions\Document\Repository;
+use KleijnWeb\ApiDescriptions\Description\Repository;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -60,9 +60,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function willCache()
     {
-        $path  = 'tests/definitions/openapi/petstore.yml';
-        $cache = $this->getMockBuilder(ArrayCache::class)->disableOriginalConstructor()->getMock();
-        $repository = new Repository(null, null, $cache);
+        $path       = 'tests/definitions/openapi/petstore.yml';
+        $cache      = $this->getMockBuilder(ArrayCache::class)->disableOriginalConstructor()->getMock();
+        $repository = new Repository(null, $cache);
 
         $cache->expects($this->exactly(1))->method('fetch')->with($path);
         $cache->expects($this->exactly(1))->method('save')->with($path, $this->isType('object'));
@@ -74,27 +74,14 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function willFetchFromCache()
     {
-        $path  = 'tests/definitions/openapi/petstore.yml';
-        $cache = $this->getMockBuilder(ArrayCache::class)->disableOriginalConstructor()->getMock();
+        $path        = 'tests/definitions/openapi/petstore.yml';
+        $cache       = $this->getMockBuilder(ArrayCache::class)->disableOriginalConstructor()->getMock();
         $description = $this->getMockBuilder(Description::class)->disableOriginalConstructor()->getMock();
 
-        $repository = new Repository(null, null, $cache);
+        $repository = new Repository(null, $cache);
 
         $cache->expects($this->exactly(1))->method('fetch')->with($path)->willReturn($description);
         $this->assertInstanceOf(Description::class, $repository->get($path));
-    }
-
-    /**
-     * @test
-     */
-    public function willValidate()
-    {
-        $path      = 'tests/definitions/openapi/petstore.yml';
-        $validator = $this->getMockBuilder(DefinitionValidator::class)->disableOriginalConstructor()->getMock();
-
-        $repository = new Repository(null, $validator);
-        $validator->expects($this->exactly(1))->method('validate')->with($this->isInstanceOf(\stdClass::class));
-        $repository->get($path);
     }
 
     /**

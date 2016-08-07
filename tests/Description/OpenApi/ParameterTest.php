@@ -6,8 +6,9 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description;
+namespace KleijnWeb\ApiDescriptions\Tests\Description\OpenApi;
 
+use KleijnWeb\ApiDescriptions\Description\OpenApi\OpenApiParameter;
 use KleijnWeb\ApiDescriptions\Description\Parameter;
 use KleijnWeb\ApiDescriptions\Description\Schema;
 
@@ -22,7 +23,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
      */
     public function creatingParameterWillWithInBodyWillForceTypeObject()
     {
-        $parameter = new Parameter(
+        $parameter = new OpenApiParameter(
             (object)[
                 'name'   => 'foo',
                 'in'     => Parameter::IN_BODY,
@@ -37,7 +38,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetters()
     {
-        $parameter = new Parameter(
+        $parameter = new OpenApiParameter(
             (object)[
                 'name'             => 'bar',
                 'in'               => Parameter::IN_PATH,

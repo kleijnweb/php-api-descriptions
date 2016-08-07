@@ -6,8 +6,9 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description;
+namespace KleijnWeb\ApiDescriptions\Tests\Description\OpenApi;
 
+use KleijnWeb\ApiDescriptions\Description\OpenApi\OpenApiPath;
 use KleijnWeb\ApiDescriptions\Description\Parameter;
 use KleijnWeb\ApiDescriptions\Description\Path;
 
@@ -23,7 +24,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->path = new Path(
+        $this->path = new OpenApiPath(
             '/foo/bar',
             (object)[
                 'get'        => (object)[],
@@ -49,7 +50,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
      */
     public function willAddPathParametersToOperation()
     {
-        $path = new Path(
+        $path = new OpenApiPath(
             '/foo/bar',
             (object)[
                 'get'        => (object)[],

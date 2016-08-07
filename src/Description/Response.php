@@ -13,7 +13,7 @@ use KleijnWeb\ApiDescriptions\Description\Visitor\VisiteeMixin;
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class Response implements Element
+abstract class Response implements Element
 {
     use VisiteeMixin;
 
@@ -26,18 +26,6 @@ class Response implements Element
      * @var Schema
      */
     protected $schema;
-
-    /**
-     * Response constructor.
-     *
-     * @param int       $code
-     * @param \stdClass $definition
-     */
-    public function __construct(int $code, \stdClass $definition)
-    {
-        $this->code   = $code;
-        $this->schema = Schema::get(isset($definition->schema) ? $definition->schema : null);
-    }
 
     /**
      * @return int
