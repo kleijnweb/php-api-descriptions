@@ -1,11 +1,11 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace KleijnWeb\ApiDescriptions\Tests\Mixins;
+namespace KleijnWeb\PhpApi\Descriptions\Tests\Mixins;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -34,6 +34,7 @@ trait HttpMessageMockingMixin
         string $method = 'GET'
     ): ServerRequestInterface {
     
+
 
         $message = $this->getMockForAbstractClass(ServerRequestInterface::class);
         $message->expects($this->once())->method('getQueryParams')->willReturn($query);

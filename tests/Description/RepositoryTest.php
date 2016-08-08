@@ -1,16 +1,16 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace KleijnWeb\ApiDescriptions\Tests\Description;
+namespace KleijnWeb\PhpApi\Descriptions\Tests\Description;
 
 use Doctrine\Common\Cache\ArrayCache;
-use KleijnWeb\ApiDescriptions\Description\Description;
-use KleijnWeb\ApiDescriptions\Description\Document\Reader\ResourceNotReadableException;
-use KleijnWeb\ApiDescriptions\Description\Repository;
+use KleijnWeb\PhpApi\Descriptions\Description\Description;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\ResourceNotReadableException;
+use KleijnWeb\PhpApi\Descriptions\Description\Repository;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>

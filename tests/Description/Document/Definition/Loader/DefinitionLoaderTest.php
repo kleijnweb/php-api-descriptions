@@ -1,18 +1,18 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description\Document\Definition\Loader;
+namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Document\Definition\Loader;
 
-use KleijnWeb\ApiDescriptions\Description\Document\Definition\Loader\DefinitionLoader;
-use KleijnWeb\ApiDescriptions\Description\Document\Definition\Loader\ResourceNotParsableException;
-use KleijnWeb\ApiDescriptions\Description\Document\Parser\Parser;
-use KleijnWeb\ApiDescriptions\Description\Document\Reader\Reader;
-use KleijnWeb\ApiDescriptions\Description\Document\Reader\Response;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\DefinitionLoader;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\ResourceNotParsableException;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\Parser;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\Reader;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\Response;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>

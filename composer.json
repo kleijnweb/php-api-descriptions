@@ -12,8 +12,8 @@
   "description": "A PHP7 library for loading api descriptions and using them to validate PSR7 messages.",
   "autoload": {
     "psr-4": {
-      "KleijnWeb\\ApiDescriptions\\Tests\\": "tests",
-      "KleijnWeb\\ApiDescriptions\\": "src"
+      "KleijnWeb\\PhpApi\\Descriptions\\Tests\\": "tests",
+      "KleijnWeb\\PhpApi\\Descriptions\\": "src"
     }
   },
   "require": {

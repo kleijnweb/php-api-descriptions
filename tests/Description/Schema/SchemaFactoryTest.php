@@ -1,16 +1,16 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace KleijnWeb\ApiDescriptions\Tests\Description\Schema;
+namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Schema;
 
-use KleijnWeb\ApiDescriptions\Description\Schema\ArraySchema;
-use KleijnWeb\ApiDescriptions\Description\Schema\ObjectSchema;
-use KleijnWeb\ApiDescriptions\Description\Schema\Schema;
-use KleijnWeb\ApiDescriptions\Description\Schema\SchemaFactory;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\ArraySchema;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\SchemaFactory;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -60,8 +60,9 @@ class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
     public function canGetNestedPropertySchemas()
     {
         /** @var ObjectSchema $schema */
-        $schema = self::$factory->create((object)['type'       => 'object',
-                                                  'properties' => ['foo' => (object)['type' => 'string']]
+        $schema = self::$factory->create((object)[
+            'type'       => 'object',
+            'properties' => ['foo' => (object)['type' => 'string']]
         ]);
 
         $this->assertInstanceOf(\stdClass::class, $schema->getPropertySchemas());

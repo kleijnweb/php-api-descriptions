@@ -1,17 +1,17 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace KleijnWeb\ApiDescriptions\Tests\Request;
+namespace KleijnWeb\PhpApi\Descriptions\Tests\Request;
 
-use KleijnWeb\ApiDescriptions\Description\Operation;
-use KleijnWeb\ApiDescriptions\Description\Parameter;
-use KleijnWeb\ApiDescriptions\Request\ParameterCoercer;
-use KleijnWeb\ApiDescriptions\Request\RequestParameterAssembler;
-use KleijnWeb\ApiDescriptions\Tests\Mixins\HttpMessageMockingMixin;
+use KleijnWeb\PhpApi\Descriptions\Description\Operation;
+use KleijnWeb\PhpApi\Descriptions\Description\Parameter;
+use KleijnWeb\PhpApi\Descriptions\Request\ParameterCoercer;
+use KleijnWeb\PhpApi\Descriptions\Request\RequestParameterAssembler;
+use KleijnWeb\PhpApi\Descriptions\Tests\Mixins\HttpMessageMockingMixin;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**

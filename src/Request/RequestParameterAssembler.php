@@ -1,14 +1,14 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace KleijnWeb\ApiDescriptions\Request;
+namespace KleijnWeb\PhpApi\Descriptions\Request;
 
-use KleijnWeb\ApiDescriptions\Description\Operation;
-use KleijnWeb\ApiDescriptions\Description\Parameter;
+use KleijnWeb\PhpApi\Descriptions\Description\Operation;
+use KleijnWeb\PhpApi\Descriptions\Description\Parameter;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**

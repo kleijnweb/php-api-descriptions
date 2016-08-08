@@ -1,17 +1,17 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description\Builder\OpenApi;
+namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Builder\OpenApi;
 
-use KleijnWeb\ApiDescriptions\Description\ComplexType;
-use KleijnWeb\ApiDescriptions\Description\Response;
-use KleijnWeb\ApiDescriptions\Description\Schema\ObjectSchema;
-use KleijnWeb\ApiDescriptions\Tests\Description\Builder\OpenApiBuilderTest;
+use KleijnWeb\PhpApi\Descriptions\Description\ComplexType;
+use KleijnWeb\PhpApi\Descriptions\Description\Response;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
+use KleijnWeb\PhpApi\Descriptions\Tests\Description\Builder\OpenApiBuilderTest;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>

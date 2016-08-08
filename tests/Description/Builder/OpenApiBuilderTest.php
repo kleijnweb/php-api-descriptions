@@ -1,19 +1,19 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description\Builder;
+namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Builder;
 
-use KleijnWeb\ApiDescriptions\Description\Builder\OpenApiBuilder;
-use KleijnWeb\ApiDescriptions\Description\Description;
-use KleijnWeb\ApiDescriptions\Description\Document\Definition\Loader\DefinitionLoader;
-use KleijnWeb\ApiDescriptions\Description\Document\Definition\RefResolver\RefResolver;
-use KleijnWeb\ApiDescriptions\Description\Document\Document;
-use KleijnWeb\ApiDescriptions\Description\Schema\Schema;
+use KleijnWeb\PhpApi\Descriptions\Description\Builder\OpenApiBuilder;
+use KleijnWeb\PhpApi\Descriptions\Description\Description;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\DefinitionLoader;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\RefResolver\RefResolver;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>

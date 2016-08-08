@@ -1,10 +1,10 @@
-# KleijnWeb\ApiDescriptions 
+# KleijnWeb\PhpApi\Descriptions 
 [![Build Status](https://travis-ci.org/kleijnweb/php-api-descriptions.svg?branch=master)](https://travis-ci.org/kleijnweb/php-api-descriptions)
 [![Coverage Status](https://coveralls.io/repos/github/kleijnweb/php-api-descriptions/badge.svg?branch=master)](https://coveralls.io/github/kleijnweb/php-api-descriptions?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kleijnweb/php-api-descriptions/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kleijnweb/php-api-descriptions/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/kleijnweb/php-api-descriptions/v/stable)](https://packagist.org/packages/kleijnweb/php-api-descriptions)
 
-A PHP7 library for loading api descriptions and using them to validate PSR7 messages. 
+A PHP7 library for loading api descriptions and using them to validate PSR7 messages. Enables object hydration in combination with [KleijnWeb\PhpApi\Hydrator](https://github.com/kleijnweb/php-api-hydrator).
 
 Supported formats:
 
@@ -60,4 +60,4 @@ Pull requests are *very* welcome, but the code has to be PSR2 compliant, follow 
 
 ## License
 
-KleijnWeb\ApiDescriptions is made available under the terms of the [LGPL, version 3.0](https://spdx.org/licenses/LGPL-3.0.html#licenseText).
+KleijnWeb\PhpApi\Descriptions is made available under the terms of the [LGPL, version 3.0](https://spdx.org/licenses/LGPL-3.0.html#licenseText).

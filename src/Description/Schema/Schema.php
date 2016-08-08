@@ -1,14 +1,14 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace KleijnWeb\ApiDescriptions\Description\Schema;
+namespace KleijnWeb\PhpApi\Descriptions\Description\Schema;
 
-use KleijnWeb\ApiDescriptions\Description\Element;
-use KleijnWeb\ApiDescriptions\Description\Visitor\VisiteeMixin;
+use KleijnWeb\PhpApi\Descriptions\Description\Element;
+use KleijnWeb\PhpApi\Descriptions\Description\Visitor\VisiteeMixin;
 
 /**
  * Represents standard JSON Schema but with support for complex types

@@ -1,27 +1,27 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description\Builder;
+namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Builder;
 
-use KleijnWeb\ApiDescriptions\Description\Builder\RamlBuilder;
-use KleijnWeb\ApiDescriptions\Description\Description;
-use KleijnWeb\ApiDescriptions\Description\Document\Definition\Loader\DefinitionLoader;
-use KleijnWeb\ApiDescriptions\Description\Document\Definition\RefResolver\RefResolver;
-use KleijnWeb\ApiDescriptions\Description\Document\Document;
-use KleijnWeb\ApiDescriptions\Description\Operation;
-use KleijnWeb\ApiDescriptions\Description\Parameter;
-use KleijnWeb\ApiDescriptions\Description\Path;
-use KleijnWeb\ApiDescriptions\Description\Response;
-use KleijnWeb\ApiDescriptions\Description\Schema;
-use KleijnWeb\ApiDescriptions\Description\Schema\ObjectSchema;
-use KleijnWeb\ApiDescriptions\Description\Schema\ScalarSchema;
-use KleijnWeb\ApiDescriptions\Description\Visitor\ClosureVisitor;
-use KleijnWeb\ApiDescriptions\Description\Visitor\ClosureVisitorScope;
+use KleijnWeb\PhpApi\Descriptions\Description\Builder\RamlBuilder;
+use KleijnWeb\PhpApi\Descriptions\Description\Description;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\DefinitionLoader;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\RefResolver\RefResolver;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
+use KleijnWeb\PhpApi\Descriptions\Description\Operation;
+use KleijnWeb\PhpApi\Descriptions\Description\Parameter;
+use KleijnWeb\PhpApi\Descriptions\Description\Path;
+use KleijnWeb\PhpApi\Descriptions\Description\Response;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
+use KleijnWeb\PhpApi\Descriptions\Description\Visitor\ClosureVisitor;
+use KleijnWeb\PhpApi\Descriptions\Description\Visitor\ClosureVisitorScope;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>

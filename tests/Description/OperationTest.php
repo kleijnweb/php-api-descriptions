@@ -1,17 +1,17 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\ApiDescriptions\Tests\Description;
+namespace KleijnWeb\PhpApi\Descriptions\Tests\Description;
 
-use KleijnWeb\ApiDescriptions\Description\Operation;
-use KleijnWeb\ApiDescriptions\Description\Parameter;
-use KleijnWeb\ApiDescriptions\Description\Schema\ScalarSchema;
-use KleijnWeb\ApiDescriptions\Description\Schema\Schema;
+use KleijnWeb\PhpApi\Descriptions\Description\Operation;
+use KleijnWeb\PhpApi\Descriptions\Description\Parameter;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>

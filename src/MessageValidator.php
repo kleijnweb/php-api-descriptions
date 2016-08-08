@@ -1,17 +1,17 @@
 <?php declare(strict_types = 1);
 /*
- * This file is part of the KleijnWeb\ApiDescriptions package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace KleijnWeb\ApiDescriptions;
+namespace KleijnWeb\PhpApi\Descriptions;
 
-use KleijnWeb\ApiDescriptions\Description\Description;
-use KleijnWeb\ApiDescriptions\Description\Schema\Validator\DefaultValidator;
-use KleijnWeb\ApiDescriptions\Description\Schema\Validator\SchemaValidator;
-use KleijnWeb\ApiDescriptions\Description\Schema\Validator\ValidationResult;
-use KleijnWeb\ApiDescriptions\Request\RequestParameterAssembler;
+use KleijnWeb\PhpApi\Descriptions\Description\Description;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\DefaultValidator;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\SchemaValidator;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\ValidationResult;
+use KleijnWeb\PhpApi\Descriptions\Request\RequestParameterAssembler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -79,6 +79,7 @@ class MessageValidator
         string $path
     ): ValidationResult {
     
+
 
         $operation = $this->description->getPath($path)->getOperation($request->getMethod());
         $schema    = $operation->getResponse($response->getStatusCode())->getSchema();
