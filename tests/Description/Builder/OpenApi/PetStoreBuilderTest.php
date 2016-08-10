@@ -9,6 +9,7 @@
 namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Builder\OpenApi;
 
 use KleijnWeb\PhpApi\Descriptions\Description\ComplexType;
+use KleijnWeb\PhpApi\Descriptions\Description\Parameter;
 use KleijnWeb\PhpApi\Descriptions\Description\Response;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Tests\Description\Builder\OpenApiBuilderTest;
@@ -140,6 +141,22 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
                 );
             }
         }
+    }
+
+    /**
+     * @test
+     */
+    public function canGetRequestBodyParameter()
+    {
+        $this->assertInstanceOf(Parameter::class, $this->description->getRequestBodyParameter('/pets', 'post'));
+    }
+
+    /**
+     * @test
+     */
+    public function getRequestBodyParameterWillReturnNullIfNonExistent()
+    {
+        $this->assertNull($this->description->getRequestBodyParameter('/pets/findByStatus', 'get'));
     }
 
     /**

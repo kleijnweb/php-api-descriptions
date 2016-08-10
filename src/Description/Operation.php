@@ -21,6 +21,12 @@ class Operation implements Element
     /**
      * @var string
      */
+    protected $id;
+
+
+    /**
+     * @var string
+     */
     protected $path;
 
     /**
@@ -44,26 +50,47 @@ class Operation implements Element
     protected $responses;
 
     /**
+     * @var array
+     */
+    private $extensions;
+
+    /**
      * Operation constructor.
      *
+     * @param string      $id
      * @param string      $path
      * @param string      $method
      * @param Parameter[] $parameters
      * @param Schema      $requestSchema
      * @param Response[]  $responses
+     * @param array       $extensions
      */
     public function __construct(
+        string $id,
         string $path,
         string $method,
-        array $parameters,
-        Schema $requestSchema,
-        array $responses
+        array $parameters = [],
+        Schema $requestSchema = null,
+        array $responses = [],
+        array $extensions = []
     ) {
+        $this->id            = $id;
         $this->path          = $path;
         $this->method        = $method;
         $this->parameters    = $parameters;
         $this->requestSchema = $requestSchema;
         $this->responses     = $responses;
+        $this->extensions    = $extensions;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getExtension(string $name)
+    {
+        return isset($this->extensions[$name]) ? $this->extensions[$name] : null;
     }
 
     /**
@@ -79,7 +106,7 @@ class Operation implements Element
      */
     public function getId(): string
     {
-        return "$this->path::$this->method";
+        return $this->id;
     }
 
     /**

@@ -28,7 +28,7 @@ class OperationTest extends \PHPUnit_Framework_TestCase
         $parameters = [
             new Parameter('bar', false, $schema, Parameter::IN_QUERY)
         ];
-        $path       = new Operation('/foo', 'get', $parameters, $schema, []);
+        $path       = new Operation('', '/foo', 'get', $parameters, $schema, []);
 
         $this->assertInstanceOf(Parameter::class, $path->getParameter('bar'));
     }
@@ -38,7 +38,7 @@ class OperationTest extends \PHPUnit_Framework_TestCase
      */
     public function willThrowExceptionIfParameterDoesNotExist()
     {
-        $path = new Operation('/foo', 'get', [], new ScalarSchema((object)['type' => Schema::TYPE_ANY]), []);
+        $path = new Operation('', '/foo', 'get', [], new ScalarSchema((object)['type' => Schema::TYPE_ANY]), []);
 
         $this->setExpectedException(\OutOfBoundsException::class);
 

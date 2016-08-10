@@ -29,7 +29,7 @@ class ValidationResult
      * @param bool     $valid
      * @param string[] $errorMessages
      */
-    public function __construct(bool $valid, array $errorMessages)
+    public function __construct(bool $valid, array $errorMessages = [])
     {
         $this->valid         = $valid;
         $this->errorMessages = $errorMessages;

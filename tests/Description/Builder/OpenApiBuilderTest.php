@@ -13,6 +13,7 @@ use KleijnWeb\PhpApi\Descriptions\Description\Description;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\DefinitionLoader;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\RefResolver\RefResolver;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 
 /**

@@ -28,16 +28,20 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
      */
     public function build(): Description
     {
-        $host    = isset($this->document->host) ? $this->document->host : null;
-        $schemes = isset($this->document->schemes) ? $this->document->schemes : [];
-        $paths   = [];
-        if (isset($this->document->paths)) {
-            foreach ($this->document->paths as $path => $pathItem) {
+        $definition = clone $this->document->getDefinition();
+
+        $host       = isset($definition->host) ? $definition->host : null;
+        $schemes    = isset($definition->schemes) ? $definition->schemes : [];
+        $extensions = $this->extractExtensions($definition);
+        $paths      = [];
+        if (isset($definition->paths)) {
+            $extensions = array_merge($extensions, $this->extractExtensions($definition->paths));
+            foreach ($definition->paths as $path => $pathItem) {
                 $paths[$path] = $this->createPath($path, $pathItem);
             }
         }
 
-        $description = new Description($paths, [], $host, $schemes, $this->document);
+        $description = new Description($paths, [], $host, $schemes, $extensions, $this->document);
 
         /** @var ObjectSchema[] $typeDefinitions */
         $typeDefinitions = [];
@@ -91,7 +95,7 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
             }
         }
 
-        return new Path($pathName, $operations, $pathParameters);
+        return new Path($pathName, $operations, $pathParameters, $this->extractExtensions($definition));
     }
 
     /**
@@ -107,10 +111,8 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
         string $path,
         string $method,
         array $pathParameters = []
-    ): Operation {
-    
-
-
+    ): Operation
+    {
         /** @var Parameter[] $parameters */
         $parameters = array_merge($pathParameters, self::extractParameters($definition));
         $responses  = [];
@@ -148,8 +150,17 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
 
             $requestSchema = $this->schemaFactory->create($schemaDefinition);
         }
+        $id = isset($definition->operationId) ? $definition->operationId : "$path:$method";
 
-        return new Operation($path, $method, $parameters, $requestSchema, $responses);
+        return new Operation(
+            $id,
+            $path,
+            $method,
+            $parameters,
+            $requestSchema,
+            $responses,
+            $this->extractExtensions($definition)
+        );
     }
 
     /**
@@ -179,7 +190,7 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
     {
         if ($definition->in === Parameter::IN_BODY) {
             $definition->schema       = isset($definition->schema) ? $definition->schema : (object)[];
-            $definition->schema->type = 'object';
+            $definition->schema->type = $definition->schema->type ?: 'object';
         }
         if (isset($definition->schema)) {
             $schema = $this->schemaFactory->create($definition->schema);
@@ -231,5 +242,23 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
         }
 
         return $this->schemaFactory->create($schemaDefinition);
+    }
+
+    /**
+     * @param \stdClass $definition
+     *
+     * @return array
+     */
+    protected static function extractExtensions(\stdClass $definition): array
+    {
+        $extensions = [];
+        foreach ($definition as $attribute => $value) {
+            if (0 === strpos($attribute, 'x-')) {
+                $extensions[substr($attribute, 2)] = $value;
+                unset($definition->$attribute);
+            }
+        }
+
+        return $extensions;
     }
 }

@@ -55,6 +55,8 @@ class SchemaFactory
             } elseif ($definition->type == Schema::TYPE_ARRAY) {
                 $itemsSchema = isset($definition->items) ? $this->create($definition->items) : null;
                 $schema      = new ArraySchema($definition, $itemsSchema);
+            } elseif ($definition->type == Schema::TYPE_ANY) {
+                $schema      = new AnySchema($definition);
             } else {
                 $schema = new ScalarSchema($definition);
             }

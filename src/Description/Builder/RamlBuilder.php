@@ -35,7 +35,7 @@ class RamlBuilder extends Builder
             }
         });
 
-        return new Description($paths, [], '', $schemes, $this->document);
+        return new Description($paths, [], '', $schemes, [], $this->document);
     }
 
     /**
@@ -75,8 +75,6 @@ class RamlBuilder extends Builder
         array $pathParameters = []
     ): Operation {
     
-
-
         /** @var Parameter[] $parameters */
         $parameters = array_merge($pathParameters, $this->extractParameters($definition));
         $responses  = [];
@@ -106,7 +104,7 @@ class RamlBuilder extends Builder
 
         $requestSchema = $this->schemaFactory->create($schemaDefinition);
 
-        return new Operation($path, $method, $parameters, $requestSchema, $responses);
+        return new Operation("$path:$method", $path, $method, $parameters, $requestSchema, $responses);
     }
 
     /**

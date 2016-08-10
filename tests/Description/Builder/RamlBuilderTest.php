@@ -17,7 +17,7 @@ use KleijnWeb\PhpApi\Descriptions\Description\Operation;
 use KleijnWeb\PhpApi\Descriptions\Description\Parameter;
 use KleijnWeb\PhpApi\Descriptions\Description\Path;
 use KleijnWeb\PhpApi\Descriptions\Description\Response;
-use KleijnWeb\PhpApi\Descriptions\Description\Schema;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\AnySchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Visitor\ClosureVisitor;
@@ -78,6 +78,7 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
             Parameter::class,
             Path::class,
             Response::class,
+            AnySchema::class
         ];
 
         sort($expected);

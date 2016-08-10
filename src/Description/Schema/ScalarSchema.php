@@ -17,20 +17,29 @@ class ScalarSchema extends Schema
     /**
      * @var string
      */
-    protected $type;
+    protected $format;
+
+    /**
+     * @var array|string
+     */
+    protected $enum;
 
     /**
      * @var string|null
      */
-    protected $format;
+    protected $pattern;
 
     /**
      * ScalarSchema constructor.
+     *
+     * @param \stdClass $definition
      */
     public function __construct(\stdClass $definition)
     {
         parent::__construct($definition);
-        $this->format = isset($definition->format) ? $definition->format : null;
+        $this->format  = isset($definition->format) ? $definition->format : null;
+        $this->enum    = isset($definition->enum) ? (array)$definition->enum : null;
+        $this->pattern = isset($definition->pattern) ? $definition->pattern : null;
     }
 
     /**
@@ -41,6 +50,23 @@ class ScalarSchema extends Schema
         return $this->isType(self::TYPE_STRING)
         && ($this->hasFormat(self::FORMAT_DATE) || $this->hasFormat(self::FORMAT_DATE_TIME));
     }
+
+    /**
+     * @return array|string
+     */
+    public function getEnum()
+    {
+        return $this->enum;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPattern()
+    {
+        return $this->pattern;
+    }
+
 
     /**
      * @return string

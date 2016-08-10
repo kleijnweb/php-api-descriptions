@@ -32,47 +32,42 @@ class RequestParameterAssembler
     }
 
     /**
-     * @param ServerRequestInterface $httpRequest
-     * @param Operation              $operation
+     * @param Operation $operation
+     * @param array     $queryParams
+     * @param array     $pathParams
+     * @param array     $headers
+     * @param mixed     $body
      *
      * @return \stdClass
      */
-    public function getRequestParameters(ServerRequestInterface $httpRequest, Operation $operation): \stdClass
+    public function assemble(
+        Operation $operation,
+        array $queryParams,
+        array $pathParams,
+        array $headers,
+        $body = null
+    ): \stdClass
     {
-        $indexed    = array_combine(
-            explode('/', trim($operation->getPath(), '/')),
-            explode('/', trim($httpRequest->getUri()->getPath(), '/'))
-        );
-        $pathParams = (object)[];
-
-        foreach ($indexed as $key => $value) {
-            if (0 == strpos('{', $key)) {
-                $pathParams->{trim($key, '{}')} = $value;
-            }
-        }
-
-        $parameters     = (object)[];
-        $queryParams    = (object)$httpRequest->getQueryParams();
-        $headers        = $httpRequest->getHeaders();
         $headerParamMap = array_combine(array_map(function ($key) {
             return $this->getHeaderParameterName($key);
         }, array_keys($headers)), array_keys($headers));
 
+        $parameters = (object)[];
         foreach ($operation->getParameters() as $parameter) {
             $paramName = $parameter->getName();
 
             switch ($parameter->getIn()) {
                 case Parameter::IN_QUERY:
-                    if (isset($queryParams->$paramName)) {
-                        $parameters->$paramName = $this->parameterCoercer->coerce($parameter, $queryParams->$paramName);
+                    if (isset($queryParams[$paramName])) {
+                        $parameters->$paramName = $this->parameterCoercer->coerce($parameter, $queryParams[$paramName]);
                     }
                     break;
                 case Parameter::IN_BODY:
-                    $parameters->$paramName = $httpRequest->getParsedBody();
+                    $parameters->$paramName = $body;
                     break;
                 case Parameter::IN_PATH:
-                    if (isset($pathParams->$paramName)) {
-                        $parameters->$paramName = $this->parameterCoercer->coerce($parameter, $pathParams->$paramName);
+                    if (isset($pathParams[$paramName])) {
+                        $parameters->$paramName = $this->parameterCoercer->coerce($parameter, $pathParams[$paramName]);
                     }
                     break;
                 case Parameter::IN_HEADER:
@@ -91,7 +86,45 @@ class RequestParameterAssembler
         return $parameters;
     }
 
-    private function getHeaderParameterName($headerName)
+    /**
+     * @param ServerRequestInterface $httpRequest
+     * @param Operation              $operation
+     *
+     * @return \stdClass
+     */
+    public function getRequestParameters(ServerRequestInterface $httpRequest, Operation $operation): \stdClass
+    {
+        $indexed = array_combine(
+            explode('/', trim($operation->getPath(), '/')),
+            explode('/', trim($httpRequest->getUri()->getPath(), '/'))
+        );
+
+        $pathParams = [];
+
+        foreach ($indexed as $key => $value) {
+            if (0 == strpos('{', $key)) {
+                $pathParams[trim($key, '{}')] = $value;
+            }
+        }
+
+        $queryParams = $httpRequest->getQueryParams();
+        $headers     = $httpRequest->getHeaders();
+
+        return $this->assemble(
+            $operation,
+            $queryParams,
+            $pathParams,
+            $headers,
+            $httpRequest->getParsedBody()
+        );
+    }
+
+    /**
+     * @param string $headerName
+     *
+     * @return string
+     */
+    private function getHeaderParameterName(string $headerName)
     {
         $replacements = [
             function ($matches) {

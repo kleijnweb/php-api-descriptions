@@ -33,17 +33,34 @@ class Path implements Element
     protected $pathParameters = [];
 
     /**
+     * @var array
+     */
+    private $extensions;
+
+    /**
      * Path constructor.
      *
      * @param string      $path
      * @param Operation[] $operations
      * @param Parameter[] $pathParameters
+     * @param array       $extensions
      */
-    public function __construct($path, array $operations, array $pathParameters)
+    public function __construct($path, array $operations, array $pathParameters = [], array $extensions = [])
     {
         $this->path           = $path;
         $this->operations     = $operations;
         $this->pathParameters = $pathParameters;
+        $this->extensions     = $extensions;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getExtension(string $name)
+    {
+        return isset($this->extensions[$name]) ? $this->extensions[$name] : null;
     }
 
     /**

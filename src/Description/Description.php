@@ -42,6 +42,11 @@ class Description implements Visitee, ClosureVisitorScope
     protected $schemes = [];
 
     /**
+     * @var array
+     */
+    protected $extensions = [];
+
+    /**
      * @var Document
      */
     protected $document;
@@ -53,15 +58,33 @@ class Description implements Visitee, ClosureVisitorScope
      * @param ComplexType[] $complexTypes
      * @param string        $host
      * @param array         $schemes
+     * @param array         $extensions
      * @param Document      $document
      */
-    public function __construct(array $paths, array $complexTypes, $host, array $schemes, Document $document)
-    {
+    public function __construct(
+        array $paths,
+        array $complexTypes,
+        $host,
+        array $schemes,
+        array $extensions,
+        Document $document
+    ) {
         $this->paths        = $paths;
         $this->complexTypes = $complexTypes;
         $this->host         = $host;
         $this->schemes      = $schemes;
         $this->document     = $document;
+        $this->extensions   = $extensions;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getExtension(string $name)
+    {
+        return isset($this->extensions[$name]) ? $this->extensions[$name] : null;
     }
 
     /**
@@ -113,6 +136,21 @@ class Description implements Visitee, ClosureVisitorScope
     public function getRequestSchema(string $path, string $method): Schema
     {
         return $this->getPath($path)->getOperation($method)->getRequestSchema();
+    }
+
+    /**
+     * @param string $path
+     * @param string $method
+     *
+     * @return Parameter|null
+     */
+    public function getRequestBodyParameter(string $path, string $method)
+    {
+        foreach ($this->getPath($path)->getOperation($method)->getParameters() as $parameter) {
+            if ($parameter->getIn() === Parameter::IN_BODY) {
+                return $parameter;
+            }
+        }
     }
 
     /**
