@@ -171,6 +171,21 @@ class Operation implements Element
     }
 
     /**
+     * @param string $path
+     * @param string $method
+     *
+     * @return Parameter|null
+     */
+    public function getRequestBodyParameter()
+    {
+        foreach ($this->getParameters() as $parameter) {
+            if ($parameter->getIn() === Parameter::IN_BODY) {
+                return $parameter;
+            }
+        }
+    }
+
+    /**
      * @param string $name
      *
      * @return Parameter

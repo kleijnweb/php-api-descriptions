@@ -19,13 +19,46 @@ class JustinRainbowSchemaValidatorAdapter implements SchemaValidator
     /**
      * @param Schema $schema
      * @param mixed  $value
+     * @param bool   $forceNoAdditionalProperties
+     * @param bool   $requireAllWhenNotSpecified
      *
      * @return ValidationResult
      */
-    public function validate(Schema $schema, $value): ValidationResult
+    public function validate(
+        Schema $schema,
+        $value,
+        $forceNoAdditionalProperties = false,
+        $requireAllWhenNotSpecified = false
+    ): ValidationResult
     {
+        $definition = $schema->getDefinition();
+
+        if ($requireAllWhenNotSpecified || $forceNoAdditionalProperties) {
+            $hackDefinition = function (\stdClass $definition) use (
+                $forceNoAdditionalProperties,
+                $requireAllWhenNotSpecified,
+                &$hackDefinition
+            ) {
+                if(isset($definition->properties)){
+                    if ($forceNoAdditionalProperties) {
+                        $definition->additionalProperties = false;
+                    }
+                    if ($requireAllWhenNotSpecified && !isset($definition->required)) {
+                        $definition->required = array_keys((array)$definition->properties);
+                    }
+                }
+
+                foreach ($definition as $item) {
+                    if ($item instanceof \stdClass) {
+                        $hackDefinition($item);
+                    }
+                }
+            };
+            $hackDefinition($definition = clone $definition);
+        }
+
         $validator = new JustinRainbowJsonSchemaValidator();
-        $validator->check($value, $schema->getDefinition());
+        $validator->check($value, $definition);
 
         $map = [];
         foreach ($validator->getErrors() as $error) {

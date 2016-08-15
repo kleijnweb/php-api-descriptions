@@ -121,7 +121,7 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
             $hasOkResponse = false;
             foreach ($definition->responses as $code => $responseDefinition) {
                 $code = (string)$code;
-                if ($code === 'default' || substr((string)$code, 1) === '2') {
+                if ($code === 'default' || $code[0] === '2') {
                     $hasOkResponse = true;
                 }
                 $code             = (int)$code;

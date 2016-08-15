@@ -24,7 +24,7 @@ class JsonParser implements Parser
         $content = json_decode($string);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new ParseException("Failed to parse as JSON");
+            throw new ParseException("Failed to parse as JSON: " . json_last_error_msg());
         }
 
         return $content;

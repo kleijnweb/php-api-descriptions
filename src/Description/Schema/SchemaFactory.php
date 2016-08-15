@@ -51,6 +51,15 @@ class SchemaFactory
                 foreach (isset($definition->properties) ? $definition->properties : [] as $attributeName => $propertyDefinition) {
                     $propertySchemas->$attributeName = $this->create($propertyDefinition);
                 }
+
+                if(isset($definition->allOf)){
+                    foreach($definition->allOf as $nested){
+                        foreach (isset($nested->properties) ? $nested->properties : [] as $attributeName => $propertyDefinition) {
+                            $propertySchemas->$attributeName = $this->create($propertyDefinition);
+                        }
+                    }
+                }
+
                 $schema = new ObjectSchema($definition, $propertySchemas);
             } elseif ($definition->type == Schema::TYPE_ARRAY) {
                 $itemsSchema = isset($definition->items) ? $this->create($definition->items) : null;
