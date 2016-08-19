@@ -51,7 +51,7 @@ abstract class Schema implements Element
      */
     public function __construct(\stdClass $definition)
     {
-        $this->type       = $definition->type;
+        $this->type       = isset($definition->type) ? $definition->type : null;
         $this->definition = $definition;
     }
 

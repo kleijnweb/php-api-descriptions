@@ -35,7 +35,17 @@ class SchemaFactory
         }
         if (!isset($definition->type)) {
             $definition       = clone $definition;
-            $definition->type = Schema::TYPE_STRING;
+            if (isset($definition->allOf)) {
+                foreach ($definition->allOf as $nested) {
+                    if(isset($nested->type)){
+                        $definition->type = $nested->type;
+                    }
+                }
+            }
+            if (!isset($definition->type)) {
+                $definition->type = Schema::TYPE_STRING;
+            }
+
         }
         if (isset($definition->properties)) {
             $definition->type = 'object';
@@ -52,12 +62,13 @@ class SchemaFactory
                     $propertySchemas->$attributeName = $this->create($propertyDefinition);
                 }
 
-                if(isset($definition->allOf)){
-                    foreach($definition->allOf as $nested){
+                if (isset($definition->allOf)) {
+                    foreach ($definition->allOf as $nested) {
                         foreach (isset($nested->properties) ? $nested->properties : [] as $attributeName => $propertyDefinition) {
                             $propertySchemas->$attributeName = $this->create($propertyDefinition);
                         }
                     }
+                    unset($definition->type);
                 }
 
                 $schema = new ObjectSchema($definition, $propertySchemas);
@@ -65,7 +76,7 @@ class SchemaFactory
                 $itemsSchema = isset($definition->items) ? $this->create($definition->items) : null;
                 $schema      = new ArraySchema($definition, $itemsSchema);
             } elseif ($definition->type == Schema::TYPE_ANY) {
-                $schema      = new AnySchema($definition);
+                $schema = new AnySchema($definition);
             } else {
                 $schema = new ScalarSchema($definition);
             }
