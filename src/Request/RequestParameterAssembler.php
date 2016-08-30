@@ -78,6 +78,7 @@ class RequestParameterAssembler
                     } else {
                         break;
                     }
+                    $value = is_array($value) ? reset($value) : $value;
                     $parameters->$paramName = $this->parameterCoercer->coerce($parameter, $value);
                     break;
             }
