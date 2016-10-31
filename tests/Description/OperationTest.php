@@ -28,9 +28,10 @@ class OperationTest extends \PHPUnit_Framework_TestCase
         $parameters = [
             new Parameter('bar', false, $schema, Parameter::IN_QUERY)
         ];
-        $path       = new Operation('', '/foo', 'get', $parameters, $schema, []);
 
-        $this->assertInstanceOf(Parameter::class, $path->getParameter('bar'));
+        $operation = new Operation('', '/foo', 'get', $parameters, $schema, []);
+
+        $this->assertInstanceOf(Parameter::class, $operation->getParameter('bar'));
     }
 
     /**
@@ -38,10 +39,57 @@ class OperationTest extends \PHPUnit_Framework_TestCase
      */
     public function willThrowExceptionIfParameterDoesNotExist()
     {
-        $path = new Operation('', '/foo', 'get', [], new ScalarSchema((object)['type' => Schema::TYPE_ANY]), []);
+        $operation = new Operation('', '/foo', 'get', [], new ScalarSchema((object)['type' => Schema::TYPE_ANY]), []);
 
         $this->setExpectedException(\OutOfBoundsException::class);
 
-        $this->assertInstanceOf(Parameter::class, $path->getParameter('bar'));
+        $this->assertInstanceOf(Parameter::class, $operation->getParameter('bar'));
+    }
+
+    /**
+     * @test
+     */
+    public function canGetRequestBodyParameter()
+    {
+        $schema = new ScalarSchema((object)['type' => Schema::TYPE_ANY]);
+
+        $parameters = [
+            new Parameter('foo', false, $schema, Parameter::IN_QUERY),
+            new Parameter('bar', false, $schema, Parameter::IN_BODY),
+            new Parameter('bah', false, $schema, Parameter::IN_QUERY)
+        ];
+
+        $operation = new Operation('', '/foo', 'post', $parameters, $schema, []);
+
+        $this->assertInstanceOf(Parameter::class, $bodyParameter = $operation->getRequestBodyParameter());
+
+        $this->assertSame('bar', $bodyParameter->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function canGetMethod()
+    {
+        $operation = new Operation('', '/foo', 'put', [], new ScalarSchema((object)['type' => Schema::TYPE_ANY]), []);
+
+        $this->assertSame('put', $operation->getMethod());
+    }
+
+    /**
+     * @test
+     */
+    public function gettingRequestBodyParameterWillReturnNullIfOperationHasNoBodyParameter()
+    {
+        $schema = new ScalarSchema((object)['type' => Schema::TYPE_ANY]);
+
+        $parameters = [
+            new Parameter('foo', false, $schema, Parameter::IN_QUERY),
+            new Parameter('bah', false, $schema, Parameter::IN_QUERY)
+        ];
+
+        $operation = new Operation('', '/foo', 'post', $parameters, $schema, []);
+
+        $this->assertNull($operation->getRequestBodyParameter());
     }
 }

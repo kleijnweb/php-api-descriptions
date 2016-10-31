@@ -9,6 +9,7 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Schema;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ArraySchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\SchemaFactory;
 
@@ -125,6 +126,53 @@ class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException(\OutOfBoundsException::class);
         $this->assertInstanceOf(Schema::class, $schema->getPropertySchema('x'));
+    }
+
+    /**
+     * @test
+     */
+    public function schemaTypeWillDefaultToLastNestedType()
+    {
+        /** @var ObjectSchema $schema */
+        $schema = self::$factory->create(
+            (object)[
+                'allOf' => [
+                    (object)['type' => 'number'],
+                    (object)['type' => 'integer']
+                ]
+            ]
+        );
+
+        $this->assertSame('integer', $schema->getType());
+    }
+
+    /**
+     * @test
+     */
+    public function willMergePropertiesWhenUsingAllOf()
+    {
+        /** @var ObjectSchema $schema */
+        $schema = self::$factory->create(
+            (object)[
+                'allOf' => [
+                    (object)[
+                        'type'       => 'object',
+                        'properties' => (object)[
+                            'foo' => (object)['type' => 'number']
+                        ]
+                    ],
+                    (object)[
+                        'type'       => 'object',
+                        'properties' => (object)[
+                            'bar' => (object)['type' => 'number']
+                        ]
+                    ],
+                ]
+            ]
+        );
+
+        $this->assertInstanceOf(ScalarSchema::class, $schema->getPropertySchema('foo'));
+        $this->assertInstanceOf(ScalarSchema::class, $schema->getPropertySchema('bar'));
     }
 
     public function simpleDefinitionProvider()

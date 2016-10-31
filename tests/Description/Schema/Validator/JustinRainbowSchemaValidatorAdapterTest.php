@@ -36,15 +36,11 @@ class JustinRainbowSchemaValidatorAdapterTest extends \PHPUnit_Framework_TestCas
                         ]
                     ],
                     'bar' => (object)[
-                        'type' => 'int',
+                        'type' => 'integer',
                     ]
                 ]
             ]),
-            (object)[
-                'foo' => (object)[
-                    'bar' => 1
-                ]
-            ]
+            (object)['foo' => (object)['bar' => 1]]
         );
         $this->assertFalse($result->isValid());
 
@@ -52,6 +48,58 @@ class JustinRainbowSchemaValidatorAdapterTest extends \PHPUnit_Framework_TestCas
             'bar'     => 'The property bar is required',
             'foo.bar' => 'Must have a minimum value of 10',
         ];
+        $this->assertSame($expected, $result->getErrorMessages());
+    }
+
+    /**
+     * @test
+     */
+    public function canForceNoAdditionalProperties()
+    {
+        $factory = new Schema\SchemaFactory();
+
+        $validator = new JustinRainbowSchemaValidatorAdapter();
+        $result    = $validator->validate(
+            $factory->create((object)[
+                'type'       => 'object',
+                'properties' => (object)[
+                    'foo' => (object)['type' => 'integer'],
+                ]
+            ]),
+            (object)['bar' => 1],
+            true
+        );
+        $this->assertFalse($result->isValid());
+
+        $expected = ['' => 'The property bar is not defined and the definition does not allow additional properties'];
+
+        $this->assertSame($expected, $result->getErrorMessages());
+    }
+
+    /**
+     * @test
+     */
+    public function canDefaultToRequireAll()
+    {
+        $factory = new Schema\SchemaFactory();
+
+        $validator = new JustinRainbowSchemaValidatorAdapter();
+        $result    = $validator->validate(
+            $factory->create((object)[
+                'type'       => 'object',
+                'properties' => (object)[
+                    'foo' => (object)['type' => 'integer'],
+                    'bar' => (object)['type' => 'integer',]
+                ]
+            ]),
+            (object)['foo' => 1],
+            false,
+            true
+        );
+        $this->assertFalse($result->isValid());
+
+        $expected = ['bar' => 'The property bar is required'];
+
         $this->assertSame($expected, $result->getErrorMessages());
     }
 }
