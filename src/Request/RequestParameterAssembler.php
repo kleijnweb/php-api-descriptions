@@ -46,8 +46,8 @@ class RequestParameterAssembler
         array $pathParams,
         array $headers,
         $body = null
-    ): \stdClass
-    {
+    ): \stdClass {
+    
         $headerParamMap = array_combine(array_map(function ($key) {
             return $this->getHeaderParameterName($key);
         }, array_keys($headers)), array_keys($headers));

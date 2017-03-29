@@ -37,7 +37,7 @@ class SchemaFactory
             $definition       = clone $definition;
             if (isset($definition->allOf)) {
                 foreach ($definition->allOf as $nested) {
-                    if(isset($nested->type)){
+                    if (isset($nested->type)) {
                         $definition->type = $nested->type;
                     }
                 }
@@ -45,7 +45,6 @@ class SchemaFactory
             if (!isset($definition->type)) {
                 $definition->type = Schema::TYPE_STRING;
             }
-
         }
         if (isset($definition->properties)) {
             $definition->type = 'object';
@@ -54,7 +53,6 @@ class SchemaFactory
         $index = array_search($definition, $this->definitions);
 
         if (false === $index) {
-
             if ($definition->type == Schema::TYPE_OBJECT) {
                 $propertySchemas = (object)[];
 

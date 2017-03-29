@@ -29,8 +29,8 @@ class JustinRainbowSchemaValidatorAdapter implements SchemaValidator
         $value,
         $forceNoAdditionalProperties = false,
         $requireAllWhenNotSpecified = false
-    ): ValidationResult
-    {
+    ): ValidationResult {
+    
         $definition = $schema->getDefinition();
 
         if ($requireAllWhenNotSpecified || $forceNoAdditionalProperties) {
@@ -39,7 +39,7 @@ class JustinRainbowSchemaValidatorAdapter implements SchemaValidator
                 $requireAllWhenNotSpecified,
                 &$hackDefinition
             ) {
-                if(isset($definition->properties)){
+                if (isset($definition->properties)) {
                     if ($forceNoAdditionalProperties) {
                         $definition->additionalProperties = false;
                     }

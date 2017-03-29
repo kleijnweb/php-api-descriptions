@@ -111,8 +111,8 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
         string $path,
         string $method,
         array $pathParameters = []
-    ): Operation
-    {
+    ): Operation {
+    
         /** @var Parameter[] $parameters */
         $parameters = array_merge($pathParameters, self::extractParameters($definition));
         $responses  = [];
