@@ -52,8 +52,6 @@ class ObjectSchema extends Schema
         $xType = null,
         $xRefId = null
     ) {
-        //$definition->type = Schema::TYPE_OBJECT;
-
         parent::__construct($definition);
 
         $this->propertySchemas = $propertySchemas;
