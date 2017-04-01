@@ -152,6 +152,8 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
         }
         $id = isset($definition->operationId) ? $definition->operationId : "$path:$method";
 
+        $isSecured = isset($definition->security);
+
         return new Operation(
             $id,
             $path,
@@ -159,7 +161,8 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
             $parameters,
             $requestSchema,
             $responses,
-            $this->extractExtensions($definition)
+            $this->extractExtensions($definition),
+            $isSecured
         );
     }
 

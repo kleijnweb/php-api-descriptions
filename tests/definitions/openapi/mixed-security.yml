@@ -1,0 +1,41 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+basePath: /s/v1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+consumes:
+  - application/json
+paths:
+  '/apiKey':
+    get:
+      security: [{ bearer: [] }]
+      responses:
+        200:
+          description: apiKey
+  '/none':
+    get:
+      responses:
+        200:
+          description: none
+  '/oauth2':
+    get:
+      security: [{ petstore_auth: [x, y] }]
+      responses:
+        200:
+          description: oauth2
+
+securityDefinitions:
+  bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+  oauth2:
+    type: oauth2
+    authorizationUrl: http://host.name/oauth/dialog
+    flow: implicit
+    scopes:
+      x: Do X
+      y: Do Y

@@ -23,7 +23,6 @@ class Operation implements Element
      */
     protected $id;
 
-
     /**
      * @var string
      */
@@ -50,6 +49,11 @@ class Operation implements Element
     protected $responses;
 
     /**
+     * @var bool
+     */
+    protected $secured;
+
+    /**
      * @var array
      */
     private $extensions;
@@ -64,6 +68,7 @@ class Operation implements Element
      * @param Schema      $requestSchema
      * @param Response[]  $responses
      * @param array       $extensions
+     * @param bool        $isSecured
      */
     public function __construct(
         string $id,
@@ -72,8 +77,10 @@ class Operation implements Element
         array $parameters = [],
         Schema $requestSchema = null,
         array $responses = [],
-        array $extensions = []
-    ) {
+        array $extensions = [],
+        $isSecured = false
+    )
+    {
         $this->id            = $id;
         $this->path          = $path;
         $this->method        = $method;
@@ -81,6 +88,7 @@ class Operation implements Element
         $this->requestSchema = $requestSchema;
         $this->responses     = $responses;
         $this->extensions    = $extensions;
+        $this->secured       = $isSecured;
     }
 
     /**
@@ -206,5 +214,13 @@ class Operation implements Element
     public function getMethod(): string
     {
         return $this->method;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isSecured(): bool
+    {
+        return $this->secured;
     }
 }

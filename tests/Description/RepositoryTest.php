@@ -9,6 +9,7 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description;
 
 use Doctrine\Common\Cache\ArrayCache;
 use KleijnWeb\PhpApi\Descriptions\Description\Description;
+use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\ResourceNotReadableException;
 use KleijnWeb\PhpApi\Descriptions\Description\Repository;
 
@@ -75,7 +76,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $path        = 'tests/definitions/openapi/petstore.yml';
         $cache       = $this->getMockBuilder(ArrayCache::class)->disableOriginalConstructor()->getMock();
-        $description = $this->getMockBuilder(Description::class)->disableOriginalConstructor()->getMock();
+        $document    = $this->getMockBuilder(Document::class)->disableOriginalConstructor()->getMock();
+        $description = new Description([], [], '', [], [], $document);
 
         $repository = new Repository(null, $cache);
 
