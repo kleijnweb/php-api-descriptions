@@ -86,16 +86,23 @@ class Path implements Element
      */
     public function getOperation(string $method): Operation
     {
-        $method = strtolower($method);
-
-        if (!isset($this->operations[$method])) {
+        if (!$this->hasOperation($method)) {
             throw new \InvalidArgumentException(
                 "Path '{$this->getPath()}' does not support '$method'" .
                 " (supports " . implode(', ', array_keys($this->operations)) . ')'
             );
         }
 
-        return $this->operations[$method];
+        return $this->operations[strtolower($method)];
+    }
+
+    /**
+     * @param string $method
+     * @return bool
+     */
+    public function hasOperation(string $method): bool
+    {
+        return isset($this->operations[strtolower($method)]);
     }
 
     /**

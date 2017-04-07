@@ -118,13 +118,22 @@ class Description implements Visitee, ClosureVisitorScope
      */
     public function getPath(string $path): Path
     {
-        if (!isset($this->paths[$path])) {
+        if (!$this->hasPath($path)) {
             throw new \InvalidArgumentException(
-                "Path '$path' does not exist (have " . implode(', ', array_keys($this->paths)) . ')'
+                "Path '$path' does not exist (have ".implode(', ', array_keys($this->paths)).')'
             );
         }
 
         return $this->paths[$path];
+    }
+
+    /**
+     * @param string $path
+     * @return bool
+     */
+    public function hasPath(string $path): bool
+    {
+        return isset($this->paths[$path]);
     }
 
     /**
