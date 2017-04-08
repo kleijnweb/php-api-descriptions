@@ -9,11 +9,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Description;
 
 use Doctrine\Common\Cache\Cache;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\DefinitionLoader;
+use KleijnWeb\PhpApi\Descriptions\Description\Respository\RepositoryIterator;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class Repository
+class Repository implements \IteratorAggregate
 {
     /**
      * @var string
@@ -24,6 +25,11 @@ class Repository
      * @var array
      */
     private $specifications = [];
+
+    /**
+     * @var array
+     */
+    private $uris = [];
 
     /**
      * @var Cache
@@ -73,23 +79,51 @@ class Repository
     }
 
     /**
-     * @param string $documentPath
+     * @param string $uri
      *
      * @return Description
      */
-    public function get(string $documentPath): Description
+    public function get(string $uri): Description
     {
-        if (!$documentPath) {
-            throw new \InvalidArgumentException("No document path provided");
+        if (!$uri) {
+            throw new \InvalidArgumentException("No document URI provided");
         }
         if ($this->basePath) {
-            $documentPath = "$this->basePath/$documentPath";
+            $uri = "$this->basePath/$uri";
         }
-        if (!isset($this->specifications[$documentPath])) {
-            $this->specifications[$documentPath] = $this->load($documentPath);
+        if (!isset($this->specifications[$uri])) {
+            $this->specifications[$uri] = $this->load($uri);
         }
 
-        return $this->specifications[$documentPath];
+        return $this->specifications[$uri];
+    }
+
+    /**
+     * @param string $uri
+     *
+     * @return Repository
+     */
+    public function register(string $uri): Repository
+    {
+        $this->uris[] = $uri;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getUris(): array
+    {
+        return $this->uris;
+    }
+
+    /**
+     * @return  \Iterator
+     */
+    public function getIterator(): \Iterator
+    {
+        return new RepositoryIterator($this);
     }
 
     /**

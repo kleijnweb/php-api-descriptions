@@ -52,6 +52,11 @@ class Description implements Visitee, ClosureVisitorScope
     protected $document;
 
     /**
+     * @var string
+     */
+    private $basePath;
+
+    /**
      * Description constructor.
      *
      * @param Path[]        $paths
@@ -60,6 +65,7 @@ class Description implements Visitee, ClosureVisitorScope
      * @param array         $schemes
      * @param array         $extensions
      * @param Document      $document
+     * @param string        $basePath
      */
     public function __construct(
         array $paths,
@@ -67,7 +73,8 @@ class Description implements Visitee, ClosureVisitorScope
         $host,
         array $schemes,
         array $extensions,
-        Document $document
+        Document $document,
+        string $basePath = ''
     ) {
         $this->paths        = $paths;
         $this->complexTypes = $complexTypes;
@@ -75,6 +82,7 @@ class Description implements Visitee, ClosureVisitorScope
         $this->schemes      = $schemes;
         $this->document     = $document;
         $this->extensions   = $extensions;
+        $this->basePath     = $basePath;
     }
 
     /**
@@ -181,6 +189,14 @@ class Description implements Visitee, ClosureVisitorScope
     public function getPaths(): array
     {
         return array_values($this->paths);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBasePath(): string
+    {
+        return $this->basePath;
     }
 
     /**
