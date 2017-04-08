@@ -16,6 +16,10 @@
       "KleijnWeb\\PhpApi\\Descriptions\\": "src"
     }
   },
+  "keywords": [
+    "openapi",
+    "swagger"
+  ],
   "require": {
     "php": "^7.0.0",
     "justinrainbow/json-schema": "^2.0",
