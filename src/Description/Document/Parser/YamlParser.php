@@ -38,13 +38,15 @@ class YamlParser implements Parser
     public function parse(string $string)
     {
         try {
-            // Hashmap support is broken in a lot of versions, so disable it and attempt fix afterwards
-            $data = $this->parser->parse($string, Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
+            if (defined('Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE')) { 
+                return $this->parser->parse($string, Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
+            } else {
+                $data = $this->parser->parse($string, true, false, false);
+                return $this->fixHashMaps($data);
+            }        
         } catch (\Throwable $e) {
             throw new ParseException("Failed to parse as YAML", 0, $e);
         }
-
-        return $this->fixHashMaps($data);
     }
 
     /**
