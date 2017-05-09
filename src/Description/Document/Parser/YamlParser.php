@@ -9,6 +9,7 @@
 namespace KleijnWeb\PhpApi\Descriptions\Description\Document\Parser;
 
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -38,7 +39,7 @@ class YamlParser implements Parser
     {
         try {
             // Hashmap support is broken in a lot of versions, so disable it and attempt fix afterwards
-            $data = $this->parser->parse($string, true, false, false);
+            $data = $this->parser->parse($string, Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
         } catch (\Throwable $e) {
             throw new ParseException("Failed to parse as YAML", 0, $e);
         }
