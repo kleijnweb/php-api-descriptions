@@ -58,7 +58,7 @@ class YamlParser implements Parser
      *
      * @return mixed
      */
-    private function fixHashMaps(&$data)
+    private function fixHashMaps($data)
     {
         if (is_array($data)) {
             $shouldBeObject = false;
