@@ -38,11 +38,13 @@ class YamlParser implements Parser
     public function parse(string $string)
     {
         try {
-            if (defined('Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE')) { 
-                return $this->parser->parse($string, Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
+            if (defined('\Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE')) {
+                return $this->parser->parse(
+                    $string,
+                    Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE | Yaml::PARSE_OBJECT_FOR_MAP
+                );
             } else {
-                $data = $this->parser->parse($string, true, false, false);
-                return $this->fixHashMaps($data);
+                return $this->fixHashMaps($this->parser->parse($string, true, false, false));                
             }        
         } catch (\Throwable $e) {
             throw new ParseException("Failed to parse as YAML", 0, $e);
