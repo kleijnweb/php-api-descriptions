@@ -44,7 +44,8 @@ class YamlParser implements Parser
                     Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE | Yaml::PARSE_OBJECT_FOR_MAP
                 );
             } else {
-                return $this->fixHashMaps($this->parser->parse($string, true, false, false));                
+                $data = $this->parser->parse($string, true, false, false);
+                return $this->fixHashMaps($data);                
             }        
         } catch (\Throwable $e) {
             throw new ParseException("Failed to parse as YAML", 0, $e);
@@ -58,7 +59,7 @@ class YamlParser implements Parser
      *
      * @return mixed
      */
-    private function fixHashMaps($data)
+    private function fixHashMaps(&$data)
     {
         if (is_array($data)) {
             $shouldBeObject = false;
