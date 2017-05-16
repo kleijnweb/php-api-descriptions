@@ -77,8 +77,8 @@ class MessageValidator
         ServerRequestInterface $request,
         ResponseInterface $response,
         string $path
-    ): ValidationResult
-    {
+    ): ValidationResult {
+    
         $operation = $this->description->getPath($path)->getOperation($request->getMethod());
         $schema    = $operation->getResponse($response->getStatusCode())->getSchema();
 

@@ -74,8 +74,8 @@ class RamlBuilder extends Builder
         string $path,
         string $method,
         array $pathParameters = []
-    ): Operation
-    {
+    ): Operation {
+    
         /** @var Parameter[] $parameters */
         $parameters = array_merge($pathParameters, $this->extractParameters($definition));
         $responses  = [];
