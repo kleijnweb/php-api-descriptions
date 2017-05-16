@@ -124,7 +124,7 @@ class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->setExpectedException(\OutOfBoundsException::class);
+        $this->expectException(\OutOfBoundsException::class);
         $this->assertInstanceOf(Schema::class, $schema->getPropertySchema('x'));
     }
 

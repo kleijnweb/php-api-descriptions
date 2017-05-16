@@ -33,7 +33,7 @@ class RefResolverTest extends \PHPUnit_Framework_TestCase
         ];
         $resolver = new RefResolver($object, '/foo');
 
-        $this->setExpectedException(InvalidReferenceException::class);
+        $this->expectException(InvalidReferenceException::class);
         $resolver->resolve();
     }
 

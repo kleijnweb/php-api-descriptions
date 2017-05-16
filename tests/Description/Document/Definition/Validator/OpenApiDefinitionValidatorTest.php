@@ -41,7 +41,7 @@ class OpenApiDefinitionValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function canInvalidate()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->validator->validate((object)[]);
     }
 }

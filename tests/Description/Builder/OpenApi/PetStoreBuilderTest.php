@@ -55,7 +55,7 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
      */
     public function unknownPathThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('foo');
     }
@@ -80,7 +80,7 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
      */
     public function unknownMethodThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('/pets')->getOperation('get');
     }
@@ -90,7 +90,7 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
      */
     public function unknownStatusCodeThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('/pets')->getOperation('post')->getResponse(123);
     }

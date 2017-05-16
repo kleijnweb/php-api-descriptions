@@ -40,7 +40,7 @@ class DescriptionFactoryTest extends \PHPUnit_Framework_TestCase
     public function willFailOtherwise()
     {
         $factory = new DescriptionFactory('x');
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $factory->create('/foo', (object)[]);
     }
 }

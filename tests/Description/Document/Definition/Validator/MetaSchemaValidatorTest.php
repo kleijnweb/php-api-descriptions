@@ -54,7 +54,7 @@ class MetaSchemaValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectedValidationResult = new ValidationResult(false, []);
 
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->validator->validate((object)[]);
 
     }

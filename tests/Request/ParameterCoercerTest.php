@@ -107,7 +107,7 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
      */
     public function willThrowUnsupportedExceptionInPredefinedCases()
     {
-        $this->setExpectedException(\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         $this->coercer->coerce(
             $this->createParameter(
                 ['getType' => 'array'],

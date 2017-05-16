@@ -99,7 +99,7 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function unknownPathThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('foo');
     }
@@ -109,7 +109,7 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function unknownMethodThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('/orders')->getOperation('post');
     }
@@ -119,7 +119,7 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function unknownStatusCodeThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('/orders')->getOperation('get')->getResponse(123);
     }

@@ -22,7 +22,7 @@ class ObjectSchemaTest extends \PHPUnit_Framework_TestCase
     {
         $schema = new ObjectSchema((object)[]);
         $schema->setComplexType(new ComplexType('Foo', $schema));
-        $this->setExpectedException(\LogicException::class);
+        $this->expectException(\LogicException::class);
         $schema->setComplexType(new ComplexType('Foo', $schema));
     }
 }

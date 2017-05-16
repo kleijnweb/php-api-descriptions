@@ -38,7 +38,7 @@ foo:
   bar: 1
 YAML;
 
-        $this->setExpectedException(ParseException::class);
+        $this->expectException(ParseException::class);
 
         $this->parser->parse($yaml);
     }

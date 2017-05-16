@@ -31,7 +31,7 @@ class JsonParserTest extends \PHPUnit_Framework_TestCase
      */
     public function willFailWhenJsonIsNotDecodable()
     {
-        $this->setExpectedException(ParseException::class);
+        $this->expectException(ParseException::class);
         $this->parser->parse('NOT VALID JSON');
     }
 

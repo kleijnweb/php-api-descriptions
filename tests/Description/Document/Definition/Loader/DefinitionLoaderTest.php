@@ -28,7 +28,7 @@ class DefinitionLoaderTest extends \PHPUnit_Framework_TestCase
             $this->getMockForAbstractClass(Reader::class),
             $this->getMockForAbstractClass(Parser::class)
         );
-        $this->setExpectedException(ResourceNotParsableException::class);
+        $this->expectException(ResourceNotParsableException::class);
         $loader->load('resource');
     }
 

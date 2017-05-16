@@ -41,7 +41,7 @@ class OperationTest extends \PHPUnit_Framework_TestCase
     {
         $operation = new Operation('', '/foo', 'get', [], new ScalarSchema((object)['type' => Schema::TYPE_ANY]), []);
 
-        $this->setExpectedException(\OutOfBoundsException::class);
+        $this->expectException(\OutOfBoundsException::class);
 
         $this->assertInstanceOf(Parameter::class, $operation->getParameter('bar'));
     }

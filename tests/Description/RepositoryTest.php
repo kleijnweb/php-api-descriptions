@@ -42,7 +42,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function willFailWhenPathDoesNotExist()
     {
-        $this->setExpectedException(ResourceNotReadableException::class);
+        $this->expectException(ResourceNotReadableException::class);
         $this->repository->get('/this/is/total/bogus');
     }
 
