@@ -19,7 +19,7 @@ class AnySchema extends Schema
      */
     public function __construct(\stdClass $definition = null)
     {
-        $definition = $definition ?: (object)[];
+        $definition       = $definition ?: (object)[];
         $definition->type = Schema::TYPE_ANY;
         parent::__construct($definition);
     }

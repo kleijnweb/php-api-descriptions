@@ -59,7 +59,7 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $scope = new class() implements ClosureVisitorScope
         {
-        public $types = [];
+            public $types = [];
         };
 
         $this->description->accept(
@@ -78,7 +78,7 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
             Parameter::class,
             Path::class,
             Response::class,
-            AnySchema::class
+            AnySchema::class,
         ];
 
         sort($expected);
@@ -161,7 +161,7 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
         $map = [
             'getDocument' => $this->document,
             'getSchemes'  => ['http', 'https'],
-            'getHost'     => ''
+            'getHost'     => '',
 
         ];
         foreach ($map as $methodName => $value) {

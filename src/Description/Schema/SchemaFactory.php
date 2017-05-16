@@ -34,7 +34,7 @@ class SchemaFactory
             $definition->type = Schema::TYPE_ANY;
         }
         if (!isset($definition->type)) {
-            $definition       = clone $definition;
+            $definition = clone $definition;
             if (isset($definition->allOf)) {
                 foreach ($definition->allOf as $nested) {
                     if (isset($nested->type)) {
@@ -56,14 +56,18 @@ class SchemaFactory
             if ($definition->type == Schema::TYPE_OBJECT) {
                 $propertySchemas = (object)[];
 
-                foreach (isset($definition->properties) ? $definition->properties : [] as $attributeName => $propertyDefinition) {
-                    $propertySchemas->$attributeName = $this->create($propertyDefinition);
+                if (isset($definition->properties)) {
+                    foreach ($definition->properties as $attributeName => $propertyDefinition) {
+                        $propertySchemas->$attributeName = $this->create($propertyDefinition);
+                    }
                 }
 
                 if (isset($definition->allOf)) {
                     foreach ($definition->allOf as $nested) {
-                        foreach (isset($nested->properties) ? $nested->properties : [] as $attributeName => $propertyDefinition) {
-                            $propertySchemas->$attributeName = $this->create($propertyDefinition);
+                        if (isset($nested->properties)) {
+                            foreach ($nested->properties as $attributeName => $propertyDefinition) {
+                                $propertySchemas->$attributeName = $this->create($propertyDefinition);
+                            }
                         }
                     }
                     unset($definition->type);

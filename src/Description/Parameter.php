@@ -17,9 +17,9 @@ class Parameter implements Element
 {
     use VisiteeMixin;
 
-    const IN_BODY = 'body';
-    const IN_PATH = 'path';
-    const IN_QUERY = 'query';
+    const IN_BODY   = 'body';
+    const IN_PATH   = 'path';
+    const IN_QUERY  = 'query';
     const IN_HEADER = 'header';
 
     /**

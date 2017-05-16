@@ -17,9 +17,15 @@ interface SchemaValidator
     /**
      * @param Schema $schema
      * @param mixed  $value
+     * @param bool   $forceNoAdditionalProperties
      * @param bool   $requireAllWhenNotSpecified
      *
      * @return ValidationResult
      */
-    public function validate(Schema $schema, $value, $forceNoAdditionalProperties = false, $requireAllWhenNotSpecified = false): ValidationResult;
+    public function validate(
+        Schema $schema,
+        $value,
+        $forceNoAdditionalProperties = false,
+        $requireAllWhenNotSpecified = false
+    ): ValidationResult;
 }

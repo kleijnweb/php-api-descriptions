@@ -18,7 +18,7 @@ use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
 class DescriptionFactory
 {
     const BUILDER_OPEN_API = 'openapi';
-    const BUILDER_RAML = 'raml';
+    const BUILDER_RAML     = 'raml';
 
     /**
      * @var string

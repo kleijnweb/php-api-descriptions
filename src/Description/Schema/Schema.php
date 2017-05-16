@@ -19,16 +19,16 @@ abstract class Schema implements Element
 {
     use VisiteeMixin;
 
-    const TYPE_ANY = 'any';
-    const TYPE_ARRAY = 'array';
-    const TYPE_BOOL = 'boolean';
-    const TYPE_INT = 'integer';
+    const TYPE_ANY    = 'any';
+    const TYPE_ARRAY  = 'array';
+    const TYPE_BOOL   = 'boolean';
+    const TYPE_INT    = 'integer';
     const TYPE_NUMBER = 'number';
-    const TYPE_NULL = 'null';
+    const TYPE_NULL   = 'null';
     const TYPE_OBJECT = 'object';
     const TYPE_STRING = 'string';
 
-    const FORMAT_DATE = 'date';
+    const FORMAT_DATE      = 'date';
     const FORMAT_DATE_TIME = 'date-time';
 
     const FORMAT_INT32 = 'int32';

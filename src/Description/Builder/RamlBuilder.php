@@ -28,6 +28,7 @@ class RamlBuilder extends Builder
         $schemes = array_map('strtolower', isset($this->document->protocols) ? $this->document->protocols : []);
         $paths   = [];
 
+        /** @noinspection PhpUnusedParameterInspection */
         $this->document->apply(function ($definition, $attributeName, $parent, $parentAttributeName) use (&$paths) {
             if (substr((string)$attributeName, 0, 1) === '/') {
                 $pathName         = "{$parentAttributeName}{$attributeName}";
@@ -73,8 +74,8 @@ class RamlBuilder extends Builder
         string $path,
         string $method,
         array $pathParameters = []
-    ): Operation {
-    
+    ): Operation
+    {
         /** @var Parameter[] $parameters */
         $parameters = array_merge($pathParameters, $this->extractParameters($definition));
         $responses  = [];
@@ -168,7 +169,7 @@ class RamlBuilder extends Builder
             'description',
             'required',
             'allowEmptyValue',
-            'collectionFormat'
+            'collectionFormat',
         ];
         foreach ($swaggerPropertyNames as $propertyName) {
             if (property_exists($schemaDefinition, $propertyName)) {

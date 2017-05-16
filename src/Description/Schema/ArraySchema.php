@@ -25,7 +25,7 @@ class ArraySchema extends Schema
      */
     public function __construct(\stdClass $definition, $itemsSchema)
     {
-        $definition->type = Schema::TYPE_ARRAY;
+        $definition->type  = Schema::TYPE_ARRAY;
         $this->itemsSchema = $itemsSchema;
         parent::__construct($definition);
     }

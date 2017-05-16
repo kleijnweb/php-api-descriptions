@@ -46,8 +46,8 @@ class RequestParameterAssembler
         array $pathParams,
         array $headers,
         $body = null
-    ): \stdClass {
-    
+    ): \stdClass
+    {
         $headerParamMap = array_combine(array_map(function ($key) {
             return $this->getHeaderParameterName($key);
         }, array_keys($headers)), array_keys($headers));
@@ -78,7 +78,7 @@ class RequestParameterAssembler
                     } else {
                         break;
                     }
-                    $value = is_array($value) ? reset($value) : $value;
+                    $value                  = is_array($value) ? reset($value) : $value;
                     $parameters->$paramName = $this->parameterCoercer->coerce($parameter, $value);
                     break;
             }

@@ -223,7 +223,7 @@ class RefResolver
             'pass'     => '',
             'path'     => '',
             'query'    => '',
-            'fragment' => ''
+            'fragment' => '',
         ];
 
         if (0 === strpos($uri, 'file://')) {

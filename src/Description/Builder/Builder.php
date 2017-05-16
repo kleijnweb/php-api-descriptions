@@ -23,7 +23,7 @@ abstract class Builder
         'post',
         'delete',
         'options',
-        'head'
+        'head',
     ];
 
     /**

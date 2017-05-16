@@ -66,6 +66,7 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
         }
 
         $description->accept(new ClosureVisitor($description, function () use (&$complexTypes) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $this->complexTypes = $complexTypes;
         }));
 
@@ -111,8 +112,8 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
         string $path,
         string $method,
         array $pathParameters = []
-    ): Operation {
-    
+    ): Operation
+    {
         /** @var Parameter[] $parameters */
         $parameters = array_merge($pathParameters, self::extractParameters($definition));
         $responses  = [];
@@ -236,7 +237,7 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
             'description',
             'required',
             'allowEmptyValue',
-            'collectionFormat'
+            'collectionFormat',
         ];
         foreach ($swaggerPropertyNames as $propertyName) {
             if (property_exists($schemaDefinition, $propertyName)) {

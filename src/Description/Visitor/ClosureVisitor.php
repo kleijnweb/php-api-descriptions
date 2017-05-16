@@ -35,10 +35,10 @@ class ClosureVisitor implements Visitor
     /**
      * @param Visitee $element
      *
-     * @return mixed|void
+     * @return mixed
      */
     public function visit(Visitee $element)
     {
-        $this->closure->call($this->scope, $element);
+        return $this->closure->call($this->scope, $element);
     }
 }

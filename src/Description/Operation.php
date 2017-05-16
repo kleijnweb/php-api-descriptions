@@ -79,8 +79,7 @@ class Operation implements Element
         array $responses = [],
         array $extensions = [],
         $isSecured = false
-    )
-    {
+    ) {
         $this->id            = $id;
         $this->path          = $path;
         $this->method        = $method;
@@ -179,9 +178,6 @@ class Operation implements Element
     }
 
     /**
-     * @param string $path
-     * @param string $method
-     *
      * @return Parameter|null
      */
     public function getRequestBodyParameter()
@@ -191,6 +187,8 @@ class Operation implements Element
                 return $parameter;
             }
         }
+
+        return null;
     }
 
     /**

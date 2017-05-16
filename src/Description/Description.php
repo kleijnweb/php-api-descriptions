@@ -128,7 +128,7 @@ class Description implements Visitee, ClosureVisitorScope
     {
         if (!$this->hasPath($path)) {
             throw new \InvalidArgumentException(
-                "Path '$path' does not exist (have ".implode(', ', array_keys($this->paths)).')'
+                "Path '$path' does not exist (have " . implode(', ', array_keys($this->paths)) . ')'
             );
         }
 
@@ -168,6 +168,8 @@ class Description implements Visitee, ClosureVisitorScope
                 return $parameter;
             }
         }
+
+        return null;
     }
 
     /**
