@@ -12,11 +12,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\SchemaFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
+class SchemaFactoryTest extends TestCase
 {
     /**
      * @var SchemaFactory
@@ -29,36 +30,28 @@ class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
-     *
      * @param \stdClass $definition
      *
      * @dataProvider simpleDefinitionProvider
      */
-    public function getWillReturnSameObjectForEqualDefinition(\stdClass $definition = null)
+    public function testGetWillReturnSameObjectForEqualDefinition(\stdClass $definition = null)
     {
         $schema1 = self::$factory->create($definition);
         $schema2 = self::$factory->create($definition);
 
-        $this->assertSame($schema1, $schema2);
+        self::assertSame($schema1, $schema2);
     }
 
-    /**
-     * @test
-     */
-    public function canGetNestedArraySchema()
+    public function testCanGetNestedArraySchema()
     {
         /** @var ArraySchema $schema */
         $schema = self::$factory->create((object)['type' => 'array', 'items' => (object)['type' => 'number']]);
 
-        $this->assertInstanceOf(Schema::class, $schema->getItemsSchema());
-        $this->assertTrue($schema->getItemsSchema()->isType(Schema::TYPE_NUMBER));
+        self::assertInstanceOf(Schema::class, $schema->getItemsSchema());
+        self::assertTrue($schema->getItemsSchema()->isType(Schema::TYPE_NUMBER));
     }
 
-    /**
-     * @test
-     */
-    public function canGetNestedPropertySchemas()
+    public function testCanGetNestedPropertySchemas()
     {
         /** @var ObjectSchema $schema */
         $schema = self::$factory->create((object)[
@@ -66,14 +59,11 @@ class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
             'properties' => ['foo' => (object)['type' => 'string']]
         ]);
 
-        $this->assertInstanceOf(\stdClass::class, $schema->getPropertySchemas());
-        $this->assertObjectHasAttribute('foo', $schema->getPropertySchemas());
+        self::assertInstanceOf(\stdClass::class, $schema->getPropertySchemas());
+        self::assertObjectHasAttribute('foo', $schema->getPropertySchemas());
     }
 
-    /**
-     * @test
-     */
-    public function canGetNestedPropertySchemaByPropertyName()
+    public function testCanGetNestedPropertySchemaByPropertyName()
     {
         /** @var ObjectSchema $schema */
         $schema = self::$factory->create(
@@ -86,14 +76,11 @@ class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertInstanceOf(Schema::class, $schema->getPropertySchema('bar'));
-        $this->assertTrue($schema->getPropertySchema('bar')->isType(Schema::TYPE_NUMBER));
+        self::assertInstanceOf(Schema::class, $schema->getPropertySchema('bar'));
+        self::assertTrue($schema->getPropertySchema('bar')->isType(Schema::TYPE_NUMBER));
     }
 
-    /**
-     * @test
-     */
-    public function canTestIfHasPropertySchema()
+    public function testCanTestIfHasPropertySchema()
     {
         /** @var ObjectSchema $schema */
         $schema = self::$factory->create(
@@ -105,14 +92,11 @@ class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertFalse($schema->hasPropertySchema('x'));
-        $this->assertTrue($schema->hasPropertySchema('bar'));
+        self::assertFalse($schema->hasPropertySchema('x'));
+        self::assertTrue($schema->hasPropertySchema('bar'));
     }
 
-    /**
-     * @test
-     */
-    public function canFailToGetNestedPropertySchemaByPropertyName()
+    public function testCanFailToGetNestedPropertySchemaByPropertyName()
     {
         /** @var ObjectSchema $schema */
         $schema = self::$factory->create(
@@ -124,14 +108,11 @@ class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->setExpectedException(\OutOfBoundsException::class);
-        $this->assertInstanceOf(Schema::class, $schema->getPropertySchema('x'));
+        self::expectException(\OutOfBoundsException::class);
+        self::assertInstanceOf(Schema::class, $schema->getPropertySchema('x'));
     }
 
-    /**
-     * @test
-     */
-    public function schemaTypeWillDefaultToLastNestedType()
+    public function testSchemaTypeWillDefaultToLastNestedType()
     {
         /** @var ObjectSchema $schema */
         $schema = self::$factory->create(
@@ -143,13 +124,10 @@ class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('integer', $schema->getType());
+        self::assertSame('integer', $schema->getType());
     }
 
-    /**
-     * @test
-     */
-    public function willMergePropertiesWhenUsingAllOf()
+    public function testWillMergePropertiesWhenUsingAllOf()
     {
         /** @var ObjectSchema $schema */
         $schema = self::$factory->create(
@@ -171,8 +149,8 @@ class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertInstanceOf(ScalarSchema::class, $schema->getPropertySchema('foo'));
-        $this->assertInstanceOf(ScalarSchema::class, $schema->getPropertySchema('bar'));
+        self::assertInstanceOf(ScalarSchema::class, $schema->getPropertySchema('foo'));
+        self::assertInstanceOf(ScalarSchema::class, $schema->getPropertySchema('bar'));
     }
 
     public function simpleDefinitionProvider()

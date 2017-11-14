@@ -12,11 +12,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Description;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\ResourceNotReadableException;
 use KleijnWeb\PhpApi\Descriptions\Description\Repository;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends TestCase
 {
     /**
      * @var Repository
@@ -28,51 +29,37 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository = new Repository();
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function willFailWhenKeyIsEmpty()
+    public function testWillFailWhenKeyIsEmpty()
     {
+        self::expectException(\InvalidArgumentException::class);
+
         $this->repository->get('');
     }
 
-    /**
-     * @test
-     */
-    public function willFailWhenPathDoesNotExist()
+    public function testWillFailWhenPathDoesNotExist()
     {
-        $this->setExpectedException(ResourceNotReadableException::class);
+        self::expectException(ResourceNotReadableException::class);
         $this->repository->get('/this/is/total/bogus');
     }
 
-    /**
-     * @test
-     */
-    public function gettingDocumentThatDoestExistWillConstructIt()
+    public function testGettingDocumentThatDoestExistWillConstructIt()
     {
         $document = $this->repository->get('tests/definitions/openapi/petstore.yml');
-        $this->assertInstanceOf(Description::class, $document);
+        self::assertInstanceOf(Description::class, $document);
     }
 
-    /**
-     * @test
-     */
-    public function willCache()
+    public function testWillCache()
     {
         $path       = 'tests/definitions/openapi/petstore.yml';
         $cache      = $this->getMockBuilder(ArrayCache::class)->disableOriginalConstructor()->getMock();
         $repository = new Repository(null, $cache);
 
-        $cache->expects($this->exactly(1))->method('fetch')->with($path);
-        $cache->expects($this->exactly(1))->method('save')->with($path, $this->isType('object'));
+        $cache->expects(self::exactly(1))->method('fetch')->with($path);
+        $cache->expects(self::exactly(1))->method('save')->with($path, self::isType('object'));
         $repository->get($path);
     }
 
-    /**
-     * @test
-     */
-    public function willFetchFromCache()
+    public function testWillFetchFromCache()
     {
         $path        = 'tests/definitions/openapi/petstore.yml';
         $cache       = $this->getMockBuilder(ArrayCache::class)->disableOriginalConstructor()->getMock();
@@ -81,18 +68,15 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $repository = new Repository(null, $cache);
 
-        $cache->expects($this->exactly(1))->method('fetch')->with($path)->willReturn($description);
-        $this->assertInstanceOf(Description::class, $repository->get($path));
+        $cache->expects(self::exactly(1))->method('fetch')->with($path)->willReturn($description);
+        self::assertInstanceOf(Description::class, $repository->get($path));
     }
 
-    /**
-     * @test
-     */
-    public function canUsePathPrefix()
+    public function testCanUsePathPrefix()
     {
         $this->repository = new Repository('tests/definitions/');
         $document         = $this->repository->get('openapi/petstore.yml');
 
-        $this->assertInstanceOf(Description::class, $document);
+        self::assertInstanceOf(Description::class, $document);
     }
 }

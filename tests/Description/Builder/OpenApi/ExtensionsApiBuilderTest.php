@@ -20,36 +20,24 @@ class ExtensionsApiBuilderTest extends OpenApiBuilderTest
         $this->setUpDescription('tests/definitions/openapi/extensions.yml');
     }
 
-    /**
-     * @test
-     */
-    public function getGetRootExtension()
+    public function testGetGetRootExtension()
     {
-        $this->assertSame('foo.bar', $this->description->getExtension('root'));
+        self::assertSame('foo.bar', $this->description->getExtension('root'));
     }
 
-    /**
-     * @test
-     */
-    public function getGetPathsExtension()
+    public function testGetGetPathsExtension()
     {
-        $this->assertSame('bar.foo', $this->description->getExtension('router'));
+        self::assertSame('bar.foo', $this->description->getExtension('router'));
     }
 
-    /**
-     * @test
-     */
-    public function getGetPathItemExtension()
+    public function testGetGetPathItemExtension()
     {
-        $this->assertSame('doh.foo', $this->description->getPath('/entity/{type}')->getExtension('router-controller'));
+        self::assertSame('doh.foo', $this->description->getPath('/entity/{type}')->getExtension('router-controller'));
     }
 
-    /**
-     * @test
-     */
-    public function canGetOperationExtension()
+    public function testCanGetOperationExtension()
     {
-        $this->assertSame(
+        self::assertSame(
             'bar.doh',
             $this->description->getPath('/entity/{type}')->getOperation('get')->getExtension('router-controller')
         );

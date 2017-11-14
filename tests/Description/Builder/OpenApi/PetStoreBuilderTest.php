@@ -24,16 +24,12 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
         $this->setUpDescription('tests/definitions/openapi/petstore.yml');
     }
 
-
-    /**
-     * @test
-     */
-    public function hasComplexTypes()
+    public function testHasComplexTypes()
     {
         /** @var ComplexType[] $types */
         $types = [];
         foreach ($this->description->getComplexTypes() as $type) {
-            $this->assertInstanceOf(ComplexType::class, $type);
+            self::assertInstanceOf(ComplexType::class, $type);
             $types[$type->getName()] = $type;
         }
         $expected = [
@@ -43,29 +39,23 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
             'Order',
             'User',
         ];
-        $this->assertSame($expected, array_keys($types));
+        self::assertSame($expected, array_keys($types));
         /** @var ObjectSchema $propertySchema */
         $propertySchema = $types['Pet']->getSchema()->getPropertySchema('category');
-        $this->assertSame($propertySchema->getComplexType(), $types['Category']);
-        $this->assertTrue($types['Pet']->getSchema()->getPropertySchema('category')->isType($types['Category']));
+        self::assertSame($propertySchema->getComplexType(), $types['Category']);
+        self::assertTrue($types['Pet']->getSchema()->getPropertySchema('category')->isType($types['Category']));
     }
 
-    /**
-     * @test
-     */
-    public function unknownPathThrowsException()
+    public function testUnknownPathThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('foo');
     }
 
-    /**
-     * @test
-     */
-    public function canGetCollectionFormatFromParameter()
+    public function testCanGetCollectionFormatFromParameter()
     {
-        $this->assertSame(
+        self::assertSame(
             'multi',
             $this->description
                 ->getPath('/pets/findByStatus')
@@ -75,41 +65,29 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
         );
     }
 
-    /**
-     * @test
-     */
-    public function unknownMethodThrowsException()
+    public function testUnknownMethodThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('/pets')->getOperation('get');
     }
 
-    /**
-     * @test
-     */
-    public function unknownStatusCodeThrowsException()
+    public function testUnknownStatusCodeThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('/pets')->getOperation('post')->getResponse(123);
     }
 
-    /**
-     * @test
-     */
-    public function canGetDefaultResponse()
+    public function testCanGetDefaultResponse()
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             Response::class,
             $this->description->getPath('/users')->getOperation('post')->getResponse(123)
         );
     }
 
-    /**
-     * @test
-     */
-    public function canGetSupportedStatusCodes()
+    public function testCanGetSupportedStatusCodes()
     {
         $map = [
             '/pets'                     => ['post' => [405, 200], 'put' => [405, 404, 400, 200]],
@@ -134,7 +112,7 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
 
         foreach ($this->description->getPaths() as $path) {
             foreach ($path->getOperations() as $operation) {
-                $this->assertSame(
+                self::assertSame(
                     $map[$operation->getPath()][$operation->getMethod()],
                     $operation->getStatusCodes(),
                     "Mismatch for operation {$operation->getId()}"
@@ -143,25 +121,16 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
         }
     }
 
-    /**
-     * @test
-     */
-    public function canGetRequestBodyParameter()
+    public function testCanGetRequestBodyParameter()
     {
-        $this->assertInstanceOf(Parameter::class, $this->description->getRequestBodyParameter('/pets', 'post'));
+        self::assertInstanceOf(Parameter::class, $this->description->getRequestBodyParameter('/pets', 'post'));
     }
 
-    /**
-     * @test
-     */
-    public function getRequestBodyParameterWillReturnNullIfNonExistent()
+    public function testGetRequestBodyParameterWillReturnNullIfNonExistent()
     {
-        $this->assertNull($this->description->getRequestBodyParameter('/pets/findByStatus', 'get'));
+        self::assertNull($this->description->getRequestBodyParameter('/pets/findByStatus', 'get'));
     }
 
-    /**
-     * @test
-     */
     public function testGetters()
     {
         $map = [
@@ -171,7 +140,7 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
 
         ];
         foreach ($map as $methodName => $value) {
-            $this->assertSame($value, $this->description->$methodName());
+            self::assertSame($value, $this->description->$methodName());
         }
     }
 }

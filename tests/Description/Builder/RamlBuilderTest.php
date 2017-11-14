@@ -22,11 +22,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Visitor\ClosureVisitor;
 use KleijnWeb\PhpApi\Descriptions\Description\Visitor\ClosureVisitorScope;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class RamlBuilderTest extends \PHPUnit_Framework_TestCase
+class RamlBuilderTest extends TestCase
 {
     /**
      * @var Description
@@ -52,10 +53,7 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
         $this->description = $builder->build();
     }
 
-    /**
-     * @test
-     */
-    public function canVisitElements()
+    public function testCanVisitElements()
     {
         $scope = new class() implements ClosureVisitorScope
         {
@@ -83,60 +81,42 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
 
         sort($expected);
 
-        $this->assertSame($expected, $scope->types);
+        self::assertSame($expected, $scope->types);
     }
 
-    /**
-     * @test
-     */
-    public function willCreatePathObjectsUsingNestedResources()
+    public function testWillCreatePathObjectsUsingNestedResources()
     {
         $this->description->getPath('/orders/nested');
     }
 
-    /**
-     * @test
-     */
-    public function unknownPathThrowsException()
+    public function testUnknownPathThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('foo');
     }
 
-    /**
-     * @test
-     */
-    public function unknownMethodThrowsException()
+    public function testUnknownMethodThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('/orders')->getOperation('post');
     }
 
-    /**
-     * @test
-     */
-    public function unknownStatusCodeThrowsException()
+    public function testUnknownStatusCodeThrowsException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
 
         $this->description->getPath('/orders')->getOperation('get')->getResponse(123);
     }
 
-    /**
-     * @test
-     */
-    public function canGetParametersFromOperation()
+    public function testCanGetParametersFromOperation()
     {
         $parameters = $this->description->getPath('/orders')->getOperation('get')->getParameters();
-        $this->assertCount(1, $parameters);
+        self::assertCount(1, $parameters);
     }
 
-    /**
-     * @test
-     */
-    public function canGetSupportedStatusCodes()
+    public function testCanGetSupportedStatusCodes()
     {
         $map = [
             '/orders' => ['get' => [200]],
@@ -144,7 +124,7 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
 
         foreach ($this->description->getPaths() as $path) {
             foreach ($path->getOperations() as $operation) {
-                $this->assertSame(
+                self::assertSame(
                     $map[$operation->getPath()][$operation->getMethod()],
                     $operation->getStatusCodes(),
                     "Mismatch for operation {$operation->getId()}"
@@ -153,9 +133,6 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @test
-     */
     public function testGetters()
     {
         $map = [
@@ -165,7 +142,7 @@ class RamlBuilderTest extends \PHPUnit_Framework_TestCase
 
         ];
         foreach ($map as $methodName => $value) {
-            $this->assertSame($value, $this->description->$methodName());
+            self::assertSame($value, $this->description->$methodName());
         }
     }
 }

@@ -21,12 +21,9 @@ class PathParamApiBuilderTest extends OpenApiBuilderTest
         $this->setUpDescription('tests/definitions/openapi/data.yml');
     }
 
-    /**
-     * @test
-     */
-    public function canGetPathParameters()
+    public function testCanGetPathParameters()
     {
-        $this->assertCount(
+        self::assertCount(
             1,
             $this->description
                 ->getPath('/entity/{type}')
@@ -34,12 +31,9 @@ class PathParamApiBuilderTest extends OpenApiBuilderTest
         );
     }
 
-    /**
-     * @test
-     */
-    public function canGetPathParametersFromOperationObject()
+    public function testCanGetPathParametersFromOperationObject()
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             Parameter::class,
             $this->description
                 ->getPath('/entity/{type}')

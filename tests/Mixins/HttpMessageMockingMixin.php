@@ -37,20 +37,20 @@ trait HttpMessageMockingMixin
 
 
         $message = $this->getMockForAbstractClass(ServerRequestInterface::class);
-        $message->expects($this->once())->method('getQueryParams')->willReturn($query);
-        $message->expects($this->any())->method('getMethod')->willReturn($method);
+        $message->expects(self::once())->method('getQueryParams')->willReturn($query);
+        $message->expects(self::any())->method('getMethod')->willReturn($method);
 
-        $message->expects($this->once())->method('getUri')->willReturnCallback(function () use ($path) {
+        $message->expects(self::once())->method('getUri')->willReturnCallback(function () use ($path) {
             $uri = $this->getMockForAbstractClass(UriInterface::class);
-            $uri->expects($this->once())->method('getPath')->willReturn($path);
+            $uri->expects(self::once())->method('getPath')->willReturn($path);
 
             return $uri;
         });
 
-        $message->expects($this->once())->method('getHeaders')->willReturn($headers);
+        $message->expects(self::once())->method('getHeaders')->willReturn($headers);
 
         if (null !== $body) {
-            $message->expects($this->once())->method('getParsedBody')->willReturn($body);
+            $message->expects(self::once())->method('getParsedBody')->willReturn($body);
         }
 
         return $message;
@@ -64,7 +64,7 @@ trait HttpMessageMockingMixin
     protected function mockResponse(int $statusCode): ResponseInterface
     {
         $message = $this->getMockForAbstractClass(ResponseInterface::class);
-        $message->expects($this->once())->method('getStatusCode')->willReturn($statusCode);
+        $message->expects(self::once())->method('getStatusCode')->willReturn($statusCode);
 
         return $message;
     }
@@ -95,10 +95,10 @@ trait HttpMessageMockingMixin
     /**
      * @return \PHPUnit_Framework_MockObject_Matcher_Invocation
      */
-    abstract protected function once();
+    abstract protected static function once();
 
     /**
      * @return \PHPUnit_Framework_MockObject_Matcher_Invocation
      */
-    abstract protected function any();
+    abstract protected static function any();
 }

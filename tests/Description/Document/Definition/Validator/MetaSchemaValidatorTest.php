@@ -11,11 +11,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Document\Definition\Va
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Validator\MetaSchemaValidator;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\SchemaValidator;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\ValidationResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class MetaSchemaValidatorTest extends \PHPUnit_Framework_TestCase
+class MetaSchemaValidatorTest extends TestCase
 {
     /**
      * @var ValidationResult
@@ -30,31 +31,25 @@ class MetaSchemaValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $validator = $this->getMockForAbstractClass(SchemaValidator::class);
-        $validator->expects($this->once())->method('validate')->willReturnCallback(function () {
+        $validator->expects(self::once())->method('validate')->willReturnCallback(function () {
             return $this->expectedValidationResult;
         });
         /** @var SchemaValidator $validator */
         $this->validator = new MetaSchemaValidator((object)[], $validator);
     }
 
-    /**
-     * @test
-     */
-    public function canValidate()
+    public function testCanValidate()
     {
         $this->expectedValidationResult = new ValidationResult(true, []);
 
         $this->validator->validate((object)[]);
     }
 
-    /**
-     * @test
-     */
-    public function canInvalidate()
+    public function testCanInvalidate()
     {
         $this->expectedValidationResult = new ValidationResult(false, []);
 
-        $this->setExpectedException(\InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
         $this->validator->validate((object)[]);
 
     }

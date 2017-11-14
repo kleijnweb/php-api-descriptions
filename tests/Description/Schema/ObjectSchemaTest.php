@@ -9,20 +9,18 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Schema;
 
 use KleijnWeb\PhpApi\Descriptions\Description\ComplexType;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class ObjectSchemaTest extends \PHPUnit_Framework_TestCase
+class ObjectSchemaTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function cannotChangeComplexType()
+    public function testCannotChangeComplexType()
     {
         $schema = new ObjectSchema((object)[]);
         $schema->setComplexType(new ComplexType('Foo', $schema));
-        $this->setExpectedException(\LogicException::class);
+        self::expectException(\LogicException::class);
         $schema->setComplexType(new ComplexType('Foo', $schema));
     }
 }

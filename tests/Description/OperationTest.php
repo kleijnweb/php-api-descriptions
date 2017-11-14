@@ -12,16 +12,14 @@ use KleijnWeb\PhpApi\Descriptions\Description\Operation;
 use KleijnWeb\PhpApi\Descriptions\Description\Parameter;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class OperationTest extends \PHPUnit_Framework_TestCase
+class OperationTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function canGetParameter()
+    public function testCanGetParameter()
     {
         $schema = new ScalarSchema((object)['type' => Schema::TYPE_ANY]);
 
@@ -31,25 +29,19 @@ class OperationTest extends \PHPUnit_Framework_TestCase
 
         $operation = new Operation('', '/foo', 'get', $parameters, $schema, []);
 
-        $this->assertInstanceOf(Parameter::class, $operation->getParameter('bar'));
+        self::assertInstanceOf(Parameter::class, $operation->getParameter('bar'));
     }
 
-    /**
-     * @test
-     */
-    public function willThrowExceptionIfParameterDoesNotExist()
+    public function testWillThrowExceptionIfParameterDoesNotExist()
     {
         $operation = new Operation('', '/foo', 'get', [], new ScalarSchema((object)['type' => Schema::TYPE_ANY]), []);
 
-        $this->setExpectedException(\OutOfBoundsException::class);
+        self::expectException(\OutOfBoundsException::class);
 
-        $this->assertInstanceOf(Parameter::class, $operation->getParameter('bar'));
+        self::assertInstanceOf(Parameter::class, $operation->getParameter('bar'));
     }
 
-    /**
-     * @test
-     */
-    public function canGetRequestBodyParameter()
+    public function testCanGetRequestBodyParameter()
     {
         $schema = new ScalarSchema((object)['type' => Schema::TYPE_ANY]);
 
@@ -61,25 +53,19 @@ class OperationTest extends \PHPUnit_Framework_TestCase
 
         $operation = new Operation('', '/foo', 'post', $parameters, $schema, []);
 
-        $this->assertInstanceOf(Parameter::class, $bodyParameter = $operation->getRequestBodyParameter());
+        self::assertInstanceOf(Parameter::class, $bodyParameter = $operation->getRequestBodyParameter());
 
-        $this->assertSame('bar', $bodyParameter->getName());
+        self::assertSame('bar', $bodyParameter->getName());
     }
 
-    /**
-     * @test
-     */
-    public function canGetMethod()
+    public function testCanGetMethod()
     {
         $operation = new Operation('', '/foo', 'put', [], new ScalarSchema((object)['type' => Schema::TYPE_ANY]), []);
 
-        $this->assertSame('put', $operation->getMethod());
+        self::assertSame('put', $operation->getMethod());
     }
 
-    /**
-     * @test
-     */
-    public function gettingRequestBodyParameterWillReturnNullIfOperationHasNoBodyParameter()
+    public function testGettingRequestBodyParameterWillReturnNullIfOperationHasNoBodyParameter()
     {
         $schema = new ScalarSchema((object)['type' => Schema::TYPE_ANY]);
 
@@ -90,6 +76,6 @@ class OperationTest extends \PHPUnit_Framework_TestCase
 
         $operation = new Operation('', '/foo', 'post', $parameters, $schema, []);
 
-        $this->assertNull($operation->getRequestBodyParameter());
+        self::assertNull($operation->getRequestBodyParameter());
     }
 }

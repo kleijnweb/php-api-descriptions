@@ -12,16 +12,14 @@ use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\Definit
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\RefResolver\InvalidReferenceException;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\RefResolver\RefResolver;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\YamlParser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class RefResolverTest extends \PHPUnit_Framework_TestCase
+class RefResolverTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function willThrowInvalidReferenceException()
+    public function testWillThrowInvalidReferenceException()
     {
         $object   = (object)[
             'type'       => 'object',
@@ -33,14 +31,11 @@ class RefResolverTest extends \PHPUnit_Framework_TestCase
         ];
         $resolver = new RefResolver($object, '/foo');
 
-        $this->setExpectedException(InvalidReferenceException::class);
+        self::expectException(InvalidReferenceException::class);
         $resolver->resolve();
     }
 
-    /**
-     * @test
-     */
-    public function canResolveResourceSchemaReferences()
+    public function testCanResolveResourceSchemaReferences()
     {
         $resolver = $this->factory('petstore.yml');
         $resolver->resolve();
@@ -48,62 +43,49 @@ class RefResolverTest extends \PHPUnit_Framework_TestCase
         $schemas        = $resolver->getDefinition()->definitions;
         $propertySchema = $schemas->Pet->properties->category;
 
-        $this->assertObjectNotHasAttribute('$ref', $propertySchema);
-        $this->assertObjectHasAttribute('x-ref-id', $propertySchema);
-        $this->assertSame('object', $propertySchema->type);
+        self::assertObjectNotHasAttribute('$ref', $propertySchema);
+        self::assertObjectHasAttribute('x-ref-id', $propertySchema);
+        self::assertSame('object', $propertySchema->type);
     }
 
-    /**
-     * @test
-     */
-    public function canResolveParameterSchemaReferences()
+    public function testCanResolveParameterSchemaReferences()
     {
         $resolver        = $this->factory('instagram.yml');
         $pathDefinitions = $resolver->getDefinition()->paths;
         $pathDefinition  = $pathDefinitions->{'/users/{user-id}'};
 
-        $this->assertInternalType('array', $pathDefinition->parameters);
+        self::assertInternalType('array', $pathDefinition->parameters);
         $pathDefinition = $pathDefinitions->{'/users/{user-id}'};
 
         $resolver->resolve();
 
-        $this->assertInternalType('array', $pathDefinition->parameters);
+        self::assertInternalType('array', $pathDefinition->parameters);
         $argumentPseudoSchema = $pathDefinition->parameters[0];
 
-        $this->assertObjectNotHasAttribute('$ref', $argumentPseudoSchema);
-        $this->assertObjectHasAttribute('in', $argumentPseudoSchema);
-        $this->assertSame('user-id', $argumentPseudoSchema->name);
+        self::assertObjectNotHasAttribute('$ref', $argumentPseudoSchema);
+        self::assertObjectHasAttribute('in', $argumentPseudoSchema);
+        self::assertSame('user-id', $argumentPseudoSchema->name);
     }
 
-    /**
-     * @test
-     */
-    public function canResolveReferencesWithSlashed()
+    public function testCanResolveReferencesWithSlashed()
     {
         $resolver = $this->factory('partials/slashes.yml');
-        $this->assertSame('thevalue', $resolver->resolve()->Foo->bar);
+        self::assertSame('thevalue', $resolver->resolve()->Foo->bar);
     }
 
-    /**
-     * @test
-     *
-     */
-    public function canResolveExternalReferencesInExample()
+    public function testCanResolveExternalReferencesInExample()
     {
         $resolver = $this->factory('composite.yml');
         $document = $resolver->resolve();
 
-        $this->assertObjectHasAttribute('schema', $document->responses->Created);
+        self::assertObjectHasAttribute('schema', $document->responses->Created);
 
         $response = $document->paths->{'/pet'}->post->responses->{'500'};
 
-        $this->assertObjectHasAttribute('description', $response);
+        self::assertObjectHasAttribute('description', $response);
     }
 
-    /**
-     * @test
-     */
-    public function canUnResolve()
+    public function testCanUnResolve()
     {
         $resolver = $this->factory('composite.yml');
 
@@ -111,21 +93,19 @@ class RefResolverTest extends \PHPUnit_Framework_TestCase
         $resolver->resolve();
         $document = $resolver->unresolve();
 
-        $this->assertObjectNotHasAttribute('schema', $document->responses->Created);
-        $this->assertEquals($expected, $document);
+        self::assertObjectNotHasAttribute('schema', $document->responses->Created);
+        self::assertEquals($expected, $document);
     }
 
     /**
      * @dataProvider externalReferenceProvider
-     * @test
      *
      * @param mixed     $expected
      * @param string    $fileUrl
      * @param string    $uri
      * @param \stdClass $content
-     *
      */
-    public function willProperlyResolveExternalReferences($expected, string $fileUrl, string $uri, \stdClass $content)
+    public function testWillProperlyResolveExternalReferences($expected, string $fileUrl, string $uri, \stdClass $content)
     {
         $mockLoader = $this
             ->getMockBuilder(DefinitionLoader::class)
@@ -143,7 +123,7 @@ class RefResolverTest extends \PHPUnit_Framework_TestCase
 
         $value = $resolver->resolve();
 
-        $this->assertSame($expected, $value);
+        self::assertSame($expected, $value);
     }
 
     /**
