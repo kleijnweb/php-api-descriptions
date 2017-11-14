@@ -18,13 +18,10 @@ class SimpleReaderTest extends TestCase
 {
     public function testWillFailWhenFileDoesNotExist()
     {
-        try {
-            $loader = new SimpleReader();
-            $loader->read('does/not/exist.json');
-        } catch (ResourceNotReadableException $e) {
-            return;
-        }
-        self::fail("Expected ResourceNotReadableException");
+        self::expectException(ResourceNotReadableException::class);
+
+        $loader = new SimpleReader();
+        $loader->read('does/not/exist.json');
     }
 
     public function testWillReturnContentTypeYamlIfUriLooksLikeYaml()

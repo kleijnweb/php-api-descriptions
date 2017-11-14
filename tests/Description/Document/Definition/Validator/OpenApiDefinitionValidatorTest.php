@@ -32,6 +32,9 @@ class OpenApiDefinitionValidatorTest extends TestCase
     public function testCanValidate()
     {
         $this->validator->validate(json_decode(file_get_contents('tests/definitions/openapi/petstore.json')));
+
+        $value = 'This assertion is never reached on exception';
+        self::assertEquals($value, $value);
     }
 
     public function testCanInvalidate()
