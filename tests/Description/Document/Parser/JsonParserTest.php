@@ -42,9 +42,9 @@ class JsonParserTest extends TestCase
     }
 
     /**
-     * @dataProvider yamlContentTypeProvider
+     * @dataProvider jsonContentTypeProvider
      */
-    public function testWillAcceptYamlContentTypes(string $contentType)
+    public function testWillAcceptJsonContentTypes(string $contentType)
     {
         self::assertTrue($this->parser->canParse($contentType));
     }
@@ -54,7 +54,7 @@ class JsonParserTest extends TestCase
         self::assertFalse($this->parser->canParse('text/html'));
     }
 
-    public function yamlContentTypeProvider()
+    public function jsonContentTypeProvider()
     {
         return [
             ['text/json'],
