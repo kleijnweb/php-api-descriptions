@@ -10,11 +10,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Document\Parser;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\ParseException;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\YamlParser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class YamlParserTest extends \PHPUnit_Framework_TestCase
+class YamlParserTest extends TestCase
 {
     /**
      * @var YamlParser
@@ -26,10 +27,7 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
         $this->parser = new YamlParser();
     }
 
-    /**
-     * @test
-     */
-    public function willFailWhenYamlIsNotDecodable()
+    public function testWillFailWhenYamlIsNotDecodable()
     {
         $yaml = <<<YAML
 foo:
@@ -38,31 +36,26 @@ foo:
   bar: 1
 YAML;
 
-        $this->setExpectedException(ParseException::class);
+        self::expectException(ParseException::class);
 
         $this->parser->parse($yaml);
     }
 
-    /**
-     * @test
-     */
-    public function canLoadValidYaml()
+    public function testCanLoadValidYaml()
     {
         $yaml = <<<YAML
 foo:
   bar: 1
 YAML;
-        $this->assertSame(1, $this->parser->parse($yaml)->foo->bar);
+        self::assertSame(1, $this->parser->parse($yaml)->foo->bar);
     }
 
     /**
      * Check Symfony\Yaml bug
      *
      * @see https://github.com/symfony/symfony/issues/17709
-     *
-     * @test
      */
-    public function canParseNumericMap()
+    public function testCanParseNumericMap()
     {
         $yaml   = <<<YAML
 map:
@@ -71,22 +64,20 @@ map:
 YAML;
         $parser = new  YamlParser();
         $actual = $parser->parse($yaml);
-        $this->assertInternalType('object', $actual);
-        $this->assertInternalType('object', $actual->map);
-        $this->assertTrue(property_exists($actual->map, '1'));
-        $this->assertTrue(property_exists($actual->map, '2'));
-        $this->assertSame('one', $actual->map->{'1'});
-        $this->assertSame('two', $actual->map->{'2'});
+        self::assertInternalType('object', $actual);
+        self::assertInternalType('object', $actual->map);
+        self::assertTrue(property_exists($actual->map, '1'));
+        self::assertTrue(property_exists($actual->map, '2'));
+        self::assertSame('one', $actual->map->{'1'});
+        self::assertSame('two', $actual->map->{'2'});
     }
 
     /**
      * Check Symfony\Yaml bug
      *
      * @see https://github.com/symfony/symfony/pull/17711
-     *
-     * @test
      */
-    public function willParseArrayAsArrayAndObjectAsObject()
+    public function testWillParseArrayAsArrayAndObjectAsObject()
     {
         $yaml = <<<YAML
 array:
@@ -96,35 +87,27 @@ YAML;
 
         $parser = new  YamlParser();
         $actual = $parser->parse($yaml);
-        $this->assertInternalType('object', $actual);
-
-        $this->assertInternalType('array', $actual->array);
-        $this->assertInternalType('object', $actual->array[0]);
-        $this->assertInternalType('object', $actual->array[1]);
-        $this->assertSame('one', $actual->array[0]->key);
-        $this->assertSame('two', $actual->array[1]->key);
+        self::assertInternalType('object', $actual);
+        self::assertInternalType('array', $actual->array);
+        self::assertInternalType('object', $actual->array[0]);
+        self::assertInternalType('object', $actual->array[1]);
+        self::assertSame('one', $actual->array[0]->key);
+        self::assertSame('two', $actual->array[1]->key);
     }
 
     /**
-     * @test
      * @dataProvider yamlContentTypeProvider
      */
-    public function willAcceptYamlContentTypes(string $contentType)
+    public function testWillAcceptYamlContentTypes(string $contentType)
     {
-        $this->assertTrue($this->parser->canParse($contentType));
+        self::assertTrue($this->parser->canParse($contentType));
     }
 
-    /**
-     * @test
-     */
-    public function willNotAcceptOtherContentType()
+    public function testWillNotAcceptOtherContentType()
     {
-        $this->assertFalse($this->parser->canParse('text/html'));
+        self::assertFalse($this->parser->canParse('text/html'));
     }
 
-    /**
-     * @test
-     */
     public function yamlContentTypeProvider()
     {
         return [

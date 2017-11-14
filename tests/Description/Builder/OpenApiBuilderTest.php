@@ -14,11 +14,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\Definit
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\RefResolver\RefResolver;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-abstract class OpenApiBuilderTest extends \PHPUnit_Framework_TestCase
+abstract class OpenApiBuilderTest extends TestCase
 {
     /**
      * @var Description
@@ -45,35 +46,26 @@ abstract class OpenApiBuilderTest extends \PHPUnit_Framework_TestCase
         $this->description = $builder->build();
     }
 
-    /**
-     * @test
-     */
-    public function isSerializable()
+    public function testIsSerializable()
     {
-        $this->assertEquals(unserialize(serialize($this->description)), $this->description);
+        self::assertEquals(unserialize(serialize($this->description)), $this->description);
     }
 
-    /**
-     * @test
-     */
-    public function canGetRequestSchema()
+    public function testCanGetRequestSchema()
     {
         foreach ($this->description->getPaths() as $path) {
             foreach ($path->getOperations() as $operation) {
                 $actual = $this->description->getRequestSchema($operation->getPath(), $operation->getMethod());
-                $this->assertInstanceOf(Schema::class, $actual);
+                self::assertInstanceOf(Schema::class, $actual);
                 $definition = $actual->getDefinition();
                 foreach ($operation->getParameters() as $parameter) {
-                    $this->assertObjectHasAttribute($parameter->getName(), $definition->properties);
+                    self::assertObjectHasAttribute($parameter->getName(), $definition->properties);
                 }
             }
         }
     }
 
-    /**
-     * @test
-     */
-    public function canGetResponseSchema()
+    public function testCanGetResponseSchema()
     {
         foreach ($this->description->getPaths() as $path) {
             foreach ($path->getOperations() as $operation) {
@@ -83,7 +75,7 @@ abstract class OpenApiBuilderTest extends \PHPUnit_Framework_TestCase
                         $operation->getMethod(),
                         $response->getCode()
                     );
-                    $this->assertInstanceOf(Schema::class, $actual);
+                    self::assertInstanceOf(Schema::class, $actual);
                 }
             }
         }

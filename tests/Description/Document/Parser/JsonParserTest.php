@@ -10,11 +10,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Document\Parser;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\JsonParser;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\ParseException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class JsonParserTest extends \PHPUnit_Framework_TestCase
+class JsonParserTest extends TestCase
 {
     /**
      * @var JsonParser
@@ -26,44 +27,34 @@ class JsonParserTest extends \PHPUnit_Framework_TestCase
         $this->parser = new JsonParser();
     }
 
-    /**
-     * @test
-     */
-    public function willFailWhenJsonIsNotDecodable()
+    public function testWillFailWhenJsonIsNotDecodable()
     {
-        $this->setExpectedException(ParseException::class);
+        self::expectException(ParseException::class);
         $this->parser->parse('NOT VALID JSON');
     }
 
-    /**
-     * @test
-     */
-    public function canLoadValidJson()
+    public function testCanLoadValidJson()
     {
-        $this->parser->parse(json_encode(['valid' => true]));
+        $object = $this->parser->parse(json_encode(['valid' => true]));
+
+        self::assertObjectHasAttribute('valid', $object);
+        self::assertTrue($object->valid);
     }
 
     /**
-     * @test
-     * @dataProvider yamlContentTypeProvider
+     * @dataProvider jsonContentTypeProvider
      */
-    public function willAcceptYamlContentTypes(string $contentType)
+    public function testWillAcceptJsonContentTypes(string $contentType)
     {
-        $this->assertTrue($this->parser->canParse($contentType));
+        self::assertTrue($this->parser->canParse($contentType));
     }
 
-    /**
-     * @test
-     */
-    public function willNotAcceptOtherContentType()
+    public function testWillNotAcceptOtherContentType()
     {
-        $this->assertFalse($this->parser->canParse('text/html'));
+        self::assertFalse($this->parser->canParse('text/html'));
     }
 
-    /**
-     * @test
-     */
-    public function yamlContentTypeProvider()
+    public function jsonContentTypeProvider()
     {
         return [
             ['text/json'],

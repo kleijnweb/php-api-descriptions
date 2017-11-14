@@ -21,12 +21,9 @@ class ArrayReferenceTest extends OpenApiBuilderTest
         $this->setUpDescription('tests/definitions/openapi/data.yml');
     }
 
-    /**
-     * @test
-     */
-    public function arrayReferenceSchemaIsArraySchema()
+    public function testArrayReferenceSchemaIsArraySchema()
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ArraySchema::class,
             $this->description
                 ->getPath('/entity/{type}/findByCriteria')

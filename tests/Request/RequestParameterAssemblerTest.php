@@ -12,12 +12,13 @@ use KleijnWeb\PhpApi\Descriptions\Description\Parameter;
 use KleijnWeb\PhpApi\Descriptions\Request\ParameterCoercer;
 use KleijnWeb\PhpApi\Descriptions\Request\RequestParameterAssembler;
 use KleijnWeb\PhpApi\Descriptions\Tests\Mixins\HttpMessageMockingMixin;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
+class RequestParameterAssemblerTest extends TestCase
 {
     use HttpMessageMockingMixin;
 
@@ -29,17 +30,14 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $coercer = $this->getMockBuilder(ParameterCoercer::class)->disableOriginalConstructor()->getMock();
-        $coercer->expects($this->any())->method('coerce')->willReturnCallback(function ($parameter, $value) {
+        $coercer->expects(self::any())->method('coerce')->willReturnCallback(function ($parameter, $value) {
             return $value;
         });
 
         $this->assembler = new RequestParameterAssembler($coercer);
     }
 
-    /**
-     * @test
-     */
-    public function canAssembleQueryParameters()
+    public function testCanAssembleQueryParameters()
     {
         $params    = [
             'foo' => 'bar',
@@ -56,13 +54,10 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
         /** @var ServerRequestInterface $message */
         $actual = $this->assembler->getRequestParameters($message, $operation);
 
-        $this->assertEquals((object)$params, $actual);
+        self::assertEquals((object)$params, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function canAssemblePathParameters()
+    public function testCanAssemblePathParameters()
     {
         $params    = [
             'foo' => 'bar',
@@ -80,13 +75,10 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
         /** @var ServerRequestInterface $message */
         $actual = $this->assembler->getRequestParameters($message, $operation);
 
-        $this->assertEquals((object)$params, $actual);
+        self::assertEquals((object)$params, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function canAssembleHeaderParameters()
+    public function testCanAssembleHeaderParameters()
     {
         $params    = [
             'foo' => 'bar',
@@ -104,13 +96,10 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
         /** @var ServerRequestInterface $message */
         $actual = $this->assembler->getRequestParameters($message, $operation);
 
-        $this->assertEquals((object)$params, $actual);
+        self::assertEquals((object)$params, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function willSkipHeaderWithoutValue()
+    public function testWillSkipHeaderWithoutValue()
     {
         $params    = [
             'baz' => '1'
@@ -127,13 +116,10 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
         /** @var ServerRequestInterface $message */
         $actual = $this->assembler->getRequestParameters($message, $operation);
 
-        $this->assertEquals((object)$params, $actual);
+        self::assertEquals((object)$params, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function willCopyBodyAsIs()
+    public function testWillCopyBodyAsIs()
     {
         $body = (object)['baz' => '1'];
 
@@ -148,30 +134,30 @@ class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
         $params = $this->assembler->getRequestParameters($message, $operation);
         $actual = $params->foo;
 
-        $this->assertSame($body, $actual);
+        self::assertSame($body, $actual);
     }
 
     /**
+     * @param string $path
      * @param array $parameterStubs
-     *
      * @return Operation
      */
     private function createOperation(string $path, array $parameterStubs = []): Operation
     {
         $operationMock = $this->getMockBuilder(Operation::class)->disableOriginalConstructor()->getMock();
-        $operationMock->expects($this->once())->method('getPath')->willReturn($path);
+        $operationMock->expects(self::once())->method('getPath')->willReturn($path);
         $parameterMocks = [];
 
         foreach ($parameterStubs as $parameterName => $stubs) {
             $parameterMock = $this->getMockBuilder(Parameter::class)->disableOriginalConstructor()->getMock();
-            $parameterMock->expects($this->any())->method('getName')->willReturn($parameterName);
+            $parameterMock->expects(self::any())->method('getName')->willReturn($parameterName);
 
             foreach ($stubs as $methodName => $value) {
-                $parameterMock->expects($this->any())->method($methodName)->willReturn($value);
+                $parameterMock->expects(self::any())->method($methodName)->willReturn($value);
             }
             $parameterMocks[$parameterName] = $parameterMock;
         }
-        $operationMock->expects($this->any())->method('getParameters')->willReturn($parameterMocks);
+        $operationMock->expects(self::any())->method('getParameters')->willReturn($parameterMocks);
 
         return $operationMock;
     }

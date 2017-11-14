@@ -10,13 +10,11 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Schema\Validator;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Schema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\JustinRainbowSchemaValidatorAdapter;
+use PHPUnit\Framework\TestCase;
 
-class JustinRainbowSchemaValidatorAdapterTest extends \PHPUnit_Framework_TestCase
+class JustinRainbowSchemaValidatorAdapterTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function willContainIndexedErrors()
+    public function testWillContainIndexedErrors()
     {
         $factory = new Schema\SchemaFactory();
 
@@ -42,19 +40,16 @@ class JustinRainbowSchemaValidatorAdapterTest extends \PHPUnit_Framework_TestCas
             ]),
             (object)['foo' => (object)['bar' => 1]]
         );
-        $this->assertFalse($result->isValid());
+        self::assertFalse($result->isValid());
 
         $expected = [
             'bar'     => 'The property bar is required',
             'foo.bar' => 'Must have a minimum value of 10',
         ];
-        $this->assertSame($expected, $result->getErrorMessages());
+        self::assertSame($expected, $result->getErrorMessages());
     }
 
-    /**
-     * @test
-     */
-    public function canForceNoAdditionalProperties()
+    public function testCanForceNoAdditionalProperties()
     {
         $factory = new Schema\SchemaFactory();
 
@@ -69,17 +64,14 @@ class JustinRainbowSchemaValidatorAdapterTest extends \PHPUnit_Framework_TestCas
             (object)['bar' => 1],
             true
         );
-        $this->assertFalse($result->isValid());
+        self::assertFalse($result->isValid());
 
         $expected = ['' => 'The property bar is not defined and the definition does not allow additional properties'];
 
-        $this->assertSame($expected, $result->getErrorMessages());
+        self::assertSame($expected, $result->getErrorMessages());
     }
 
-    /**
-     * @test
-     */
-    public function canDefaultToRequireAll()
+    public function testCanDefaultToRequireAll()
     {
         $factory = new Schema\SchemaFactory();
 
@@ -96,10 +88,10 @@ class JustinRainbowSchemaValidatorAdapterTest extends \PHPUnit_Framework_TestCas
             false,
             true
         );
-        $this->assertFalse($result->isValid());
+        self::assertFalse($result->isValid());
 
         $expected = ['bar' => 'The property bar is required'];
 
-        $this->assertSame($expected, $result->getErrorMessages());
+        self::assertSame($expected, $result->getErrorMessages());
     }
 }

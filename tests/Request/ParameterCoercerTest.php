@@ -13,11 +13,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 use KleijnWeb\PhpApi\Descriptions\Request\ParameterCoercer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
+class ParameterCoercerTest extends TestCase
 {
     /**
      * @var ParameterCoercer
@@ -29,26 +30,22 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
         $this->coercer = new ParameterCoercer();
     }
 
-    /**
-     * @test
-     */
-    public function willReturnOriginalValueIfTypeDoesNotMatchKnownType()
+    public function testWillReturnOriginalValueIfTypeDoesNotMatchKnownType()
     {
         $value  = (object)[];
         $actual = $this->coercer->coerce($this->createParameter(['getType' => 'x']), $value);
-        $this->assertSame($value, $actual);
+        self::assertSame($value, $actual);
     }
 
     /**
      * @dataProvider conversionProvider
-     * @test
      *
      * @param string $type
      * @param mixed  $value
      * @param mixed  $expected
      * @param string $format
      */
-    public function willInterpretValuesAsExpected($type, $value, $expected, $format = null)
+    public function testWillInterpretValuesAsExpected($type, $value, $expected, $format = null)
     {
         $stubs       = [];
         $schemaStubs = ['getType' => $type];
@@ -63,34 +60,32 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
         $actual = $this->coercer->coerce($this->createParameter($schemaStubs, $stubs), $value);
 
         if (is_object($expected)) {
-            $this->assertEquals($expected, $actual);
+            self::assertEquals($expected, $actual);
 
             return;
         }
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
      * @dataProvider malformedConversionProvider
-     * @test
      *
      * @param string $type
      * @param mixed  $value
      */
-    public function willNotChangeUninterpretableValues($type, $value)
+    public function testWillNotChangeUninterpretableValues($type, $value)
     {
         $actual = $this->coercer->coerce($this->createParameter(['getType' => $type]), $value);
-        $this->assertSame($value, $actual);
+        self::assertSame($value, $actual);
     }
 
     /**
      * @dataProvider malformedDateTimeConversionProvider
-     * @test
      *
      * @param string $format
      * @param mixed  $value
      */
-    public function willNotChangeUninterpretableDateTimeAsExpected($format, $value)
+    public function testWillNotChangeUninterpretableDateTimeAsExpected($format, $value)
     {
         $actual = $this->coercer->coerce(
             $this->createParameter([
@@ -99,15 +94,12 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
             ]),
             $value
         );
-        $this->assertSame($value, $actual);
+        self::assertSame($value, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function willThrowUnsupportedExceptionInPredefinedCases()
+    public function testWillThrowUnsupportedExceptionInPredefinedCases()
     {
-        $this->setExpectedException(\RuntimeException::class);
+        self::expectException(\RuntimeException::class);
         $this->coercer->coerce(
             $this->createParameter(
                 ['getType' => 'array'],
@@ -210,7 +202,7 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
         $parameterMock = $this->getMockBuilder(Parameter::class)->disableOriginalConstructor()->getMock();
 
         foreach ($stubs as $methodName => $value) {
-            $parameterMock->expects($this->any())->method($methodName)->willReturn($value);
+            $parameterMock->expects(self::any())->method($methodName)->willReturn($value);
         }
 
         switch ($schemaStubs['getType']) {
@@ -224,10 +216,10 @@ class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
                 $schemaMock = $this->getMockBuilder(ScalarSchema::class)->disableOriginalConstructor()->getMock();
         }
 
-        $parameterMock->expects($this->any())->method('getSchema')->willReturn($schemaMock);
+        $parameterMock->expects(self::any())->method('getSchema')->willReturn($schemaMock);
 
         foreach ($schemaStubs as $methodName => $value) {
-            $schemaMock->expects($this->any())->method($methodName)->willReturn($value);
+            $schemaMock->expects(self::any())->method($methodName)->willReturn($value);
         }
 
         return $parameterMock;

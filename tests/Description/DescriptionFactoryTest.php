@@ -10,37 +10,29 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Description;
 use KleijnWeb\PhpApi\Descriptions\Description\DescriptionFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class DescriptionFactoryTest extends \PHPUnit_Framework_TestCase
+class DescriptionFactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function canMakeDescriptionUsingRaml()
+    public function testCanMakeDescriptionUsingRaml()
     {
         $factory = new DescriptionFactory(DescriptionFactory::BUILDER_RAML);
-        $this->assertInstanceOf(Description::class, $factory->create('/foo', (object)[]));
+        self::assertInstanceOf(Description::class, $factory->create('/foo', (object)[]));
     }
 
-    /**
-     * @test
-     */
-    public function canMakeDescriptionUsingOpenApi()
+    public function testCanMakeDescriptionUsingOpenApi()
     {
         $factory = new DescriptionFactory(DescriptionFactory::BUILDER_RAML);
-        $this->assertInstanceOf(Description::class, $factory->create('/foo', (object)[]));
+        self::assertInstanceOf(Description::class, $factory->create('/foo', (object)[]));
     }
 
-    /**
-     * @test
-     */
-    public function willFailOtherwise()
+    public function testWillFailOtherwise()
     {
         $factory = new DescriptionFactory('x');
-        $this->setExpectedException(\InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
         $factory->create('/foo', (object)[]);
     }
 }

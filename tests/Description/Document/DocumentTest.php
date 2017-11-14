@@ -9,11 +9,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Document;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\DefinitionLoader;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class DocumentTest extends \PHPUnit_Framework_TestCase
+class DocumentTest extends TestCase
 {
     /**
      * @var Document
@@ -27,23 +28,17 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
         $this->document = new Document($uri, $loader->load($uri));
     }
 
-    /**
-     * @test
-     */
-    public function canApplyRecursiveCallback()
+    public function testCanApplyRecursiveCallback()
     {
         $keys = [];
         $this->document->apply(function ($value, $key) use (&$keys) {
             $keys[] = $key;
         });
 
-        $this->assertCount(601, $keys);
+        self::assertCount(601, $keys);
     }
 
-    /**
-     * @test
-     */
-    public function canModifyValuesUsingRecursiveCallback()
+    public function testCanModifyValuesUsingRecursiveCallback()
     {
         $this->document->apply(function (&$value) {
             if (is_scalar($value)) {
@@ -57,13 +52,10 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
             }
         });
 
-        $this->assertCount(1, array_unique($values));
+        self::assertCount(1, array_unique($values));
     }
 
-    /**
-     * @test
-     */
-    public function canStopRecursiveProcessingByReturningFalse()
+    public function testCanStopRecursiveProcessingByReturningFalse()
     {
         $this->document->apply(function ($value, $key) use (&$keys) {
 
@@ -75,6 +67,6 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
 
             return true;
         });
-        $this->assertCount(15, $keys);
+        self::assertCount(15, $keys);
     }
 }

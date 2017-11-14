@@ -21,12 +21,9 @@ class SecurityTest extends OpenApiBuilderTest
         $this->setUpDescription('tests/definitions/openapi/mixed-security.yml');
     }
 
-    /**
-     * @test
-     */
-    public function noSecurityMarksOperationUnsecured()
+    public function testNoSecurityMarksOperationUnsecured()
     {
-        $this->assertFalse(
+        self::assertFalse(
             $this->description
                 ->getPath('/none')
                 ->getOperation('get')
@@ -34,12 +31,9 @@ class SecurityTest extends OpenApiBuilderTest
         );
     }
 
-    /**
-     * @test
-     */
-    public function apiKeySecurityMarksOperationSecured()
+    public function testApiKeySecurityMarksOperationSecured()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->description
                 ->getPath('/apiKey')
                 ->getOperation('get')
@@ -47,12 +41,9 @@ class SecurityTest extends OpenApiBuilderTest
         );
     }
 
-    /**
-     * @test
-     */
-    public function oauth2SecurityMarksOperationSecured()
+    public function testOauth2SecurityMarksOperationSecured()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->description
                 ->getPath('/oauth2')
                 ->getOperation('get')

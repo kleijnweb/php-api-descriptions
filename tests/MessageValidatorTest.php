@@ -11,20 +11,20 @@ use KleijnWeb\PhpApi\Descriptions\Description\DescriptionFactory;
 use KleijnWeb\PhpApi\Descriptions\Description\Repository;
 use KleijnWeb\PhpApi\Descriptions\MessageValidator;
 use KleijnWeb\PhpApi\Descriptions\Tests\Mixins\HttpMessageMockingMixin;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class MessageValidatorTest extends \PHPUnit_Framework_TestCase
+class MessageValidatorTest extends TestCase
 {
     use HttpMessageMockingMixin;
 
     /**
-     * @test
      * @group integration
      */
-    public function canValidateUsingOpenApiDescription()
+    public function testCanValidateUsingOpenApiDescription()
     {
         $validator = new MessageValidator(
             (new Repository())
@@ -42,20 +42,19 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
         /** @var ServerRequestInterface $request */
         $result = $validator->validateRequest($request, $path);
 
-        $this->assertTrue($result->isValid());
+        self::assertTrue($result->isValid());
 
         $response = $this->mockResponse(200);
         $body     = (object)[];
         $result   = $validator->validateResponse($body, $request, $response, $path);
 
-        $this->assertTrue($result->isValid());
+        self::assertTrue($result->isValid());
     }
 
     /**
-     * @test
      * @group integration
      */
-    public function canValidateUsingRamlDescription()
+    public function testCanValidateUsingRamlDescription()
     {
         $validator = new MessageValidator(
             (new Repository())
@@ -71,12 +70,12 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
         /** @var ServerRequestInterface $request */
         $result = $validator->validateRequest($request, $path);
 
-        $this->assertTrue($result->isValid());
+        self::assertTrue($result->isValid());
 
         $response = $this->mockResponse(200);
         $body     = (object)[];
         $result   = $validator->validateResponse($body, $request, $response, $path);
 
-        $this->assertTrue($result->isValid());
+        self::assertTrue($result->isValid());
     }
 }

@@ -11,11 +11,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Document\Definition\Va
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Validator\MetaSchemaValidator;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Validator\OpenApiDefinitionValidator;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\SchemaValidator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class OpenApiDefinitionValidatorTest extends \PHPUnit_Framework_TestCase
+class OpenApiDefinitionValidatorTest extends TestCase
 {
     /**
      * @var MetaSchemaValidator
@@ -28,20 +29,17 @@ class OpenApiDefinitionValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validator = new OpenApiDefinitionValidator();
     }
 
-    /**
-     * @test
-     */
-    public function canValidate()
+    public function testCanValidate()
     {
         $this->validator->validate(json_decode(file_get_contents('tests/definitions/openapi/petstore.json')));
+
+        $value = 'This assertion is never reached on exception';
+        self::assertEquals($value, $value);
     }
 
-    /**
-     * @test
-     */
-    public function canInvalidate()
+    public function testCanInvalidate()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
         $this->validator->validate((object)[]);
     }
 }

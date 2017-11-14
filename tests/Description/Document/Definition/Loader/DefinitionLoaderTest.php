@@ -13,43 +13,38 @@ use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\Resourc
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\Parser;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\Reader;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\Response;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class DefinitionLoaderTest extends \PHPUnit_Framework_TestCase
+class DefinitionLoaderTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function willFailWithoutApplicableParser()
+    public function testWillFailWithoutApplicableParser()
     {
         $loader = new DefinitionLoader(
             $this->getMockForAbstractClass(Reader::class),
             $this->getMockForAbstractClass(Parser::class)
         );
-        $this->setExpectedException(ResourceNotParsableException::class);
+        self::expectException(ResourceNotParsableException::class);
         $loader->load('resource');
     }
 
-    /**
-     * @test
-     */
-    public function willReturnParsedDefinition()
+    public function testWillReturnParsedDefinition()
     {
         $uri         = 'resource';
         $definition  = (object)[];
         $reader      = $this->getMockForAbstractClass(Reader::class);
         $contentType = 'x-foo';
         $content     = (string)rand();
-        $reader->expects($this->once())->method('read')->with($uri)->willReturn(new Response($contentType, $content));
+        $reader->expects(self::once())->method('read')->with($uri)->willReturn(new Response($contentType, $content));
 
         $parser = $this->getMockForAbstractClass(Parser::class);
-        $parser->expects($this->once())->method('canParse')->with($contentType)->willReturn(true);
-        $parser->expects($this->once())->method('parse')->with($content)->willReturn($definition);
+        $parser->expects(self::once())->method('canParse')->with($contentType)->willReturn(true);
+        $parser->expects(self::once())->method('parse')->with($content)->willReturn($definition);
 
         $loader = new DefinitionLoader($reader, $parser);
 
-        $this->assertSame($definition, $loader->load($uri));
+        self::assertSame($definition, $loader->load($uri));
     }
 }
