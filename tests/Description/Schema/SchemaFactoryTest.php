@@ -12,11 +12,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\SchemaFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class SchemaFactoryTest extends \PHPUnit_Framework_TestCase
+class SchemaFactoryTest extends TestCase
 {
     /**
      * @var SchemaFactory

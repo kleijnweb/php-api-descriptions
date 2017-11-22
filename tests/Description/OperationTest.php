@@ -12,11 +12,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Operation;
 use KleijnWeb\PhpApi\Descriptions\Description\Parameter;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class OperationTest extends \PHPUnit_Framework_TestCase
+class OperationTest extends TestCase
 {
     /**
      * @test

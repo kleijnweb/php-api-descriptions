@@ -13,11 +13,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 use KleijnWeb\PhpApi\Descriptions\Request\ParameterCoercer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class ParameterCoercerTest extends \PHPUnit_Framework_TestCase
+class ParameterCoercerTest extends TestCase
 {
     /**
      * @var ParameterCoercer

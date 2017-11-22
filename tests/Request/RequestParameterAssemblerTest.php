@@ -13,11 +13,12 @@ use KleijnWeb\PhpApi\Descriptions\Request\ParameterCoercer;
 use KleijnWeb\PhpApi\Descriptions\Request\RequestParameterAssembler;
 use KleijnWeb\PhpApi\Descriptions\Tests\Mixins\HttpMessageMockingMixin;
 use Psr\Http\Message\ServerRequestInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class RequestParameterAssemblerTest extends \PHPUnit_Framework_TestCase
+class RequestParameterAssemblerTest extends TestCase
 {
     use HttpMessageMockingMixin;
 

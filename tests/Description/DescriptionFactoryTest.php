@@ -10,11 +10,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Description;
 use KleijnWeb\PhpApi\Descriptions\Description\DescriptionFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class DescriptionFactoryTest extends \PHPUnit_Framework_TestCase
+class DescriptionFactoryTest extends TestCase
 {
     /**
      * @test

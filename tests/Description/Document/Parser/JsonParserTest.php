@@ -10,11 +10,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Document\Parser;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\JsonParser;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\ParseException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class JsonParserTest extends \PHPUnit_Framework_TestCase
+class JsonParserTest extends TestCase
 {
     /**
      * @var JsonParser

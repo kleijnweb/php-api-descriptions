@@ -12,11 +12,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Repository;
 use KleijnWeb\PhpApi\Descriptions\MessageValidator;
 use KleijnWeb\PhpApi\Descriptions\Tests\Mixins\HttpMessageMockingMixin;
 use Psr\Http\Message\ServerRequestInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class MessageValidatorTest extends \PHPUnit_Framework_TestCase
+class MessageValidatorTest extends TestCase
 {
     use HttpMessageMockingMixin;
 

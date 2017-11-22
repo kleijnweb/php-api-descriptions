@@ -12,11 +12,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Description;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\ResourceNotReadableException;
 use KleijnWeb\PhpApi\Descriptions\Description\Repository;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends TestCase
 {
     /**
      * @var Repository

@@ -12,11 +12,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\Definit
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\RefResolver\InvalidReferenceException;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\RefResolver\RefResolver;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\YamlParser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class RefResolverTest extends \PHPUnit_Framework_TestCase
+class RefResolverTest extends TestCase
 {
     /**
      * @test

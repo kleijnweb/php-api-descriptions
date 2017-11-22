@@ -10,8 +10,9 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Schema\Validator;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Schema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\JustinRainbowSchemaValidatorAdapter;
+use PHPUnit\Framework\TestCase;
 
-class JustinRainbowSchemaValidatorAdapterTest extends \PHPUnit_Framework_TestCase
+class JustinRainbowSchemaValidatorAdapterTest extends TestCase
 {
     /**
      * @test

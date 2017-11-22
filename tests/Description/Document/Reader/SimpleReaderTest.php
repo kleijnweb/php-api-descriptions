@@ -9,11 +9,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Document\Reader;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\ResourceNotReadableException;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\SimpleReader;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class SimpleReaderTest extends \PHPUnit_Framework_TestCase
+class SimpleReaderTest extends TestCase
 {
     /**
      * @test

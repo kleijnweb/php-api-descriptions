@@ -11,11 +11,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Document\Definition\Va
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Validator\MetaSchemaValidator;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\SchemaValidator;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\ValidationResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class MetaSchemaValidatorTest extends \PHPUnit_Framework_TestCase
+class MetaSchemaValidatorTest extends TestCase
 {
     /**
      * @var ValidationResult

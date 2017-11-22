@@ -9,11 +9,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Document;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\DefinitionLoader;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class DocumentTest extends \PHPUnit_Framework_TestCase
+class DocumentTest extends TestCase
 {
     /**
      * @var Document

@@ -10,11 +10,12 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Document\Parser;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\ParseException;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\YamlParser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class YamlParserTest extends \PHPUnit_Framework_TestCase
+class YamlParserTest extends TestCase
 {
     /**
      * @var YamlParser

@@ -22,11 +22,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Visitor\ClosureVisitor;
 use KleijnWeb\PhpApi\Descriptions\Description\Visitor\ClosureVisitorScope;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class RamlBuilderTest extends \PHPUnit_Framework_TestCase
+class RamlBuilderTest extends TestCase
 {
     /**
      * @var Description

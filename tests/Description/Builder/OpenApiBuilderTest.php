@@ -14,11 +14,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\Definit
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\RefResolver\RefResolver;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-abstract class OpenApiBuilderTest extends \PHPUnit_Framework_TestCase
+abstract class OpenApiBuilderTest extends TestCase
 {
     /**
      * @var Description

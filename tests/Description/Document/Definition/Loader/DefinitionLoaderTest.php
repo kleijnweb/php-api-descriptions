@@ -13,11 +13,12 @@ use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\Resourc
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Parser\Parser;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\Reader;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\Response;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class DefinitionLoaderTest extends \PHPUnit_Framework_TestCase
+class DefinitionLoaderTest extends TestCase
 {
     /**
      * @test
