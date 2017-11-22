@@ -35,6 +35,8 @@ class OpenApiDefinitionValidatorTest extends TestCase
     public function canValidate()
     {
         $this->validator->validate(json_decode(file_get_contents('tests/definitions/openapi/petstore.json')));
+        // Just making sure exception is not thrown, here for PHPUnit risk assessment
+        $this->assertTrue(true);
     }
 
     /**

@@ -92,7 +92,11 @@ class RamlBuilderTest extends TestCase
      */
     public function willCreatePathObjectsUsingNestedResources()
     {
-        $this->description->getPath('/orders/nested');
+        $path       = '/orders/nested';
+        $pathObject = $this->description->getPath($path);
+
+        $this->assertInstanceOf(Path::class, $pathObject);
+        $this->assertEquals($path, $pathObject->getPath());
     }
 
     /**

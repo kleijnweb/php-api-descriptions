@@ -41,7 +41,8 @@ class JsonParserTest extends TestCase
      */
     public function canLoadValidJson()
     {
-        $this->parser->parse(json_encode(['valid' => true]));
+        $data = (object)['valid' => true];
+        $this->assertEquals($data, $this->parser->parse(json_encode($data)));
     }
 
     /**

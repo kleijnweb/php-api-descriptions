@@ -22,13 +22,9 @@ class SimpleReaderTest extends TestCase
      */
     public function willFailWhenFileDoesNotExist()
     {
-        try {
-            $loader = new SimpleReader();
-            $loader->read('does/not/exist.json');
-        } catch (ResourceNotReadableException $e) {
-            return;
-        }
-        $this->fail("Expected ResourceNotReadableException");
+        $this->expectException(ResourceNotReadableException::class);
+        $reader = new SimpleReader();
+        $reader->read('does/not/exist.json');
     }
 
     /**
@@ -36,8 +32,8 @@ class SimpleReaderTest extends TestCase
      */
     public function willReturnContentTypeYamlIfUriLooksLikeYaml()
     {
-        $loader   = new SimpleReader();
-        $response = $loader->read('tests/definitions/openapi/petstore.yml');
+        $reader   = new SimpleReader();
+        $response = $reader->read('tests/definitions/openapi/petstore.yml');
         $this->assertSame(SimpleReader::CONTENT_TYPE_YAML, $response->getContentType());
     }
 
@@ -46,8 +42,8 @@ class SimpleReaderTest extends TestCase
      */
     public function willReturnContentTypeYamlIfUriLooksLikeRaml()
     {
-        $loader   = new SimpleReader();
-        $response = $loader->read('tests/definitions/raml/mobile-order-api/api.raml');
+        $reader   = new SimpleReader();
+        $response = $reader->read('tests/definitions/raml/mobile-order-api/api.raml');
         $this->assertSame(SimpleReader::CONTENT_TYPE_YAML, $response->getContentType());
     }
 
@@ -56,8 +52,8 @@ class SimpleReaderTest extends TestCase
      */
     public function willReturnContentTypeJsonForEverythingElse()
     {
-        $loader   = new SimpleReader();
-        $response = $loader->read(__FILE__);
+        $reader   = new SimpleReader();
+        $response = $reader->read(__FILE__);
         $this->assertSame(SimpleReader::CONTENT_TYPE_JSON, $response->getContentType());
     }
 }
