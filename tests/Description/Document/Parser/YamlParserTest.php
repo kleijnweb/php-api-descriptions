@@ -123,9 +123,6 @@ YAML;
         $this->assertFalse($this->parser->canParse('text/html'));
     }
 
-    /**
-     * @test
-     */
     public function yamlContentTypeProvider()
     {
         return [
