@@ -1,10 +1,11 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Schema;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ArraySchema;
@@ -64,7 +65,7 @@ class SchemaFactoryTest extends TestCase
         /** @var ObjectSchema $schema */
         $schema = self::$factory->create((object)[
             'type'       => 'object',
-            'properties' => ['foo' => (object)['type' => 'string']]
+            'properties' => ['foo' => (object)['type' => 'string']],
         ]);
 
         $this->assertInstanceOf(\stdClass::class, $schema->getPropertySchemas());
@@ -82,8 +83,8 @@ class SchemaFactoryTest extends TestCase
                 'type'       => 'object',
                 'properties' => [
                     'foo' => (object)['type' => 'string'],
-                    'bar' => (object)['type' => 'number']
-                ]
+                    'bar' => (object)['type' => 'number'],
+                ],
             ]
         );
 
@@ -101,8 +102,8 @@ class SchemaFactoryTest extends TestCase
             (object)[
                 'type'       => 'object',
                 'properties' => [
-                    'bar' => (object)['type' => 'number']
-                ]
+                    'bar' => (object)['type' => 'number'],
+                ],
             ]
         );
 
@@ -120,8 +121,8 @@ class SchemaFactoryTest extends TestCase
             (object)[
                 'type'       => 'object',
                 'properties' => [
-                    'bar' => (object)['type' => 'number']
-                ]
+                    'bar' => (object)['type' => 'number'],
+                ],
             ]
         );
 
@@ -139,8 +140,8 @@ class SchemaFactoryTest extends TestCase
             (object)[
                 'allOf' => [
                     (object)['type' => 'number'],
-                    (object)['type' => 'integer']
-                ]
+                    (object)['type' => 'integer'],
+                ],
             ]
         );
 
@@ -159,16 +160,16 @@ class SchemaFactoryTest extends TestCase
                     (object)[
                         'type'       => 'object',
                         'properties' => (object)[
-                            'foo' => (object)['type' => 'number']
-                        ]
+                            'foo' => (object)['type' => 'number'],
+                        ],
                     ],
                     (object)[
                         'type'       => 'object',
                         'properties' => (object)[
-                            'bar' => (object)['type' => 'number']
-                        ]
+                            'bar' => (object)['type' => 'number'],
+                        ],
                     ],
-                ]
+                ],
             ]
         );
 
@@ -186,7 +187,7 @@ class SchemaFactoryTest extends TestCase
             [(object)['type' => 'object', 'x-type' => 'Foo']],
             [(object)['type' => 'object', 'x-ref-id' => '#/definitions/Foo']],
             [(object)['type' => 'string', 'format' => 'date']],
-            [(object)['type' => 'array', 'items' => (object)['type' => 'string']]]
+            [(object)['type' => 'array', 'items' => (object)['type' => 'string']]],
         ];
     }
 }

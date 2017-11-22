@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
@@ -32,14 +32,14 @@ class JustinRainbowSchemaValidatorAdapterTest extends TestCase
                         'properties' => (object)[
                             'bar' => (object)[
                                 'type'    => 'integer',
-                                'minimum' => 10
-                            ]
-                        ]
+                                'minimum' => 10,
+                            ],
+                        ],
                     ],
                     'bar' => (object)[
                         'type' => 'integer',
-                    ]
-                ]
+                    ],
+                ],
             ]),
             (object)['foo' => (object)['bar' => 1]]
         );
@@ -65,7 +65,7 @@ class JustinRainbowSchemaValidatorAdapterTest extends TestCase
                 'type'       => 'object',
                 'properties' => (object)[
                     'foo' => (object)['type' => 'integer'],
-                ]
+                ],
             ]),
             (object)['bar' => 1],
             true
@@ -90,8 +90,8 @@ class JustinRainbowSchemaValidatorAdapterTest extends TestCase
                 'type'       => 'object',
                 'properties' => (object)[
                     'foo' => (object)['type' => 'integer'],
-                    'bar' => (object)['type' => 'integer',]
-                ]
+                    'bar' => (object)['type' => 'integer',],
+                ],
             ]),
             (object)['foo' => 1],
             false,

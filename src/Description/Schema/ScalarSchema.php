@@ -1,10 +1,11 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace KleijnWeb\PhpApi\Descriptions\Description\Schema;
 
 /**
@@ -48,7 +49,7 @@ class ScalarSchema extends Schema
     public function isDateTime(): bool
     {
         return $this->isType(self::TYPE_STRING)
-        && ($this->hasFormat(self::FORMAT_DATE) || $this->hasFormat(self::FORMAT_DATE_TIME));
+            && ($this->hasFormat(self::FORMAT_DATE) || $this->hasFormat(self::FORMAT_DATE_TIME));
     }
 
     /**

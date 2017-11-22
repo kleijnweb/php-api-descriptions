@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
@@ -8,7 +8,6 @@
 
 namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Builder\OpenApi;
 
-use KleijnWeb\PhpApi\Descriptions\Description\Schema\ArraySchema;
 use KleijnWeb\PhpApi\Descriptions\Tests\Description\Builder\OpenApiBuilderTest;
 
 /**

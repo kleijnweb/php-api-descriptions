@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
@@ -28,9 +28,9 @@ class RefResolverTest extends TestCase
             'type'       => 'object',
             'properties' => (object)[
                 'foo' => (object)[
-                    '$ref' => '#/does/not/exist'
-                ]
-            ]
+                    '$ref' => '#/does/not/exist',
+                ],
+            ],
         ];
         $resolver = new RefResolver($object, '/foo');
 
@@ -157,32 +157,32 @@ class RefResolverTest extends TestCase
                 'foo',
                 '/somedir/entities.json',
                 'entities.json#/definitions/SomeType',
-                (object)['definitions' => (object)['SomeType' => 'foo']]
+                (object)['definitions' => (object)['SomeType' => 'foo']],
             ],
             [
                 'bar',
                 '/somedir/entities.yaml',
                 'entities.yaml#/definitions/SomeType',
-                (object)['definitions' => (object)['SomeType' => 'bar']]
+                (object)['definitions' => (object)['SomeType' => 'bar']],
             ],
             [
                 'mary',
                 '/somedir/entities/had/a/little.yaml',
                 'entities/had/a/little.yaml#/Lamb',
-                (object)['Lamb' => 'mary']
+                (object)['Lamb' => 'mary'],
             ],
             [
                 'wow',
                 'wss://many:external@references.com:8080/so.yml?much',
                 'wss://many:external@references.com:8080/so.yml?much#/flexibility',
-                (object)['flexibility' => 'wow']
+                (object)['flexibility' => 'wow'],
             ],
             [
                 'local',
                 '/somedir/local.yml',
                 'file://local.yml#/definitions/SomeType',
-                (object)['definitions' => (object)['SomeType' => 'local']]
-            ]
+                (object)['definitions' => (object)['SomeType' => 'local']],
+            ],
         ];
     }
 

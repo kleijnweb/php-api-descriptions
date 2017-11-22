@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
@@ -45,8 +45,9 @@ class YamlParser implements Parser
                 );
             } else {
                 $data = $this->parser->parse($string, true, false, false);
-                return $this->fixHashMaps($data);                
-            }        
+
+                return $this->fixHashMaps($data);
+            }
         } catch (\Throwable $e) {
             throw new ParseException("Failed to parse as YAML", 0, $e);
         }
@@ -87,6 +88,6 @@ class YamlParser implements Parser
     public function canParse(string $contentType): bool
     {
         return strpos($contentType, 'yaml') == strlen($contentType) - 4
-        || strpos($contentType, 'yml') == strlen($contentType) - 3;
+            || strpos($contentType, 'yml') == strlen($contentType) - 3;
     }
 }

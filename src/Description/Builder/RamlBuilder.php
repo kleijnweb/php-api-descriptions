@@ -1,10 +1,11 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace KleijnWeb\PhpApi\Descriptions\Description\Builder;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Description;
@@ -75,7 +76,7 @@ class RamlBuilder extends Builder
         string $method,
         array $pathParameters = []
     ): Operation {
-    
+
         /** @var Parameter[] $parameters */
         $parameters = array_merge($pathParameters, $this->extractParameters($definition));
         $responses  = [];

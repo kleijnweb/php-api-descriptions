@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
@@ -128,7 +128,7 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
             '/users/{username}'         => [
                 'get'    => [404, 200, 400],
                 'put'    => [404, 400, 200],
-                'delete' => [404, 400, 200]
+                'delete' => [404, 400, 200],
             ],
         ];
 
@@ -167,7 +167,7 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
         $map = [
             'getDocument' => $this->document,
             'getSchemes'  => ['http'],
-            'getHost'     => 'petstore.swagger.io'
+            'getHost'     => 'petstore.swagger.io',
 
         ];
         foreach ($map as $methodName => $value) {

@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
@@ -133,7 +133,7 @@ YAML;
             ['text/yaml'],
             ['application/yml'],
             ['application/yaml'],
-            ['application/vn.error+yml']
+            ['application/vn.error+yml'],
         ];
     }
 }

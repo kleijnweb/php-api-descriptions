@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
@@ -27,7 +27,7 @@ class OperationTest extends TestCase
         $schema = new ScalarSchema((object)['type' => Schema::TYPE_ANY]);
 
         $parameters = [
-            new Parameter('bar', false, $schema, Parameter::IN_QUERY)
+            new Parameter('bar', false, $schema, Parameter::IN_QUERY),
         ];
 
         $operation = new Operation('', '/foo', 'get', $parameters, $schema, []);
@@ -57,7 +57,7 @@ class OperationTest extends TestCase
         $parameters = [
             new Parameter('foo', false, $schema, Parameter::IN_QUERY),
             new Parameter('bar', false, $schema, Parameter::IN_BODY),
-            new Parameter('bah', false, $schema, Parameter::IN_QUERY)
+            new Parameter('bah', false, $schema, Parameter::IN_QUERY),
         ];
 
         $operation = new Operation('', '/foo', 'post', $parameters, $schema, []);
@@ -86,7 +86,7 @@ class OperationTest extends TestCase
 
         $parameters = [
             new Parameter('foo', false, $schema, Parameter::IN_QUERY),
-            new Parameter('bah', false, $schema, Parameter::IN_QUERY)
+            new Parameter('bah', false, $schema, Parameter::IN_QUERY),
         ];
 
         $operation = new Operation('', '/foo', 'post', $parameters, $schema, []);

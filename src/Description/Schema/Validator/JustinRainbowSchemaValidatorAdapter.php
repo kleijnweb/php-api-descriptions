@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
@@ -30,7 +30,7 @@ class JustinRainbowSchemaValidatorAdapter implements SchemaValidator
         $forceNoAdditionalProperties = false,
         $requireAllWhenNotSpecified = false
     ): ValidationResult {
-    
+
         $definition = $schema->getDefinition();
 
         if ($requireAllWhenNotSpecified || $forceNoAdditionalProperties) {

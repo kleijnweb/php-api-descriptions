@@ -1,10 +1,11 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 /*
  * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace KleijnWeb\PhpApi\Descriptions\Request;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Operation;
@@ -47,7 +48,7 @@ class RequestParameterAssembler
         array $headers,
         $body = null
     ): \stdClass {
-    
+
         $headerParamMap = array_combine(array_map(function ($key) {
             return $this->getHeaderParameterName($key);
         }, array_keys($headers)), array_keys($headers));
