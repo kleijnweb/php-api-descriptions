@@ -46,14 +46,96 @@ abstract class Schema implements Element
     protected $type;
 
     /**
+     * @var mixed
+     */
+    protected $default;
+
+    /**
+     * @var string
+     */
+    protected $title = '';
+
+    /**
+     * @var string
+     */
+    protected $description = '';
+
+    /**
+     * @var bool
+     */
+    protected $readOnly = false;
+
+    /**
+     * @var bool
+     */
+    protected $writeOnly = false;
+
+    /**
+     * @var array
+     */
+    protected $examples = [];
+
+    /**
      * Schema constructor.
      *
      * @param \stdClass $definition
      */
     public function __construct(\stdClass $definition)
     {
-        $this->type       = isset($definition->type) ? $definition->type : null;
+        foreach (array_keys(get_object_vars($this)) as $propertyName) {
+            if (isset($definition->$propertyName)) {
+                $this->$propertyName = $definition->$propertyName;
+            }
+        }
         $this->definition = $definition;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefault()
+    {
+        return $this->default;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReadOnly(): bool
+    {
+        return $this->readOnly;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWriteOnly(): bool
+    {
+        return $this->writeOnly;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExamples(): array
+    {
+        return $this->examples;
     }
 
     /**

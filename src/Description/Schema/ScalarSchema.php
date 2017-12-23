@@ -38,9 +38,7 @@ class ScalarSchema extends Schema
     public function __construct(\stdClass $definition)
     {
         parent::__construct($definition);
-        $this->format  = isset($definition->format) ? $definition->format : null;
         $this->enum    = isset($definition->enum) ? (array)$definition->enum : null;
-        $this->pattern = isset($definition->pattern) ? $definition->pattern : null;
     }
 
     /**
