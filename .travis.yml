@@ -8,8 +8,11 @@ matrix:
   include:
     - php: 7.0
       env: COMPOSER_FLAGS="--prefer-lowest"
+      script: bin/phpunit --exclude-group perf
     - php: 7.0
-      script: bin/phpunit --coverage-clover build/logs/clover.xml
+      script: bin/phpunit --group perf
+    - php: 7.0
+      script: bin/phpunit --exclude-group perf --coverage-clover build/logs/clover.xml
       before_script:
         - mkdir -p build/logs
       after_script:

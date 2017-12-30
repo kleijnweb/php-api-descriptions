@@ -9,7 +9,7 @@
     }
   ],
   "license": "LGPL-3.0",
-  "description": "A PHP7 library for loading api descriptions and using them to validate PSR7 messages.",
+  "description": "A PHP library for creating \"contract-first\" API applications.",
   "autoload": {
     "psr-4": {
       "KleijnWeb\\PhpApi\\Descriptions\\Tests\\": "tests",
