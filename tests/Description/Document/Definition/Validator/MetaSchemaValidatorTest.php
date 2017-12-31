@@ -57,6 +57,5 @@ class MetaSchemaValidatorTest extends TestCase
 
         $this->expectException(\InvalidArgumentException::class);
         $this->validator->validate((object)[]);
-
     }
 }

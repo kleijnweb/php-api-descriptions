@@ -92,4 +92,3 @@ class IntegerProcessorTest extends TestCase
         $processor->hydrate(((float)PHP_INT_MAX) * 2);
     }
 }
-

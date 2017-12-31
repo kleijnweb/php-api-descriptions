@@ -9,10 +9,10 @@
 namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Schema\Validator;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Schema;
-use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\JustinRainbowSchemaValidatorAdapter;
+use KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator\JsonGuardSchemaValidatorAdapter;
 use PHPUnit\Framework\TestCase;
 
-class JustinRainbowSchemaValidatorAdapterTest extends TestCase
+class JsonGuardSchemaValidatorAdapterTest extends TestCase
 {
     /**
      * @test
@@ -21,7 +21,7 @@ class JustinRainbowSchemaValidatorAdapterTest extends TestCase
     {
         $factory = new Schema\SchemaFactory();
 
-        $validator = new JustinRainbowSchemaValidatorAdapter();
+        $validator = new JsonGuardSchemaValidatorAdapter();
         $result    = $validator->validate(
             $factory->create((object)[
                 'type'       => 'object',
@@ -46,8 +46,8 @@ class JustinRainbowSchemaValidatorAdapterTest extends TestCase
         $this->assertFalse($result->isValid());
 
         $expected = [
-            'bar'     => 'The property bar is required',
-            'foo.bar' => 'Must have a minimum value of 10',
+            '/'        => 'The object must contain the properties ["bar"].',
+            '/foo/bar' => 'The number must be at least 10.',
         ];
         $this->assertSame($expected, $result->getErrorMessages());
     }
@@ -59,7 +59,7 @@ class JustinRainbowSchemaValidatorAdapterTest extends TestCase
     {
         $factory = new Schema\SchemaFactory();
 
-        $validator = new JustinRainbowSchemaValidatorAdapter();
+        $validator = new JsonGuardSchemaValidatorAdapter();
         $result    = $validator->validate(
             $factory->create((object)[
                 'type'       => 'object',
@@ -72,7 +72,7 @@ class JustinRainbowSchemaValidatorAdapterTest extends TestCase
         );
         $this->assertFalse($result->isValid());
 
-        $expected = ['' => 'The property bar is not defined and the definition does not allow additional properties'];
+        $expected = ['/' => 'The object must not contain additional properties (["bar"]).'];
 
         $this->assertSame($expected, $result->getErrorMessages());
     }
@@ -84,7 +84,7 @@ class JustinRainbowSchemaValidatorAdapterTest extends TestCase
     {
         $factory = new Schema\SchemaFactory();
 
-        $validator = new JustinRainbowSchemaValidatorAdapter();
+        $validator = new JsonGuardSchemaValidatorAdapter();
         $result    = $validator->validate(
             $factory->create((object)[
                 'type'       => 'object',
@@ -99,7 +99,7 @@ class JustinRainbowSchemaValidatorAdapterTest extends TestCase
         );
         $this->assertFalse($result->isValid());
 
-        $expected = ['bar' => 'The property bar is required'];
+        $expected = ['/' => 'The object must contain the properties ["bar"].'];
 
         $this->assertSame($expected, $result->getErrorMessages());
     }

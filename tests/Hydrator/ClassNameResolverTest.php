@@ -42,7 +42,7 @@ class ClassNameResolverTest extends TestCase
 
         $repeats = 5;
         $start = microtime(true);
-        for($i = 0; $i < $repeats; ++$i){
+        for ($i = 0; $i < $repeats; ++$i) {
             $resolver->resolve('Pet');
         }
 

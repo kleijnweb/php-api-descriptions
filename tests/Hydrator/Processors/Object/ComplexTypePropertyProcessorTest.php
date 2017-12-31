@@ -54,7 +54,8 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
             (object)[
                 'id'          => new ScalarSchema((object)['type' => 'integer']),
                 'nonExistent' => new ScalarSchema((object)['type' => 'string']),
-            ]);
+            ]
+        );
 
         $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema));
 
@@ -154,7 +155,8 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
             (object)[
                 'id'   => new ScalarSchema((object)['type' => 'integer']),
                 'name' => new ScalarSchema((object)['type' => Schema::TYPE_NULL]),
-            ]);
+            ]
+        );
 
         $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema));
 
@@ -198,7 +200,8 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
 
                     ]
                 ),
-            ]);
+            ]
+        );
 
         $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema));
 
@@ -237,7 +240,8 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
                     'type'    => ScalarSchema::TYPE_NULL,
                     'default' => 'theDefaultValue',
                 ]),
-            ]);
+            ]
+        );
 
         $this->mockPropertyProcesser
             ->expects($this->any())
@@ -306,7 +310,8 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
                 'nullProperty' => new ScalarSchema((object)[
                     'type' => ScalarSchema::TYPE_NULL,
                 ]),
-            ]);
+            ]
+        );
 
         $this->mockPropertyProcesser
             ->expects($this->any())

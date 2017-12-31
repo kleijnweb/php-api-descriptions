@@ -33,7 +33,8 @@ class OkStatusResolverTest extends TestCase
     public function willReturn200ForNullResultWhen204NotAvailable()
     {
         $statusCode = $this->resolver->resolve(
-            null, $this->getMockBuilder(Operation::class)
+            null,
+            $this->getMockBuilder(Operation::class)
             ->disableOriginalConstructor()
             ->getMock()
         );

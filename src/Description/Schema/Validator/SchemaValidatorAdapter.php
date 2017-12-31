@@ -8,13 +8,12 @@
 
 namespace KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator;
 
-use JsonSchema\Validator as JustinRainbowJsonSchemaValidator;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class JustinRainbowSchemaValidatorAdapter implements SchemaValidator
+abstract class SchemaValidatorAdapter implements SchemaValidator
 {
     /**
      * @param Schema $schema
@@ -57,14 +56,8 @@ class JustinRainbowSchemaValidatorAdapter implements SchemaValidator
             $hackDefinition($definition = clone $definition);
         }
 
-        $validator = new JustinRainbowJsonSchemaValidator();
-        $validator->check($value, $definition);
-
-        $map = [];
-        foreach ($validator->getErrors() as $error) {
-            $map[$error['property']] = $error['message'];
-        }
-
-        return new ValidationResult($validator->isValid(), $map);
+        return $this->getResult($definition, $value);
     }
+
+    abstract protected function getResult(\stdClass $definition, $value): ValidationResult;
 }

@@ -11,6 +11,6 @@ namespace KleijnWeb\PhpApi\Descriptions\Description\Schema\Validator;
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class DefaultValidator extends JustinRainbowSchemaValidatorAdapter
+class DefaultValidator extends JsonGuardSchemaValidatorAdapter
 {
 }

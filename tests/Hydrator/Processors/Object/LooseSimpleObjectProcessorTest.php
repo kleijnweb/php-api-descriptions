@@ -8,7 +8,6 @@
 
 namespace KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Processors\Object;
 
-
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Hydrator\Processors\AnyProcessor;
@@ -74,7 +73,8 @@ class LooseSimpleObjectProcessorTest extends SimpleObjectProcessorTest
                     'type'    => ScalarSchema::TYPE_NULL,
                     'default' => 'theDefaultValue',
                 ]),
-            ]);
+            ]
+        );
 
         $this->mockPropertyProcesser
             ->expects($this->any())

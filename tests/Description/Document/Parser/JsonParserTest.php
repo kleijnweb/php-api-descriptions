@@ -70,5 +70,4 @@ class JsonParserTest extends TestCase
             ['application/vn.error+json'],
         ];
     }
-
 }

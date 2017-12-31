@@ -70,7 +70,6 @@ class DocumentTest extends TestCase
         $this->document->apply(function ($value, $key) use (&$keys) {
 
             if ($key === 'paths') {
-
                 return false;
             }
             $keys[] = $key;

@@ -69,4 +69,3 @@ class DateTimeProcessorTest extends TestCase
         $this->processor->dehydrate($value);
     }
 }
-

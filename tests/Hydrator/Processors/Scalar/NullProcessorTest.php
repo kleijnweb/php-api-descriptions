@@ -36,4 +36,3 @@ class NullProcessorTest extends BasicScalarTest
         ];
     }
 }
-

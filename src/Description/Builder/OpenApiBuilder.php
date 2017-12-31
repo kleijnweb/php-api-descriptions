@@ -140,11 +140,13 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
             $requestSchema          = $this->schemaFactory->create($schemaDefinition);
         } else {
             $schemaDefinition->type       = 'object';
-            $schemaDefinition->required   = [];
             $schemaDefinition->properties = (object)[];
 
             foreach ($parameters as $parameter) {
                 if ($parameter->isRequired()) {
+                    if (!isset($schemaDefinition->required)) {
+                        $schemaDefinition->required = [];
+                    }
                     $schemaDefinition->required[] = $parameter->getName();
                 }
                 $schemaDefinition->properties->{$parameter->getName()} = $parameter->getSchema()->getDefinition();

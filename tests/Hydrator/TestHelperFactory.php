@@ -68,7 +68,8 @@ class TestHelperFactory
             (object)[
                 'id'   => new ScalarSchema((object)['type' => 'integer']),
                 'name' => new ScalarSchema((object)['type' => 'string']),
-            ]);
+            ]
+        );
 
         if ($useComplexTypes) {
             $categorySchema->setComplexType(new ComplexType('Category', $categorySchema));
@@ -117,7 +118,8 @@ class TestHelperFactory
             (object)[
                 'id'   => new ScalarSchema((object)['type' => 'integer']),
                 'name' => new ScalarSchema((object)['type' => 'string']),
-            ]);
+            ]
+        );
 
         if ($useComplexTypes) {
             $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema));
