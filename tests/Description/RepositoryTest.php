@@ -8,12 +8,12 @@
 
 namespace KleijnWeb\PhpApi\Descriptions\Tests\Description;
 
-use Doctrine\Common\Cache\ArrayCache;
 use KleijnWeb\PhpApi\Descriptions\Description\Description;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Reader\ResourceNotReadableException;
 use KleijnWeb\PhpApi\Descriptions\Description\Repository;
 use PHPUnit\Framework\TestCase;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -63,11 +63,11 @@ class RepositoryTest extends TestCase
     public function willCache()
     {
         $path       = 'tests/definitions/openapi/petstore.yml';
-        $cache      = $this->getMockBuilder(ArrayCache::class)->disableOriginalConstructor()->getMock();
+        $cache      = $this->getMockBuilder(CacheInterface::class)->getMockForAbstractClass();
         $repository = new Repository(null, $cache);
 
-        $cache->expects($this->exactly(1))->method('fetch')->with($path);
-        $cache->expects($this->exactly(1))->method('save')->with($path, $this->isType('object'));
+        $cache->expects($this->exactly(1))->method('get')->with($path);
+        $cache->expects($this->exactly(1))->method('set')->with($path, $this->isType('object'));
         $repository->get($path);
     }
 
@@ -76,14 +76,16 @@ class RepositoryTest extends TestCase
      */
     public function willFetchFromCache()
     {
-        $path        = 'tests/definitions/openapi/petstore.yml';
-        $cache       = $this->getMockBuilder(ArrayCache::class)->disableOriginalConstructor()->getMock();
+        $path  = 'tests/definitions/openapi/petstore.yml';
+        $cache = $this->getMockBuilder(CacheInterface::class)->getMockForAbstractClass();
+
+        /** @var Document $document */
         $document    = $this->getMockBuilder(Document::class)->disableOriginalConstructor()->getMock();
         $description = new Description([], [], '', [], [], $document);
 
         $repository = new Repository(null, $cache);
 
-        $cache->expects($this->exactly(1))->method('fetch')->with($path)->willReturn($description);
+        $cache->expects($this->exactly(1))->method('set')->with($path)->willReturn($description);
         $this->assertInstanceOf(Description::class, $repository->get($path));
     }
 

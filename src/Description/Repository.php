@@ -8,9 +8,9 @@
 
 namespace KleijnWeb\PhpApi\Descriptions\Description;
 
-use Doctrine\Common\Cache\Cache;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\DefinitionLoader;
 use KleijnWeb\PhpApi\Descriptions\Description\Respository\RepositoryIterator;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -33,7 +33,7 @@ class Repository implements \IteratorAggregate
     private $uris = [];
 
     /**
-     * @var Cache
+     * @var CacheInterface
      */
     private $cache;
 
@@ -51,13 +51,13 @@ class Repository implements \IteratorAggregate
      * Repository constructor.
      *
      * @param string|null             $basePath
-     * @param Cache|null              $cache
+     * @param CacheInterface|null     $cache
      * @param DefinitionLoader|null   $loader
      * @param DescriptionFactory|null $factory
      */
     public function __construct(
         string $basePath = null,
-        Cache $cache = null,
+        CacheInterface $cache = null,
         DefinitionLoader $loader = null,
         DescriptionFactory $factory = null
     ) {
@@ -134,14 +134,14 @@ class Repository implements \IteratorAggregate
      */
     private function load(string $uri): Description
     {
-        if ($this->cache && $description = $this->cache->fetch($uri)) {
+        if ($this->cache && $description = $this->cache->get($uri)) {
             return $description;
         }
 
         $description = $this->factory->create($uri, $this->loader->load($uri));
 
         if ($this->cache) {
-            $this->cache->save($uri, $description);
+            $this->cache->set($uri, $description);
         }
 
         return $description;
