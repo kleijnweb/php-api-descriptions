@@ -66,8 +66,8 @@ class RepositoryTest extends TestCase
         $cache      = $this->getMockBuilder(CacheInterface::class)->getMockForAbstractClass();
         $repository = new Repository(null, $cache);
 
-        $cache->expects($this->exactly(1))->method('get')->with($path);
-        $cache->expects($this->exactly(1))->method('set')->with($path, $this->isType('object'));
+        $cache->expects($this->exactly(1))->method('get')->with($cacheKey = bin2hex($path));
+        $cache->expects($this->exactly(1))->method('set')->with($cacheKey, $this->isType('object'));
         $repository->get($path);
     }
 
@@ -85,7 +85,7 @@ class RepositoryTest extends TestCase
 
         $repository = new Repository(null, $cache);
 
-        $cache->expects($this->exactly(1))->method('set')->with($path)->willReturn($description);
+        $cache->expects($this->exactly(1))->method('set')->with($cacheKey = bin2hex($path))->willReturn($description);
         $this->assertInstanceOf(Description::class, $repository->get($path));
     }
 

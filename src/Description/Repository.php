@@ -134,14 +134,14 @@ class Repository implements \IteratorAggregate
      */
     private function load(string $uri): Description
     {
-        if ($this->cache && $description = $this->cache->get($uri)) {
+        if ($this->cache && $description = $this->cache->get($cacheKey = bin2hex($uri))) {
             return $description;
         }
 
         $description = $this->factory->create($uri, $this->loader->load($uri));
 
-        if ($this->cache) {
-            $this->cache->set($uri, $description);
+        if (isset($cacheKey)) {
+            $this->cache->set($cacheKey, $description);
         }
 
         return $description;
