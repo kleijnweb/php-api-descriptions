@@ -191,11 +191,11 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
         $tagSchema = new ObjectSchema(
             (object)[],
             (object)[
-                'id'   => new ScalarSchema((object)['type' => 'integer']),
-                'name' => new ScalarSchema((object)['type' => Schema::TYPE_STRING]),
+                'id'    => new ScalarSchema((object)['type' => 'integer']),
+                'name'  => new ScalarSchema((object)['type' => Schema::TYPE_STRING]),
                 'extra' => new ScalarSchema(
                     (object)[
-                        'type' => Schema::TYPE_STRING,
+                        'type'    => Schema::TYPE_STRING,
                         'default' => 'defaultValue'
 
                     ]
@@ -293,15 +293,16 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
      */
     public function willNotOmitNullTypeValuesOnTypedObjectsWhenDehydrating()
     {
-        $processor = $this->createProcessor(
-            function (ObjectSchema $schema) {
-                $className = get_class(new class
-                {
-                    private $aInt;
-                    private $nullProperty;
-                });
+        $stub = new class
+        {
+            private $aInt         = 1;
 
-                return $this->factory($schema, $className);
+            private $nullProperty = null;
+        };
+
+        $processor = $this->createProcessor(
+            function (ObjectSchema $schema) use ($stub) {
+                return $this->factory($schema, get_class($stub));
             },
             (object)[
                 'aInt'         => new ScalarSchema((object)[
@@ -320,9 +321,7 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
                 return $value;
             });
 
-        $object = (object)['aInt' => 1, 'nullProperty' => null];
-
-        $data = $processor->dehydrate($object);
+        $data = $processor->dehydrate($stub);
 
         $this->assertSame(1, $data->aInt);
         $this->assertObjectHasAttribute('nullProperty', $data);

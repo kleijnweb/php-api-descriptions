@@ -51,7 +51,6 @@ class AnyProcessorTest extends TestCase
      * @dataProvider valueProvider
      *
      * @param int|float $value
-     * @param int|float $hydrated
      */
     public function willDehydrateAsPassthrough($value)
     {
@@ -72,8 +71,11 @@ class AnyProcessorTest extends TestCase
             [(object)['a' => 'b'], (object)['a' => 'b']],
             ['2017', '2017'],
             ['1234567890', '1234567890'],
-            ['2017-05-01', new \DateTime('2017-05-01')],
-            [($now = new \DateTime)->format(\DateTime::RFC3339_EXTENDED), $now],
+            ['2017-05-01', new \DateTime('2017-05-01T00:00:00.0000')],
+            [
+                $rfcUsec = (new \DateTime)->format(DateTimeSerializer::FORMAT_RFC3339_USEC),
+                \DateTime::createFromFormat(DateTimeSerializer::FORMAT_RFC3339_USEC, $rfcUsec)
+            ],
         ];
     }
 }
