@@ -17,4 +17,8 @@ matrix:
         - mkdir -p build/logs
       after_script:
         - travis_retry php bin/coveralls -v
+    - php: 7.1
+      script:
+        - bin/phpunit --exclude-group perf
+        - bin/phpcs --standard=PSR2 src tests
   fast_finish: true
