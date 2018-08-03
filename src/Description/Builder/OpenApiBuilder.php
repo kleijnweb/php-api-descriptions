@@ -49,7 +49,7 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
 
         $description->accept(new ClosureVisitor($this, function ($schema) use (&$typeDefinitions) {
             if ($schema instanceof ObjectSchema) {
-                if ($schema->isType(Schema::TYPE_OBJECT) && isset($schema->getDefinition()->{'x-ref-id'})) {
+                if (isset($schema->getDefinition()->{'x-ref-id'})) {
                     $typeName = substr(
                         $schema->getDefinition()->{'x-ref-id'},
                         strrpos($schema->getDefinition()->{'x-ref-id'}, '/') + 1
@@ -59,6 +59,15 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
                 }
             }
         }));
+
+        $this->document->apply(function ($composite, $attribute, $parent, $parentAttribute) use (&$typeDefinitions) {
+            if ($parentAttribute === 'definitions') {
+                $schema = $this->schemaFactory->create($composite);
+                if ($schema instanceof ObjectSchema) {
+                    $typeDefinitions[$attribute] = $schema;
+                }
+            }
+        });
 
         foreach ($typeDefinitions as $name => $schema) {
             $type = new ComplexType($name, $schema);

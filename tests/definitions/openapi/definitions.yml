@@ -1,0 +1,35 @@
+swagger: '2.0'
+info:
+  description: 'Data api'
+  version: 1.0.0
+basePath: /data/v1
+paths:
+  /baz:
+    get:
+      responses:
+        '200':
+          schema: { $ref: '#/definitions/Baz' }
+
+definitions:
+  Foo:
+    type: object
+    properties:
+      fooProperty: { type: string }
+  Bar:
+    type: object
+    properties:
+      barProperty: { type: string }
+
+  Baz:
+    allOf:
+      - { $ref: '#/definitions/Foo' }
+      - { $ref: '#/definitions/Bar' }
+      - properties:
+          bazProperty: { type: string }
+
+  StringDefinition:
+    type: string
+
+  UnusedDefinition:
+    properties:
+      barProperty: { type: string }
