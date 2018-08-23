@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * This file is part of the KleijnWeb\PhpApi\Descriptions\Hydrator package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,6 +14,8 @@ use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 use KleijnWeb\PhpApi\Descriptions\Hydrator\ClassNameResolver;
+use KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Types\Category;
+use KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Types\Pet;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -51,7 +53,7 @@ class TestHelperFactory
                 ]),
             ]
         );
-        $petSchema->setComplexType(new ComplexType('Pet', $petSchema));
+        $petSchema->setComplexType(new ComplexType('Pet', $petSchema, Pet::class));
 
         return $petSchema;
     }
@@ -72,7 +74,7 @@ class TestHelperFactory
         );
 
         if ($useComplexTypes) {
-            $categorySchema->setComplexType(new ComplexType('Category', $categorySchema));
+            $categorySchema->setComplexType(new ComplexType('Category', $categorySchema, Category::class));
         }
 
         $petSchema = new ObjectSchema(
@@ -101,7 +103,7 @@ class TestHelperFactory
         );
 
         if ($useComplexTypes) {
-            $petSchema->setComplexType(new ComplexType('Pet', $petSchema));
+            $petSchema->setComplexType(new ComplexType('Pet', $petSchema, Pet::class));
         }
 
         return $petSchema;
@@ -122,7 +124,7 @@ class TestHelperFactory
         );
 
         if ($useComplexTypes) {
-            $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema));
+            $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema, Tag::class));
         }
 
         return $tagSchema;

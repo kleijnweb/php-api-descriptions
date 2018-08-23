@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * This file is part of the KleijnWeb\PhpApi\Descriptions\Hydrator package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,10 +29,10 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
     public function hydrateWillOmitPropertiesNotInSchema()
     {
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, TestHelperFactory::createPartialPetSchema());
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->once())
             ->method('hydrate')
             ->willReturn(999);
@@ -60,10 +60,10 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
         $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema));
 
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, $tagSchema);
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->once())
             ->method('hydrate')
             ->willReturn(999);
@@ -80,10 +80,10 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
     public function hydrateWillDelegateToPropertyProcessor()
     {
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, TestHelperFactory::createTagSchema());
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->once())
             ->method('hydrate')
             ->with(2)
@@ -102,10 +102,10 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
     public function dehydrateWillOmitPropertyInClassWhenValueIsNullAndTypeIsNotNull()
     {
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, TestHelperFactory::createTagSchema());
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->once())
             ->method('dehydrate')
             ->with(2)
@@ -129,10 +129,10 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
     public function dehydrateWillDelegateToPropertyProcessorWhenValueNotNull()
     {
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, TestHelperFactory::createTagSchema());
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('dehydrate')
             ->willReturnCallback(function ($value) {
@@ -161,10 +161,10 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
         $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema));
 
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, $tagSchema);
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('dehydrate')
             ->willReturnCallback(function ($value) {
@@ -206,10 +206,10 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
         $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema));
 
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, $tagSchema);
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('dehydrate')
             ->willReturnCallback(function ($value) {
@@ -230,7 +230,7 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
     {
         $processor = $this->createProcessor(
             function (ObjectSchema $schema) {
-                return $this->factory($schema, Tag::class);
+                return $this->factory($schema);
             },
             (object)[
                 'id'   => new ScalarSchema((object)[
@@ -243,7 +243,7 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
             ]
         );
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('hydrate')
             ->willReturnCallback(function ($value) {
@@ -268,7 +268,7 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
             return $this->factory($schema, Pet::class);
         }, 'id', 'name', 'status');
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('dehydrate')
             ->willReturnCallback(function ($value) {
@@ -302,7 +302,7 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
 
         $processor = $this->createProcessor(
             function (ObjectSchema $schema) use ($stub) {
-                return $this->factory($schema, get_class($stub));
+                return $this->factory($schema);
             },
             (object)[
                 'aInt'         => new ScalarSchema((object)[
@@ -314,7 +314,7 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
             ]
         );
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('dehydrate')
             ->willReturnCallback(function ($value) {
@@ -328,8 +328,14 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
         $this->assertNull($data->nullProperty);
     }
 
-    protected function factory(ObjectSchema $schema, string $className): ComplexTypePropertyProcessor
+    /**
+     * @param ObjectSchema $schema
+     *
+     * @return ComplexTypePropertyProcessor
+     * @throws \ReflectionException
+     */
+    protected function factory(ObjectSchema $schema): ComplexTypePropertyProcessor
     {
-        return new ComplexTypePropertyProcessor($schema, $className);
+        return new ComplexTypePropertyProcessor($schema);
     }
 }

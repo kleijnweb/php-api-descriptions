@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * This file is part of the KleijnWeb\PhpApi\Descriptions\Hydrator package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,14 +15,16 @@ class ComplexTypePropertyProcessor extends ComplexTypeProcessor
 {
     /**
      * @param \stdClass $input
+     *
      * @return object
      */
     protected function hydrateObject(\stdClass $input)
     {
         $object = $this->getObjectForHydration($input);
+        $className = get_class($object);
 
-        foreach ($this->reflectionProperties as $name => $reflectionProperty) {
-            if (isset($this->reflectionProperties[$name])) {
+        foreach ($this->reflectionProperties[$className] as $name => $reflectionProperty) {
+            if ($this->hasReflectionProperty($className, $name)) {
                 if (!property_exists($input, $name)) {
                     if (!isset($this->defaults[$name])) {
                         continue;
@@ -32,10 +34,10 @@ class ComplexTypePropertyProcessor extends ComplexTypeProcessor
                     $value = $input->$name;
                 }
 
-                if (isset($this->propertyProcessors[$name])) {
+                if ($this->hasReflectionProperty($className, $name)) {
                     $value = $this->hydrateProperty($name, $value);
                 }
-                $this->reflectionProperties[$name]->setValue($object, $value);
+                $this->getReflectionProperty($className, $name)->setValue($object, $value);
             }
         }
 
@@ -44,10 +46,18 @@ class ComplexTypePropertyProcessor extends ComplexTypeProcessor
 
     /**
      * @param \stdClass $input
+     *
      * @return object
      */
     protected function getObjectForHydration(\stdClass $input)
     {
-        return unserialize(sprintf('O:%d:"%s":0:{}', strlen($this->className), $this->className));
+        $className = $this->defaultClassName;
+
+        if (isset($input->{'x-type-name'})) {
+            $type      = $this->types[$input->{'x-type-name'}];
+            $className = $type->getClassName();
+        }
+
+        return unserialize(sprintf('O:%d:"%s":0:{}', strlen($className), $className));
     }
 }

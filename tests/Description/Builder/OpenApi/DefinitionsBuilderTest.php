@@ -36,6 +36,7 @@ class DefinitionsBuilderTest extends OpenApiBuilderTest
             'Bar',
             'Baz',
             'Foo',
+            'PolymorhpicPropertiesObject',
             'UnusedDefinition',
         ];
 

@@ -6,19 +6,23 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\PhpApi\Descriptions\Hydrator\Processors\Scalar;
+namespace KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Types\Polymorphism;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class NullProcessor extends ScalarProcessor
+class DiamondCType extends DiamondAType
 {
     /**
-     * @param $value
-     * @return null
+     * @var string
      */
-    public function hydrate($value)
+    private $typeCProperty;
+
+    /**
+     * @return string
+     */
+    public function getTypeCProperty(): string
     {
-        return null;
+        return $this->typeCProperty;
     }
 }

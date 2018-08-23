@@ -18,6 +18,7 @@ use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 use KleijnWeb\PhpApi\Descriptions\Description\Visitor\ClosureVisitor;
 use KleijnWeb\PhpApi\Descriptions\Description\Visitor\ClosureVisitorScope;
+use KleijnWeb\PhpApi\Descriptions\Hydrator\ClassNameResolver;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -70,7 +71,12 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
         });
 
         foreach ($typeDefinitions as $name => $schema) {
-            $type = new ComplexType($name, $schema);
+            $type = new ComplexType(
+                $name,
+                $schema,
+                $this->classNameResolver->resolve($schema->getComplexType()->getName())
+            );
+
             $schema->setComplexType($type);
             $complexTypes[] = $type;
         }
