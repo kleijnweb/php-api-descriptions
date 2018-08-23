@@ -44,6 +44,10 @@ abstract class ComplexTypeProcessor extends ObjectProcessor
 
         $type = $schema->getComplexType();
 
+        if (null === $type) {
+            throw new \InvalidArgumentException("Schema does not have a complex type");
+        }
+
         $this->defaultClassName        = $type->getClassName();
         $this->types[$type->getName()] = $type;
 

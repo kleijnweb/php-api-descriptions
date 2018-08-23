@@ -59,7 +59,7 @@ class Pet
      * @param string    $status
      * @param float     $price
      * @param string[]  $photoUrls
-     * @param Category  $category
+     * @param Category       $category
      * @param Tag[]     $tags
      * @param \stdClass $rating
      */

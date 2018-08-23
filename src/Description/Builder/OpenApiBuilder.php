@@ -18,7 +18,6 @@ use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 use KleijnWeb\PhpApi\Descriptions\Description\Visitor\ClosureVisitor;
 use KleijnWeb\PhpApi\Descriptions\Description\Visitor\ClosureVisitorScope;
-use KleijnWeb\PhpApi\Descriptions\Hydrator\ClassNameResolver;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -70,21 +69,23 @@ class OpenApiBuilder extends Builder implements ClosureVisitorScope
             }
         });
 
-        foreach ($typeDefinitions as $name => $schema) {
-            $type = new ComplexType(
-                $name,
-                $schema,
-                $this->classNameResolver->resolve($schema->getComplexType()->getName())
-            );
 
-            $schema->setComplexType($type);
-            $complexTypes[] = $type;
+        if (null !== $this->classNameResolver) {
+            foreach ($typeDefinitions as $name => $schema) {
+                $type = new ComplexType(
+                    $name,
+                    $schema,
+                    $this->classNameResolver->resolve($name)
+                );
+                $schema->setComplexType($type);
+                $complexTypes[] = $type;
+            }
+
+            $description->accept(new ClosureVisitor($description, function () use (&$complexTypes) {
+                /** @noinspection PhpUndefinedFieldInspection */
+                $this->complexTypes = $complexTypes;
+            }));
         }
-
-        $description->accept(new ClosureVisitor($description, function () use (&$complexTypes) {
-            /** @noinspection PhpUndefinedFieldInspection */
-            $this->complexTypes = $complexTypes;
-        }));
 
         return $description;
     }

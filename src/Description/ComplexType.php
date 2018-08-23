@@ -40,14 +40,7 @@ class ComplexType
      */
     private $className;
 
-    /**
-     * ComplexType constructor.
-     *
-     * @param string       $name
-     * @param ObjectSchema $schema
-     * @param string|null  $className
-     */
-    public function __construct(string $name, ObjectSchema $schema, string $className = null)
+    public function __construct(string $name, ObjectSchema $schema, string $className)
     {
         $this->name      = $name;
         $this->schema    = $schema;

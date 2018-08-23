@@ -21,7 +21,12 @@ class PetStoreBuilderTest extends OpenApiBuilderTest
 {
     protected function setUp()
     {
-        $this->setUpDescription('tests/definitions/openapi/petstore.yml');
+        $this->setUpDescription(
+            'tests/definitions/openapi/petstore.yml',
+            [
+                'KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Types'
+            ]
+        );
     }
 
 

@@ -8,6 +8,8 @@
 
 namespace KleijnWeb\PhpApi\Descriptions\Tests\Mixins;
 
+use PHPUnit\Framework\MockObject\Matcher\Invocation;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -35,7 +37,7 @@ trait HttpMessageMockingMixin
         string $method = 'GET'
     ): ServerRequestInterface {
 
-
+        /** @var ServerRequestInterface|MockObject $message */
         $message = $this->getMockForAbstractClass(ServerRequestInterface::class);
         $message->expects($this->once())->method('getQueryParams')->willReturn($query);
         $message->expects($this->any())->method('getMethod')->willReturn($method);
@@ -63,6 +65,7 @@ trait HttpMessageMockingMixin
      */
     protected function mockResponse(int $statusCode): ResponseInterface
     {
+        /** @var ResponseInterface|MockObject $message */
         $message = $this->getMockForAbstractClass(ResponseInterface::class);
         $message->expects($this->once())->method('getStatusCode')->willReturn($statusCode);
 
@@ -93,12 +96,12 @@ trait HttpMessageMockingMixin
     );
 
     /**
-     * @return \PHPUnit_Framework_MockObject_Matcher_Invocation
+     * @return Invocation
      */
     abstract protected function once();
 
     /**
-     * @return \PHPUnit_Framework_MockObject_Matcher_Invocation
+     * @return Invocation
      */
     abstract protected function any();
 }

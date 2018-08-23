@@ -16,6 +16,7 @@ use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
 use KleijnWeb\PhpApi\Descriptions\Hydrator\ClassNameResolver;
 use KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Types\Category;
 use KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Types\Pet;
+use KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Types\Tag;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -34,7 +35,9 @@ class TestHelperFactory
     {
         $tagSchema      = self::createTagSchema();
         $categorySchema = new ObjectSchema((object)[], (object)[]);
-        $categorySchema->setComplexType(new ComplexType('Category', $categorySchema));
+        $categorySchema
+            ->setComplexType(new ComplexType('Category', $categorySchema, Category::class));
+
         $petSchema = new ObjectSchema(
             (object)[],
             (object)[
@@ -53,6 +56,7 @@ class TestHelperFactory
                 ]),
             ]
         );
+
         $petSchema->setComplexType(new ComplexType('Pet', $petSchema, Pet::class));
 
         return $petSchema;

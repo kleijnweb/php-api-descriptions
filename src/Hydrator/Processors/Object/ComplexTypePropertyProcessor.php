@@ -20,7 +20,7 @@ class ComplexTypePropertyProcessor extends ComplexTypeProcessor
      */
     protected function hydrateObject(\stdClass $input)
     {
-        $object = $this->getObjectForHydration($input);
+        $object    = $this->getObjectForHydration($input);
         $className = get_class($object);
 
         foreach ($this->reflectionProperties[$className] as $name => $reflectionProperty) {
@@ -35,6 +35,9 @@ class ComplexTypePropertyProcessor extends ComplexTypeProcessor
                 }
 
                 if ($this->hasReflectionProperty($className, $name)) {
+                    if (!isset($this->propertyProcessors[$name])) {
+                        continue;
+                    }
                     $value = $this->hydrateProperty($name, $value);
                 }
                 $this->getReflectionProperty($className, $name)->setValue($object, $value);

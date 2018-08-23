@@ -18,7 +18,12 @@ class DefinitionsBuilderTest extends OpenApiBuilderTest
 {
     protected function setUp()
     {
-        $this->setUpDescription(__DIR__ . '/../../../definitions/openapi/definitions.yml');
+        $this->setUpDescription(
+            __DIR__ . '/../../../definitions/openapi/definitions.yml',
+            [
+                'KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Types\Random',
+            ]
+        );
     }
 
     /**

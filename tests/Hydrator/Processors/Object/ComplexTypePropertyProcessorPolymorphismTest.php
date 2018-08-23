@@ -57,7 +57,7 @@ class ComplexTypePropertyProcessorPolymorphismTest extends ObjectProcessorTest
     {
         $processor = $this->createProcessor(
             function (ObjectSchema $schema) {
-                return $this->factory($schema, DiamondBType::class);
+                return $this->factory($schema);
             },
             $this->typeBSchema
         );
@@ -89,7 +89,7 @@ class ComplexTypePropertyProcessorPolymorphismTest extends ObjectProcessorTest
     {
         $processor = $this->createProcessor(
             function (ObjectSchema $schema) {
-                return $this->factory($schema, DiamondAType::class);
+                return $this->factory($schema);
             },
             $this->typeASchema
         );
@@ -124,7 +124,7 @@ class ComplexTypePropertyProcessorPolymorphismTest extends ObjectProcessorTest
     {
         $processor = $this->createProcessor(
             function (ObjectSchema $schema) {
-                return $this->factory($schema, DiamondBType::class);
+                return $this->factory($schema);
             },
             $this->typeBSchema
         );
@@ -162,7 +162,7 @@ class ComplexTypePropertyProcessorPolymorphismTest extends ObjectProcessorTest
     {
         $processor = $this->createProcessor(
             function (ObjectSchema $schema) {
-                return $this->factory($schema, DiamondAType::class);
+                return $this->factory($schema);
             },
             $this->typeASchema
         );
@@ -194,14 +194,12 @@ class ComplexTypePropertyProcessorPolymorphismTest extends ObjectProcessorTest
     /**
      * @param ObjectSchema $schema
      *
-     * @param string       $className
-     *
      * @return ComplexTypePropertyProcessor
      * @throws \ReflectionException
      */
-    protected function factory(ObjectSchema $schema, string $className): ComplexTypePropertyProcessor
+    protected function factory(ObjectSchema $schema): ComplexTypePropertyProcessor
     {
-        return new ComplexTypePropertyProcessor($schema, $className);
+        return new ComplexTypePropertyProcessor($schema);
     }
 
     protected function createSchema()

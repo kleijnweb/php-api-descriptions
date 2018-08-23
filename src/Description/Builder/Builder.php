@@ -43,11 +43,6 @@ abstract class Builder
      */
     protected $classNameResolver;
 
-    /**
-     * OpenApiBuilder constructor.
-     *
-     * @param Document $document
-     */
     public function __construct(Document $document, ClassNameResolver $classNameResolver = null)
     {
         $this->document          = $document;
