@@ -12,6 +12,7 @@ use KleijnWeb\PhpApi\Descriptions\Description\Builder\OpenApiBuilder;
 use KleijnWeb\PhpApi\Descriptions\Description\Builder\RamlBuilder;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\RefResolver\RefResolver;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
+use KleijnWeb\PhpApi\Descriptions\Hydrator\ClassNameResolver;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
@@ -27,13 +28,20 @@ class DescriptionFactory
     private $type;
 
     /**
+     * @var ClassNameResolver
+     */
+    private $classNameResolver;
+
+    /**
      * DescriptionFactory constructor.
      *
-     * @param string $type
+     * @param string                 $type
+     * @param ClassNameResolver|null $classNameResolver
      */
-    public function __construct(string $type = self::BUILDER_OPEN_API)
+    public function __construct(string $type = self::BUILDER_OPEN_API, ClassNameResolver $classNameResolver = null)
     {
-        $this->type = $type;
+        $this->type              = $type;
+        $this->classNameResolver = $classNameResolver;
     }
 
     /**
@@ -51,7 +59,8 @@ class DescriptionFactory
                     new Document(
                         $uri,
                         (new RefResolver($definition, $uri))->resolve()
-                    )
+                    ),
+                    $this->classNameResolver
                 )
                 )->build();
             case self::BUILDER_RAML:
@@ -60,7 +69,8 @@ class DescriptionFactory
                     new Document(
                         $uri,
                         $definition
-                    )
+                    ),
+                    $this->classNameResolver
                 )
                 )->build();
             default:
