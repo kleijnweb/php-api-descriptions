@@ -198,7 +198,7 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
                 'extra' => new ScalarSchema(
                     (object)[
                         'type'    => Schema::TYPE_STRING,
-                        'default' => 'defaultValue'
+                        'default' => 'defaultValue',
 
                     ]
                 ),
@@ -273,9 +273,29 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
      */
     public function willOmitNullValuesOnTypedObjectsWhenDehydrating()
     {
-        $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema);
-        }, 'id', 'name', 'status');
+        $schema = new ObjectSchema(
+            (object)[],
+            (object)[
+                'id'   => new ScalarSchema((object)[
+                    'type' => ScalarSchema::TYPE_INT,
+                ]),
+                'name' => new ScalarSchema((object)[
+                    'type'    => ScalarSchema::TYPE_STRING,
+                ]),
+                'status' => new ScalarSchema((object)[
+                    'type'    => ScalarSchema::TYPE_STRING,
+                ]),
+            ]
+        );
+
+        $schema->setComplexType(new ComplexType('Pet', $schema, Pet::class));
+
+        $processor = $this->createProcessor(
+            function (ObjectSchema $schema) {
+                return $this->factory($schema);
+            },
+            $schema
+        );
 
         $this->mockPropertyProcessor
             ->expects($this->any())
@@ -302,25 +322,25 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
      */
     public function willNotOmitNullTypeValuesOnTypedObjectsWhenDehydrating()
     {
-        $stub = new class
-        {
-            private $aInt = 1;
-
-            private $nullProperty = null;
-        };
-
-        $processor = $this->createProcessor(
-            function (ObjectSchema $schema) use ($stub) {
-                return $this->factory($schema);
-            },
+        $schema = new ObjectSchema(
+            (object)[],
             (object)[
-                'aInt'         => new ScalarSchema((object)[
+                'id'   => new ScalarSchema((object)[
                     'type' => ScalarSchema::TYPE_INT,
                 ]),
-                'nullProperty' => new ScalarSchema((object)[
-                    'type' => ScalarSchema::TYPE_NULL,
+                'name' => new ScalarSchema((object)[
+                    'type'    => ScalarSchema::TYPE_NULL,
                 ]),
             ]
+        );
+
+        $schema->setComplexType(new ComplexType('Pet', $schema, Pet::class));
+
+        $processor = $this->createProcessor(
+            function (ObjectSchema $schema) {
+                return $this->factory($schema);
+            },
+            $schema
         );
 
         $this->mockPropertyProcessor
@@ -330,11 +350,17 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
                 return $value;
             });
 
-        $data = $processor->dehydrate($stub);
+        $pet = new Pet(1, 'Fido', 'single', 123.12);
+        $refl     = new \ReflectionObject($pet);
+        $property = $refl->getProperty('name');
+        $property->setAccessible(true);
+        $property->setValue($pet, null);
 
-        $this->assertSame(1, $data->aInt);
-        $this->assertObjectHasAttribute('nullProperty', $data);
-        $this->assertNull($data->nullProperty);
+        $data = $processor->dehydrate($pet);
+
+        $this->assertSame(1, $data->id);
+        $this->assertObjectHasAttribute('name', $data);
+        $this->assertNull($data->name);
     }
 
     /**

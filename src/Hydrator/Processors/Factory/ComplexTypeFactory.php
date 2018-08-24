@@ -10,7 +10,6 @@ namespace KleijnWeb\PhpApi\Descriptions\Hydrator\Processors\Factory;
 
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
-use KleijnWeb\PhpApi\Descriptions\Hydrator\ClassNameResolver;
 use KleijnWeb\PhpApi\Descriptions\Hydrator\ProcessorBuilder;
 use KleijnWeb\PhpApi\Descriptions\Hydrator\Processors\Object\ComplexTypePropertyProcessor;
 use KleijnWeb\PhpApi\Descriptions\Hydrator\Processors\Object\ObjectProcessor;

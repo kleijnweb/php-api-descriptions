@@ -129,7 +129,7 @@ class ProcessorBuilderTest extends TestCase
                     }
 
                     /** @var ObjectSchema $schema */
-                    return 'Tag' === $schema->getComplexType()->getName();
+                    return Tag::class === $schema->getComplexType()->getClassName();
                 }
 
                 public function getPriority(): int
@@ -139,9 +139,7 @@ class ProcessorBuilderTest extends TestCase
 
                 protected function instantiate(ObjectSchema $schema, ProcessorBuilder $builder): ObjectProcessor
                 {
-                    $className = $this->classNameResolver->resolve($schema->getComplexType()->getName());
-
-                    return new class($schema, $className) extends ComplexTypePropertyProcessor
+                    return new class($schema) extends ComplexTypePropertyProcessor
                     {
                         private $identityMap = [];
 
@@ -231,7 +229,7 @@ class ProcessorBuilderTest extends TestCase
     public static function createComplexSchema(): ObjectSchema
     {
         $schema = new ObjectSchema((object)[], (object)['id' => new AnySchema()]);
-        $schema->setComplexType(new ComplexType('Pet', $schema));
+        $schema->setComplexType(new ComplexType('Pet', $schema, Pet::class));
 
         return $schema;
     }
