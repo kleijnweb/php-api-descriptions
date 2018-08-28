@@ -69,7 +69,9 @@ abstract class ComplexTypeProcessor extends ObjectProcessor
 
     protected function dehydrateObject($object): \stdClass
     {
-        $node = (object)[];
+        $node = (object)[
+            'x-type-name'
+        ];
 
         /** @var ObjectSchema $objectSchema */
         $objectSchema = $this->schema;
