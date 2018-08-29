@@ -57,6 +57,14 @@ class ComplexTypePropertyProcessor extends ComplexTypeProcessor
         $className = $this->defaultClassName;
 
         if (isset($input->{'x-type-name'})) {
+            if (!isset($this->types[$input->{'x-type-name'}])) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        "Request type not in '%s'",
+                        implode(', ', array_keys($this->types))
+                    )
+                );
+            }
             $type      = $this->types[$input->{'x-type-name'}];
             $className = $type->getClassName();
         }

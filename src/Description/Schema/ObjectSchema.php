@@ -143,6 +143,14 @@ class ObjectSchema extends Schema
     }
 
     /**
+     * @param string $xType
+     */
+    public function setXType(string $xType): void
+    {
+        $this->xType = $xType;
+    }
+
+    /**
      * @return string|null
      */
     public function getXRefId()

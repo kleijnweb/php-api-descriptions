@@ -21,7 +21,7 @@ abstract class ObjectProcessor extends Processor
     /**
      * @var \KleijnWeb\PhpApi\Descriptions\Hydrator\Processors\Processor[]
      */
-    protected $propertyProcessors;
+    protected $propertyProcessors = [];
 
     /**
      * @var array

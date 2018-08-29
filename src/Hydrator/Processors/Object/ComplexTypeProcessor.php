@@ -69,10 +69,6 @@ abstract class ComplexTypeProcessor extends ObjectProcessor
 
     protected function dehydrateObject($object): \stdClass
     {
-        $node = (object)[
-            'x-type-name'
-        ];
-
         /** @var ObjectSchema $objectSchema */
         $objectSchema = $this->schema;
 
@@ -94,34 +90,68 @@ abstract class ComplexTypeProcessor extends ObjectProcessor
 
         // Object is already an instance of current schema. Find best match.
         do {
+            $canDescend = false;
             foreach ($type->getChildren() as $childType) {
                 $childClassName = $childType->getClassName();
-                // Break on the first child type that is not a match.
-                if (!$object instanceof $childClassName) {
-                    break 2;
+                if ($object instanceof $childClassName) {
+                    $canDescend   = true;
+                    $className    = $childClassName;
+                    $objectSchema = $childType->getSchema();
+                    $type         = $objectSchema->getComplexType();
                 }
-                // This still matches, continue.
-                $className    = $childClassName;
-                $objectSchema = $childType->getSchema();
-                $type         = $objectSchema->getComplexType();
             }
+            if (!$canDescend) {
+                break;
+            }
+
         } while (count($type->getChildren()) > 0);
 
-        foreach ($objectSchema->getPropertySchemas() as $name => $propertySchema) {
-            if (!$this->hasReflectionProperty($className, $name)) {
-                if (!isset($this->defaults[$name])) {
-                    continue;
-                }
-                $value = $this->defaults[$name];
-            } else {
-                $value = $this->getReflectionProperty($className, $name)->getValue($object);
-            }
+        $node = (object)[
+            'x-type-name' => $type->getName(),
+        ];
 
-            if ($this->shouldFilterOutputValue($objectSchema->getPropertySchema($name), $value)) {
-                continue;
+        $lineage = [];
+
+        // Determine lineage
+        $traverseUp = function (ComplexType $type) use (&$lineage, &$traverseUp) {
+
+            $lineage[] = $type;
+            $parents   = $type->getParents();
+
+            if (count($parents)) {
+                $traverseUp($parents[0]);
             }
-            $node->$name = $this->dehydrateProperty($name, $value);
-        }
+        };
+
+        $traverseUp($type);
+
+        $lineage = array_reverse($lineage);
+
+        $applyProperties = function ($object, $node) use ($lineage) {
+            foreach ($lineage as $type) {
+                $className    = $type->getClassName();
+                $objectSchema = $type->getSchema();
+
+                foreach ($objectSchema->getPropertySchemas() as $name => $propertySchema) {
+                    if (!$this->hasReflectionProperty($className, $name)) {
+                        if (!isset($this->defaults[$name])) {
+                            continue;
+                        }
+                        $value = $this->defaults[$name];
+                    } else {
+                        $value = $this->getReflectionProperty($className, $name)->getValue($object);
+                    }
+
+                    if ($this->shouldFilterOutputValue($objectSchema->getPropertySchema($name), $value)) {
+                        continue;
+                    }
+
+                    $node->$name = $this->dehydrateProperty($name, $value);
+                }
+            }
+        };
+
+        $applyProperties($object, $node);
 
         return $node;
     }

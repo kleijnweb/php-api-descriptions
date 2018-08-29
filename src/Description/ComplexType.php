@@ -66,6 +66,7 @@ class ComplexType
     public function addParent(ComplexType $parent): ComplexType
     {
         $this->parents[] = $parent;
+        $parent->addChild($this);
         return $this;
     }
 
