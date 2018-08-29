@@ -84,6 +84,7 @@ class RefResolver
      * @param object|array $current
      * @param \stdClass    $document
      * @param string       $uri
+     * @throws InvalidReferenceException
      */
     private function resolveRecursively(&$current, \stdClass $document = null, string $uri = null)
     {

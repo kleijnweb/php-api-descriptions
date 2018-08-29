@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * This file is part of the KleijnWeb\PhpApi\Descriptions\Hydrator package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,19 +29,21 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
     public function hydrateWillOmitPropertiesNotInSchema()
     {
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, TestHelperFactory::createPartialPetSchema());
 
-        $this->mockPropertyProcesser
-            ->expects($this->once())
+        $this->mockPropertyProcessor
+            ->expects($this->exactly(3))
             ->method('hydrate')
-            ->willReturn(999);
+            ->withConsecutive([2], [100], [])
+            ->willReturnOnConsecutiveCalls(111, 222.0, []);
 
-        /** @var Tag $actual */
+        /** @var Pet $actual */
         $actual = $processor->hydrate((object)['id' => 2, 'name' => 'Fido']);
 
-        $this->assertInstanceOf(Tag::class, $actual);
-        $this->assertSame(999, $actual->getId());
+        $this->assertInstanceOf(Pet::class, $actual);
+        $this->assertSame(111, $actual->getId());
+        $this->assertSame(222.0, $actual->getPrice());
     }
 
     /**
@@ -57,13 +59,13 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
             ]
         );
 
-        $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema));
+        $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema, Tag::class));
 
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, $tagSchema);
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->once())
             ->method('hydrate')
             ->willReturn(999);
@@ -80,10 +82,10 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
     public function hydrateWillDelegateToPropertyProcessor()
     {
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, TestHelperFactory::createTagSchema());
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->once())
             ->method('hydrate')
             ->with(2)
@@ -102,10 +104,10 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
     public function dehydrateWillOmitPropertyInClassWhenValueIsNullAndTypeIsNotNull()
     {
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, TestHelperFactory::createTagSchema());
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->once())
             ->method('dehydrate')
             ->with(2)
@@ -129,10 +131,10 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
     public function dehydrateWillDelegateToPropertyProcessorWhenValueNotNull()
     {
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, TestHelperFactory::createTagSchema());
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('dehydrate')
             ->willReturnCallback(function ($value) {
@@ -158,13 +160,13 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
             ]
         );
 
-        $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema));
+        $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema, Tag::class));
 
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, $tagSchema);
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('dehydrate')
             ->willReturnCallback(function ($value) {
@@ -196,20 +198,20 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
                 'extra' => new ScalarSchema(
                     (object)[
                         'type'    => Schema::TYPE_STRING,
-                        'default' => 'defaultValue'
+                        'default' => 'defaultValue',
 
                     ]
                 ),
             ]
         );
 
-        $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema));
+        $tagSchema->setComplexType(new ComplexType('Tag', $tagSchema, Tag::class));
 
         $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Tag::class);
+            return $this->factory($schema);
         }, $tagSchema);
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('dehydrate')
             ->willReturnCallback(function ($value) {
@@ -228,10 +230,8 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
      */
     public function willHydrateDefault()
     {
-        $processor = $this->createProcessor(
-            function (ObjectSchema $schema) {
-                return $this->factory($schema, Tag::class);
-            },
+        $schema = new ObjectSchema(
+            (object)[],
             (object)[
                 'id'   => new ScalarSchema((object)[
                     'type' => ScalarSchema::TYPE_INT,
@@ -243,7 +243,16 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
             ]
         );
 
-        $this->mockPropertyProcesser
+        $schema->setComplexType(new ComplexType('Tag', $schema, Tag::class));
+
+        $processor = $this->createProcessor(
+            function (ObjectSchema $schema) {
+                return $this->factory($schema);
+            },
+            $schema
+        );
+
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('hydrate')
             ->willReturnCallback(function ($value) {
@@ -264,11 +273,31 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
      */
     public function willOmitNullValuesOnTypedObjectsWhenDehydrating()
     {
-        $processor = $this->createProcessor(function (ObjectSchema $schema) {
-            return $this->factory($schema, Pet::class);
-        }, 'id', 'name', 'status');
+        $schema = new ObjectSchema(
+            (object)[],
+            (object)[
+                'id'   => new ScalarSchema((object)[
+                    'type' => ScalarSchema::TYPE_INT,
+                ]),
+                'name' => new ScalarSchema((object)[
+                    'type'    => ScalarSchema::TYPE_STRING,
+                ]),
+                'status' => new ScalarSchema((object)[
+                    'type'    => ScalarSchema::TYPE_STRING,
+                ]),
+            ]
+        );
 
-        $this->mockPropertyProcesser
+        $schema->setComplexType(new ComplexType('Pet', $schema, Pet::class));
+
+        $processor = $this->createProcessor(
+            function (ObjectSchema $schema) {
+                return $this->factory($schema);
+            },
+            $schema
+        );
+
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('dehydrate')
             ->willReturnCallback(function ($value) {
@@ -293,43 +322,55 @@ class ComplexTypePropertyProcessorTest extends ObjectProcessorTest
      */
     public function willNotOmitNullTypeValuesOnTypedObjectsWhenDehydrating()
     {
-        $stub = new class
-        {
-            private $aInt         = 1;
-
-            private $nullProperty = null;
-        };
-
-        $processor = $this->createProcessor(
-            function (ObjectSchema $schema) use ($stub) {
-                return $this->factory($schema, get_class($stub));
-            },
+        $schema = new ObjectSchema(
+            (object)[],
             (object)[
-                'aInt'         => new ScalarSchema((object)[
+                'id'   => new ScalarSchema((object)[
                     'type' => ScalarSchema::TYPE_INT,
                 ]),
-                'nullProperty' => new ScalarSchema((object)[
-                    'type' => ScalarSchema::TYPE_NULL,
+                'name' => new ScalarSchema((object)[
+                    'type'    => ScalarSchema::TYPE_NULL,
                 ]),
             ]
         );
 
-        $this->mockPropertyProcesser
+        $schema->setComplexType(new ComplexType('Pet', $schema, Pet::class));
+
+        $processor = $this->createProcessor(
+            function (ObjectSchema $schema) {
+                return $this->factory($schema);
+            },
+            $schema
+        );
+
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('dehydrate')
             ->willReturnCallback(function ($value) {
                 return $value;
             });
 
-        $data = $processor->dehydrate($stub);
+        $pet = new Pet(1, 'Fido', 'single', 123.12);
+        $refl     = new \ReflectionObject($pet);
+        $property = $refl->getProperty('name');
+        $property->setAccessible(true);
+        $property->setValue($pet, null);
 
-        $this->assertSame(1, $data->aInt);
-        $this->assertObjectHasAttribute('nullProperty', $data);
-        $this->assertNull($data->nullProperty);
+        $data = $processor->dehydrate($pet);
+
+        $this->assertSame(1, $data->id);
+        $this->assertObjectHasAttribute('name', $data);
+        $this->assertNull($data->name);
     }
 
-    protected function factory(ObjectSchema $schema, string $className): ComplexTypePropertyProcessor
+    /**
+     * @param ObjectSchema $schema
+     *
+     * @return ComplexTypePropertyProcessor
+     * @throws \ReflectionException
+     */
+    protected function factory(ObjectSchema $schema): ComplexTypePropertyProcessor
     {
-        return new ComplexTypePropertyProcessor($schema, $className);
+        return new ComplexTypePropertyProcessor($schema);
     }
 }

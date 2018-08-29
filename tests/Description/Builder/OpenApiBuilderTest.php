@@ -14,6 +14,7 @@ use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\Loader\Definit
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Definition\RefResolver\RefResolver;
 use KleijnWeb\PhpApi\Descriptions\Description\Document\Document;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\Schema;
+use KleijnWeb\PhpApi\Descriptions\Hydrator\ClassNameResolver;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,16 +32,20 @@ abstract class OpenApiBuilderTest extends TestCase
      */
     protected $document;
 
-    /**
-     * @param string $uri
-     */
-    protected function setUpDescription(string $uri)
+    protected function setUpDescription(string $uri, array $namespaces = null)
     {
+        $classNameResolver = null;
+
+        if (null !== $namespaces) {
+            $classNameResolver = new ClassNameResolver($namespaces);
+        }
+
         $builder = new OpenApiBuilder(
             $this->document = new Document(
                 $uri,
                 (new RefResolver((new DefinitionLoader())->load($uri), $uri))->resolve()
-            )
+            ),
+            $classNameResolver
         );
 
         $this->description = $builder->build();

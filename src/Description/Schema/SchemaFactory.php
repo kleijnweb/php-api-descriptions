@@ -8,6 +8,9 @@
 
 namespace KleijnWeb\PhpApi\Descriptions\Description\Schema;
 
+use KleijnWeb\PhpApi\Descriptions\Description\ComplexType;
+use KleijnWeb\PhpApi\Descriptions\Hydrator\ClassNameResolver;
+
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
@@ -19,16 +22,32 @@ class SchemaFactory
     private $schemas = [];
 
     /**
+     * @var ComplexType[]
+     */
+    private $complexTypes = [];
+
+    /**
+     * @var ObjectSchema[]
+     */
+    private $typedSchemas = [];
+
+    /**
      * @var array
      */
     private $definitions = [];
 
     /**
+     * @var ClassNameResolver
+     */
+    private $classNameResolver;
+
+    /**
      * @param \stdClass|null $definition
+     * @param string|null    $name
      *
      * @return Schema
      */
-    public function create(\stdClass $definition = null): Schema
+    public function create(\stdClass $definition = null, string $name = null): Schema
     {
         if (!$definition) {
             $definition       = (object)[];
@@ -51,9 +70,9 @@ class SchemaFactory
             $definition->type = 'object';
         }
 
-        $index = array_search($definition, $this->definitions);
+        $index = var_export($definition, true);
 
-        if (false === $index) {
+        if (!isset($this->schemas[$index])) {
             if ($definition->type == Schema::TYPE_OBJECT) {
                 $propertySchemas = (object)[];
 
@@ -65,6 +84,9 @@ class SchemaFactory
 
                 if (isset($definition->allOf)) {
                     foreach ($definition->allOf as $nested) {
+                        if (isset($nested->{'x-ref-id'})) {
+                            continue;
+                        }
                         if (isset($nested->properties)) {
                             foreach ($nested->properties as $attributeName => $propertyDefinition) {
                                 $propertySchemas->$attributeName = $this->create($propertyDefinition);
@@ -74,7 +96,23 @@ class SchemaFactory
                     unset($definition->type);
                 }
 
-                $schema = new ObjectSchema($definition, $propertySchemas);
+                if ($name === null && isset($definition->{'x-ref-id'})) {
+                    $name = $this->getTypeNameFromRefId($definition);
+                }
+
+                $schema = new ObjectSchema($definition, $propertySchemas, null, $name);
+
+                if (null !== $name) {
+                    if (isset($this->typedSchemas[$name])) {
+                        $a = var_export($schema, true);
+                        $b = var_export($this->typedSchemas[$name], true);
+                        $a2 = var_export($definition, true);
+                        $b2 = var_export($this->typedSchemas[$name]->getDefinition(), true);
+                        throw new \InvalidArgumentException("Type '$name' already exists");
+                    }
+                    $this->typedSchemas[$name] = $schema;
+                }
+
             } elseif ($definition->type == Schema::TYPE_ARRAY) {
                 $itemsSchema = isset($definition->items) ? $this->create($definition->items) : null;
                 $schema      = new ArraySchema($definition, $itemsSchema);
@@ -84,12 +122,58 @@ class SchemaFactory
                 $schema = new ScalarSchema($definition);
             }
 
-            $this->definitions[] = $definition;
-            $this->schemas[]     = $schema;
+            $this->schemas[$index] = $schema;
 
             return $schema;
         }
 
         return $this->schemas[$index];
+    }
+
+    /**
+     * @return ComplexType[]
+     */
+    public function resolveTypes(): array
+    {
+        foreach ($this->typedSchemas as $name => $schema) {
+            $schema->setComplexType(new ComplexType(
+                $name,
+                $schema,
+                $this->classNameResolver->resolve($name)
+            ));
+        }
+
+        foreach ($this->typedSchemas as $name => $schema) {
+            $definition = $schema->getDefinition();
+
+            if (isset($definition->allOf)) {
+                foreach ($definition->allOf as $partial) {
+                    if (isset($partial->{'x-ref-id'})) {
+                        $this->typedSchemas[$schema->getXType()]
+                            ->getComplexType()
+                            ->addParent(
+                                $this->typedSchemas[$this->getTypeNameFromRefId($partial)]->getComplexType()
+                            );
+                    }
+                }
+            }
+        }
+
+        return array_map(function(ObjectSchema $schema){
+            return $schema->getComplexType();
+        }, $this->typedSchemas);
+    }
+
+    /**
+     * @param ClassNameResolver $classNameResolver
+     */
+    public function setClassNameResolver(ClassNameResolver $classNameResolver)
+    {
+        $this->classNameResolver = $classNameResolver;
+    }
+
+    private function getTypeNameFromRefId(\stdClass $definition)
+    {
+        return substr($definition->{'x-ref-id'}, strrpos($definition->{'x-ref-id'}, '/') + 1);
     }
 }

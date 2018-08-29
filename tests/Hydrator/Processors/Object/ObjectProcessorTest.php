@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * This file is part of the KleijnWeb\PhpApi\Descriptions\Hydrator package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -24,18 +24,18 @@ abstract class ObjectProcessorTest extends TestCase
     /**
      * @var MockObject
      */
-    protected $mockPropertyProcesser;
+    protected $mockPropertyProcessor;
 
     /**
      * @var Processor
      */
-    protected $propertyProcesser;
+    protected $propertyProcessor;
 
     protected function setUp()
     {
         $mock                        = $this->createMockPropertyProcessor();
-        $this->mockPropertyProcesser = $mock;
-        $this->propertyProcesser     = $mock;
+        $this->mockPropertyProcessor = $mock;
+        $this->propertyProcessor     = $mock;
     }
 
     protected function createProcessor($factory, ...$setup): ObjectProcessor
@@ -63,7 +63,7 @@ abstract class ObjectProcessorTest extends TestCase
         $processor = $factory($schema);
 
         foreach ($schema->getPropertySchemas() as $name => $schema) {
-            $processor->setPropertyProcessor($name, $this->propertyProcesser);
+            $processor->setPropertyProcessor($name, $this->propertyProcessor);
         }
 
         return $processor;

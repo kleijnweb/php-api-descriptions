@@ -26,15 +26,72 @@ class ComplexType
     private $schema;
 
     /**
-     * ComplexType constructor.
-     *
-     * @param string       $name
-     * @param ObjectSchema $schema
+     * @var ComplexType[]
      */
-    public function __construct(string $name, ObjectSchema $schema)
+    private $parents = [];
+
+    /**
+     * @var ComplexType[]
+     */
+    private $children = [];
+
+    /**
+     * @var null|string
+     */
+    private $className;
+
+    public function __construct(string $name, ObjectSchema $schema, string $className)
     {
-        $this->name   = $name;
-        $this->schema = $schema;
+        $this->name      = $name;
+        $this->schema    = $schema;
+        $this->className = $className;
+    }
+
+    /**
+     * @param ComplexType $child
+     *
+     * @return ComplexType
+     */
+    public function addChild(ComplexType $child): ComplexType
+    {
+        $this->children[] = $child;
+        return $this;
+    }
+
+    /**
+     * @param ComplexType $parent
+     *
+     * @return ComplexType
+     */
+    public function addParent(ComplexType $parent): ComplexType
+    {
+        $this->parents[] = $parent;
+        $parent->addChild($this);
+        return $this;
+    }
+
+    /**
+     * @return ComplexType[]
+     */
+    public function getParents(): array
+    {
+        return $this->parents;
+    }
+
+    /**
+     * @return ComplexType[]
+     */
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getClassName()
+    {
+        return $this->className;
     }
 
     /**

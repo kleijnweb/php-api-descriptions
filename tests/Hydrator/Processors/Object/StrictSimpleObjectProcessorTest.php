@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * This file is part of the KleijnWeb\PhpApi\Descriptions\Hydrator package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,7 +27,7 @@ class StrictSimpleObjectProcessorTest extends SimpleObjectProcessorTest
 
         $object = (object)['aInt' => 1, 'nullProperty' => null];
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('hydrate')
             ->willReturnCallback(function ($value) {
@@ -51,7 +51,7 @@ class StrictSimpleObjectProcessorTest extends SimpleObjectProcessorTest
 
         $object = (object)['aInt' => 1, 'nullProperty' => null];
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('hydrate')
             ->willReturnCallback(function ($value) {
@@ -90,7 +90,7 @@ class StrictSimpleObjectProcessorTest extends SimpleObjectProcessorTest
     {
         $processor = $this->createProcessor(StrictSimpleObjectProcessor::class, 'a', 'b', 'c');
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->exactly(3))
             ->method('dehydrate')
             ->withConsecutive([3], [2], [1])

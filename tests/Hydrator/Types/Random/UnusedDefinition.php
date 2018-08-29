@@ -6,11 +6,11 @@
  * file that was distributed with this source code.
  */
 
-namespace KleijnWeb\PhpApi\Descriptions\Hydrator\Exception;
+namespace KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Types\Random;
 
 /**
  * @author John Kleijn <john@kleijnweb.nl>
  */
-class DateTimeNotParsableException extends \RuntimeException
+class UnusedDefinition
 {
 }

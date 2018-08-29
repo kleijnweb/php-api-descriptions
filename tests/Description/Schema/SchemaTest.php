@@ -11,6 +11,8 @@ namespace KleijnWeb\PhpApi\Descriptions\Tests\Description\Schema;
 use KleijnWeb\PhpApi\Descriptions\Description\ComplexType;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ObjectSchema;
 use KleijnWeb\PhpApi\Descriptions\Description\Schema\ScalarSchema;
+use KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Types\Pet;
+use KleijnWeb\PhpApi\Descriptions\Tests\Hydrator\Types\Tag;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,9 +26,9 @@ class SchemaTest extends TestCase
     public function cannotChangeComplexType()
     {
         $schema = new ObjectSchema((object)[]);
-        $schema->setComplexType(new ComplexType('Foo', $schema));
+        $schema->setComplexType(new ComplexType('Pet', $schema, Pet::class));
         $this->expectException(\LogicException::class);
-        $schema->setComplexType(new ComplexType('Foo', $schema));
+        $schema->setComplexType(new ComplexType('Tag', $schema, Tag::class));
     }
 
     /**

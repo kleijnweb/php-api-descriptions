@@ -33,3 +33,8 @@ definitions:
   UnusedDefinition:
     properties:
       barProperty: { type: string }
+
+  PolymorhpicPropertiesObject:
+    properties:
+      bar:
+        $ref: '#/definitions/Bar'

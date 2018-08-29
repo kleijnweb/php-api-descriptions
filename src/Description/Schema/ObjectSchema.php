@@ -127,9 +127,9 @@ class ObjectSchema extends Schema
     }
 
     /**
-     * @return ComplexType
+     * @return ComplexType|null
      */
-    public function getComplexType(): ComplexType
+    public function getComplexType()
     {
         return $this->complexType;
     }
@@ -140,6 +140,14 @@ class ObjectSchema extends Schema
     public function getXType()
     {
         return $this->xType;
+    }
+
+    /**
+     * @param string $xType
+     */
+    public function setXType(string $xType): void
+    {
+        $this->xType = $xType;
     }
 
     /**

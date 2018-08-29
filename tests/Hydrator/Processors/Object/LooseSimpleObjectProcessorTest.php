@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * This file is part of the KleijnWeb\PhpApi\Descriptions\Hydrator package.
+ * This file is part of the KleijnWeb\PhpApi\Descriptions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -33,7 +33,7 @@ class LooseSimpleObjectProcessorTest extends SimpleObjectProcessorTest
 
         $object = (object)['aInt' => 1, 'anyProperty' => 'anyValue'];
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->once())
             ->method('hydrate')
             ->with(1)
@@ -76,7 +76,7 @@ class LooseSimpleObjectProcessorTest extends SimpleObjectProcessorTest
             ]
         );
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->any())
             ->method('hydrate')
             ->willReturnCallback(function ($value) {
@@ -96,7 +96,7 @@ class LooseSimpleObjectProcessorTest extends SimpleObjectProcessorTest
     {
         $processor = $this->createProcessor([$this, 'factory'], 'a', 'b', 'c');
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->exactly(3))
             ->method('hydrate')
             ->withConsecutive([3], [null], [1])
@@ -116,7 +116,7 @@ class LooseSimpleObjectProcessorTest extends SimpleObjectProcessorTest
 
         $object = (object)['aInt' => 1, 'anyProperty' => 'anyValue'];
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->once())
             ->method('dehydrate')
             ->with(1)
@@ -151,7 +151,7 @@ class LooseSimpleObjectProcessorTest extends SimpleObjectProcessorTest
 
         $object = (object)['aInt' => 1, 'anyProperty' => 'anyValue'];
 
-        $this->mockPropertyProcesser
+        $this->mockPropertyProcessor
             ->expects($this->exactly(2))
             ->method('dehydrate')
             ->withConsecutive([1], [$object->anyProperty])
