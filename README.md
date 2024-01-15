@@ -1,3 +1,5 @@
+# This project is no longer maintained
+
 # KleijnWeb\PhpApi\Descriptions 
 [![Build Status](https://travis-ci.org/kleijnweb/php-api-descriptions.svg?branch=master)](https://travis-ci.org/kleijnweb/php-api-descriptions)
 [![Coverage Status](https://coveralls.io/repos/github/kleijnweb/php-api-descriptions/badge.svg?branch=master)](https://coveralls.io/github/kleijnweb/php-api-descriptions?branch=master)
